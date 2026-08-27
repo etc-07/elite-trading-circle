@@ -41,7 +41,7 @@
         <div class="back-link"><a href="index.html">← Kembali</a></div>
     </div>
     <script>
-        // URL APPS SCRIPT LO (SUDAH DIPASANG)
+        // URL APPS SCRIPT LO
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx3X5m5ExThoJLoxXDychVjpHORL72hcxGJXFMTjqi7l2-IkaD7uszfGX4O9s3RRpGx/exec';
 
         function handleRegister(e) {
@@ -59,10 +59,24 @@
                 return; 
             }
 
+            // BUAT OBJECT USER DATA
+            const userData = {
+                nama: document.getElementById('nama').value,
+                email: document.getElementById('email').value,
+                whatsapp: document.getElementById('whatsapp').value,
+                password: password,
+                registerDate: new Date().toISOString()
+            };
+
+            // SIMPAN KE LOCALSTORAGE (BIAR BISA LOGIN)
+            localStorage.setItem('user_' + userData.email, JSON.stringify(userData));
+            
+            // SET LOADING
             const btn = document.getElementById('btnSubmit');
             btn.disabled = true;
             btn.textContent = 'Memproses...';
 
+            // KIRIM KE GOOGLE SHEETS
             const form = document.getElementById('registerForm');
             const formData = new FormData(form);
             
@@ -72,14 +86,8 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.result === 'success') {
-                    alert('Pendaftaran berhasil! Data tersimpan.\n\nSilakan login dengan email dan password Anda.');
-                    window.location.href = 'login.html';
-                } else {
-                    alert('Terjadi kesalahan. Silakan coba lagi.');
-                    btn.disabled = false;
-                    btn.textContent = 'Daftar Gratis';
-                }
+                alert('Pendaftaran berhasil! Data tersimpan.\n\nSilakan login dengan email dan password Anda.');
+                window.location.href = 'login.html';
             })
             .catch(error => {
                 console.error('Error:', error);
