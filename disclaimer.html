@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disclaimer Risiko - Elite Trading Circle</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#D4AF37">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%); color: #fff; min-height: 100vh; }
+        
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background: rgba(10, 10, 10, 0.95); position: fixed; width: 100%; top: 0; z-index: 1000; backdrop-filter: blur(10px); border-bottom: 2px solid #D4AF37; }
+        .logo { display: flex; align-items: center; gap: 15px; font-size: 24px; font-weight: bold; }
+        .logo img { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; }
+        .logo-text { background: linear-gradient(135deg, #D4AF37 0%, #FFD700 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .container { padding: 120px 5% 60px; max-width: 900px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 40px; }
+        .header h1 { font-size: 36px; margin-bottom: 15px; }
+        .header h1 .highlight { background: linear-gradient(135deg, #D4AF37, #FFD700); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .disclaimer-box { background: rgba(26, 26, 26, 0.8); border: 2px solid rgba(212, 175, 55, 0.3); border-radius: 16px; padding: 40px; margin-bottom: 30px; }
+        .disclaimer-box h2 { color: #D4AF37; font-size: 22px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .disclaimer-box p { color: #d4d4d4; line-height: 1.8; margin-bottom: 15px; font-size: 15px; }
+        .disclaimer-box ul { padding-left: 20px; color: #d4d4d4; line-height: 1.8; margin-bottom: 15px; }
+        .disclaimer-box li { margin-bottom: 10px; }
+        
+        .warning-text { color: #ef4444; font-weight: 600; }
+        
+        .back-button { display: inline-block; padding: 12px 30px; background: transparent; border: 2px solid #D4AF37; color: #D4AF37; border-radius: 8px; font-weight: 600; text-decoration: none; transition: all 0.3s; }
+        .back-button:hover { background: #D4AF37; color: #0a0a0a; transform: translateY(-2px); }
+        
+        .footer { background: rgba(10, 10, 10, 0.95); padding: 40px 5%; text-align: center; border-top: 2px solid rgba(212, 175, 55, 0.3); margin-top: 60px; }
+        .footer p { color: #888; font-size: 14px; }
+        
+        @media (max-width: 768px) { .header h1 { font-size: 28px; } .disclaimer-box { padding: 25px; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="logo.png" alt="Elite Trading Circle">
+            <span class="logo-text">Elite Trading Circle</span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1><span class="highlight">Disclaimer</span> & Peringatan Risiko</h1>
+        </div>
+        
+        <div class="disclaimer-box">
+            <h2>⚠️ Peringatan Risiko Tinggi</h2>
+            <p>Trading di pasar keuangan (Forex, Komoditas, Indeks, dan Crypto) melibatkan risiko kerugian yang sangat tinggi dan mungkin tidak cocok untuk semua investor. Anda harus menyadari sepenuhnya semua risiko yang terkait dengan trading dan mencari saran dari penasihat keuangan independen jika Anda memiliki keraguan.</p>
+            
+            <h2>📉 Tidak Ada Jaminan Profit</h2>
+            <p>Elite Trading Circle menyediakan perangkat lunak Expert Advisor (EA) sebagai alat bantu trading. <span class="warning-text">Kami TIDAK menjamin profit, penghasilan, atau hasil tertentu.</span> Kinerja masa lalu dari suatu EA tidak menjamin hasil di masa depan. Perubahan kondisi pasar dapat menyebabkan kerugian yang signifikan.</p>
+            
+            <h2>🛡️ Batasan Tanggung Jawab</h2>
+            <p>Dengan menggunakan layanan, EA, atau informasi dari Elite Trading Circle, Anda setuju bahwa:</p>
+            <ul>
+                <li>Anda menggunakan perangkat lunak ini sepenuhnya atas risiko Anda sendiri.</li>
+                <li>Elite Trading Circle, pengembang, dan afiliasi tidak bertanggung jawab atas kerugian finansial, kerusakan perangkat lunak, atau konsekuensi lainnya yang timbul dari penggunaan EA kami.</li>
+                <li>Keputusan trading sepenuhnya ada di tangan Anda. Kami hanya menyediakan alat, bukan saran keuangan.</li>
+            </ul>
+            
+            <h2>💡 Saran Penggunaan</h2>
+            <p>Selalu uji coba EA di akun <strong>Demo</strong> terlebih dahulu sebelum menggunakannya di akun Real. Pastikan Anda memahami cara kerja EA, pengaturan risiko (Drawdown, Lot Size), dan kondisi broker yang Anda gunakan.</p>
+        </div>
+        
+        <div style="text-align: center;">
+            <a href="index.html" class="back-button">← Kembali ke Beranda</a>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 Elite Trading Circle. All rights reserved.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partner Exness - Elite Trading Circle</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#D4AF37">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%); color: #fff; min-height: 100vh; }
+        
+        /* Navbar */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background: rgba(10, 10, 10, 0.95); position: fixed; width: 100%; top: 0; z-index: 1000; backdrop-filter: blur(10px); border-bottom: 2px solid #D4AF37; }
+        .logo { display: flex; align-items: center; gap: 15px; font-size: 24px; font-weight: bold; }
+        .logo img { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; }
+        .logo-text { background: linear-gradient(135deg, #D4AF37 0%, #FFD700 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .nav-buttons { display: flex; gap: 15px; }
+        
+        /* Buttons */
+        .btn { padding: 12px 30px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; transition: all 0.3s; font-size: 14px; text-decoration: none; display: inline-block; }
+        .btn-login { background: transparent; border: 2px solid #D4AF37; color: #D4AF37; }
+        .btn-login:hover { background: #D4AF37; color: #0a0a0a; transform: translateY(-2px); }
+        .btn-join { background: linear-gradient(135deg, #D4AF37, #FFD700); color: #0a0a0a; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); }
+        .btn-join:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6); }
+        
+        /* Content */
+        .container { padding: 120px 5% 60px; max-width: 900px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 40px; }
+        .header h1 { font-size: 36px; margin-bottom: 15px; }
+        .header h1 .highlight { background: linear-gradient(135deg, #D4AF37, #FFD700); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header p { color: #d4d4d4; max-width: 700px; margin: 0 auto; line-height: 1.8; }
+        
+        /* Partner Card */
+        .partner-card { background: rgba(26, 26, 26, 0.8); border: 2px solid rgba(212, 175, 55, 0.3); border-radius: 16px; padding: 40px; transition: all 0.3s; margin-bottom: 30px; }
+        .partner-card:hover { border-color: #D4AF37; box-shadow: 0 10px 40px rgba(212, 175, 55, 0.2); }
+        
+        .code-box { 
+            background: rgba(10, 10, 10, 0.8); 
+            border: 2px dashed #D4AF37; 
+            border-radius: 12px; 
+            padding: 25px; 
+            text-align: center; 
+            margin: 30px 0; 
+        }
+        .code-label { color: #888; font-size: 14px; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+        .code-value { 
+            color: #D4AF37; 
+            font-size: 32px; 
+            font-weight: 800; 
+            letter-spacing: 2px; 
+            font-family: 'Courier New', monospace;
+            user-select: all;
+        }
+        .code-note { color: #ef4444; font-size: 13px; margin-top: 10px; font-weight: 600; }
+        
+        /* Steps */
+        .steps { display: grid; gap: 20px; margin-bottom: 30px; }
+        .step { display: flex; gap: 15px; align-items: flex-start; }
+        .step-num { 
+            width: 35px; 
+            height: 35px; 
+            background: linear-gradient(135deg, #D4AF37, #FFD700); 
+            color: #0a0a0a; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: bold; 
+            flex-shrink: 0; 
+        }
+        .step-content h3 { color: #fff; font-size: 18px; margin-bottom: 5px; }
+        .step-content p { color: #d4d4d4; font-size: 14px; line-height: 1.6; }
+        
+        /* CTA Button */
+        .btn-register { 
+            display: block; 
+            width: 100%; 
+            padding: 18px; 
+            background: linear-gradient(135deg, #D4AF37, #FFD700); 
+            color: #0a0a0a; 
+            border-radius: 12px; 
+            font-weight: 800; 
+            font-size: 18px; 
+            text-align: center; 
+            text-decoration: none; 
+            transition: all 0.3s; 
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.4);
+        }
+        .btn-register:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(212, 175, 55, 0.6); }
+        
+        .back-button { display: inline-block; margin-top: 30px; padding: 12px 30px; background: transparent; border: 2px solid #D4AF37; color: #D4AF37; border-radius: 8px; font-weight: 600; text-decoration: none; transition: all 0.3s; }
+        .back-button:hover { background: #D4AF37; color: #0a0a0a; transform: translateY(-2px); }
+        
+        @media (max-width: 768px) {
+            .header h1 { font-size: 28px; }
+            .code-value { font-size: 24px; }
+            .partner-card { padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="logo.png" alt="Elite Trading Circle">
+            <span class="logo-text">Elite Trading Circle</span>
+        </div>
+        <div class="nav-buttons" id="nav-buttons">
+            <a href="dashboard.html" class="btn btn-login">Dashboard</a>
+            <button class="btn btn-join" onclick="doLogout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>Buka Akun <span class="highlight">Exness Partner</span></h1>
+            <p>Dapatkan akses ke kondisi trading premium dengan spread rendah, eksekusi cepat, dan dukungan eksklusif dari Elite Trading Circle.</p>
+        </div>
+        
+        <div class="partner-card">
+            <div class="code-box">
+                <div class="code-label">Wajib Masukkan Partner Code</div>
+                <div class="code-value">aowbanveal</div>
+                <div class="code-note">⚠️ Pastikan kode ini terisi saat registrasi untuk mendapatkan benefit eksklusif</div>
+            </div>
+            
+            <div class="steps">
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                        <h3>Klik Tombol Daftar di Bawah</h3>
+                        <p>Anda akan diarahkan ke halaman registrasi resmi Exness melalui link partner kami.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <div class="step-content">
+                        <h3>Isi Data Registrasi</h3>
+                        <p>Lengkapi formulir pendaftaran dengan data diri yang valid. Pastikan kolom Partner/Referral Code sudah terisi <strong>aowbanveal</strong>.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <div class="step-content">
+                        <h3>Verifikasi Akun (KYC)</h3>
+                        <p>Upload dokumen identitas dan bukti alamat untuk mengaktifkan akun trading Anda secara penuh.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">4</div>
+                    <div class="step-content">
+                        <h3>Deposit & Mulai Trading</h3>
+                        <p>Lakukan deposit pertama Anda dan nikmati akses ke EA Premium serta support prioritas dari tim kami.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="https://one.exnessonelink.com/a/aowbanveal" target="_blank" class="btn-register">
+                Daftar Akun Exness Sekarang →
+            </a>
+        </div>
+        
+        <a href="dashboard.html" class="back-button">← Kembali ke Dashboard</a>
+    </div>
+
+    <script>
+        // Cek status login saat halaman dimuat
+        window.onload = function() {
+            const user = localStorage.getItem('user');
+            if (!user) {
+                alert('Silakan login terlebih dahulu untuk mengakses fitur ini!');
+                window.location.href = 'login.html';
+            }
+            
+            document.getElementById('nav-buttons').innerHTML = `
+                <a href="dashboard.html" class="btn btn-login">Dashboard</a>
+                <button class="btn btn-join" onclick="doLogout()">Logout</button>
+            `;
+        };
+
+        function doLogout() {
+            localStorage.removeItem('user');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Elite Trading Circle</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { 
+            background: linear-gradient(135deg, #0a0a0a, #1a1a1a); 
+            color: #fff; 
+            min-height: 100vh; 
+            overflow-x: hidden; 
+            position: relative; 
+        }
+        
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 700px;
+            height: 700px;
+            opacity: 0.02;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(3px) contrast(0.3);
+        }
+        
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background: rgba(10, 10, 10, 0.95); position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 2px solid #D4AF37; }
+        .logo { display: flex; align-items: center; gap: 12px; font-size: 24px; font-weight: bold; }
+        .logo img { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; }
+        .logo-text { background: linear-gradient(135deg, #D4AF37, #FFD700); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .btn-logout { padding: 12px 30px; background: transparent; border: 2px solid #ef4444; color: #ef4444; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .btn-logout:hover { background: #ef4444; color: white; }
+        
+        .dashboard { margin-top: 100px; padding: 30px 5%; max-width: 1400px; margin-left: auto; margin-right: auto; position: relative; z-index: 1; }
+        .main-layout { display: grid; grid-template-columns: 1fr 450px; gap: 25px; align-items: start; }
+        .left-column { display: flex; flex-direction: column; gap: 20px; }
+        
+        .welcome { 
+            background: linear-gradient(135deg, #D4AF37, #FFD700); 
+            padding: 20px 30px; 
+            border-radius: 16px; 
+            color: #0a0a0a; 
+        }
+        .welcome h1 { font-size: 24px; margin-bottom: 5px; }
+        .welcome p { font-size: 14px; }
+        
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+        .menu-card { background: rgba(26, 26, 26, 0.8); border: 2px solid rgba(212, 175, 55, 0.3); border-radius: 16px; padding: 25px; cursor: pointer; transition: all 0.3s; }
+        .menu-card:hover { transform: translateY(-5px); border-color: #D4AF37; box-shadow: 0 10px 40px rgba(212, 175, 55, 0.3); }
+        .menu-icon { font-size: 35px; margin-bottom: 12px; }
+        .menu-card h3 { font-size: 18px; margin-bottom: 8px; color: #D4AF37; }
+        .menu-card p { color: #d4d4d4; font-size: 13px; }
+        
+        .sidebar-box { 
+            background: rgba(26, 26, 26, 0.9); 
+            border: 2px solid rgba(212, 175, 55, 0.3); 
+            border-radius: 16px; 
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            height: auto;
+            min-height: 800px;
+            position: sticky;
+            top: 110px;
+        }
+        
+        .sidebar-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 8px; 
+            padding-bottom: 8px; 
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            flex-shrink: 0;
+        }
+        .sidebar-title { font-size: 16px; color: #D4AF37; font-weight: bold; }
+        .sidebar-badge { background: linear-gradient(135deg, #10b981, #34d399); color: #0a0a0a; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; }
+        
+        /* CHART - Hide TradingView Logo */
+        .chart-section { margin-bottom: 0; }
+        .tradingview-chart { 
+            width: 100%; 
+            height: 250px !important;
+            border-radius: 10px; 
+            overflow: hidden; 
+            position: relative;
+        }
+        .tradingview-chart iframe {
+            border: none;
+        }
+        /* Hide TradingView watermark/logo */
+        .tradingview-chart .tradingview-widget-container__widget a[href*="tradingview"],
+        .tradingview-chart .tradingview-widget-container__widget .tradingview-widget-copyright,
+        .tradingview-chart [class*="copyright"],
+        .tradingview-chart a[target="_blank"][rel*="noopener"] {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
+        
+        /* DIVIDER - Tipis */
+        .divider { 
+            height: 1px; 
+            background: linear-gradient(90deg, transparent, #D4AF37, transparent); 
+            margin: 5px 0;
+            flex-shrink: 0;
+        }
+        
+        /* MARKET OVERVIEW - Rapat dengan Chart */
+        .market-section { 
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin-top: 0;
+            padding-top: 0;
+        }
+        .market-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 8px; 
+            margin-top: 0;
+            flex-shrink: 0;
+        }
+        .market-title { font-size: 14px; color: #D4AF37; font-weight: bold; }
+        .market-badge { background: rgba(212, 175, 55, 0.2); color: #D4AF37; padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: bold; }
+        .tradingview-market { 
+            width: 100%; 
+            height: 450px !important;
+            border-radius: 10px; 
+            overflow: hidden; 
+        }
+        
+        @media (max-width: 1024px) {
+            .main-layout { grid-template-columns: 1fr; }
+            .sidebar-box { min-height: 800px; position: static; }
+            .watermark { width: 500px; height: 500px; }
+        }
+    </style>
+</head>
+<body>
+    <img src="logo.png" alt="" class="watermark">
+    
+    <nav class="navbar">
+        <div class="logo">
+            <img src="logo.png" alt="Elite Trading Circle">
+            <span class="logo-text">Elite Trading Circle</span>
+        </div>
+        <button class="btn-logout" onclick="logout()">Logout</button>
+    </nav>
+    
+    <div class="dashboard">
+        <div class="main-layout">
+            <div class="left-column">
+                <div class="welcome">
+                    <h1>Selamat Datang, <span id="userName">User</span>!</h1>
+                    <p>Kelola akun trading dan EA Anda dari sini</p>
+                </div>
+                
+                <div class="menu-grid">
+                    <div class="menu-card" onclick="location.href='sewa-ea.html'">
+                        <div class="menu-icon">💎</div>
+                        <h3>Sewa EA Premium</h3>
+                        <p>Lihat paket sewa EA 1-3 bulan</p>
+                    </div>
+                    
+                    <div class="menu-card" onclick="location.href='free-ea.html'">
+                        <div class="menu-icon">🎁</div>
+                        <h3>Free EA</h3>
+                        <p>Dapatkan EA gratis via partner IB</p>
+                    </div>
+                    
+                    <div class="menu-card" onclick="location.href='akun-pantau.html'">
+                        <div class="menu-icon">📊</div>
+                        <h3>Akun Pantau</h3>
+                        <p>Monitor performa akun trading</p>
+                    </div>
+                    
+                    <!-- EMOJI SUDAH DIKEMBALIKAN DI SINI -->
+                    <div class="menu-card" onclick="location.href='exness-partner.html'">
+                        <div class="menu-icon">🏦</div>
+                        <h3>Buka Akun Exness</h3>
+                        <p>Registrasi via partner & dapatkan benefit eksklusif</p>
+                    </div>
+                    
+                    <div class="menu-card" onclick="window.open('https://chat.whatsapp.com/IrHfctA7LdjG8AsvJnjkHQ?s=sw&p=i&mlu=4', '_blank')">
+                        <div class="menu-icon">👥</div>
+                        <h3>Join WhatsApp Group</h3>
+                        <p>Bergabung dengan komunitas Elite Trading</p>
+                    </div>
+                    
+                    <div class="menu-card" onclick="window.open('https://t.me/ELITE_TRADING_CIRCLE_27', '_blank')">
+                        <div class="menu-icon">💬</div>
+                        <h3>Chat Admin</h3>
+                        <p>Hubungi admin via Telegram</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-box">
+                <div class="chart-section">
+                    <div class="sidebar-header">
+                        <div class="sidebar-title">📊 XAU/USD Live Chart</div>
+                        <div class="sidebar-badge">LIVE</div>
+                    </div>
+                    <div class="tradingview-chart">
+                        <div id="tradingview_chart"></div>
+                        <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+                        <script type="text/javascript">
+                        new TradingView.widget({
+                            "autosize": true,
+                            "symbol": "OANDA:XAUUSD",
+                            "interval": "60",
+                            "timezone": "Asia/Jakarta",
+                            "theme": "dark",
+                            "style": "1",
+                            "locale": "id",
+                            "toolbar_bg": "#1a1a1a",
+                            "enable_publishing": false,
+                            "allow_symbol_change": true,
+                            "container_id": "tradingview_chart",
+                            "hide_top_toolbar": true,
+                            "hide_side_toolbar": true,
+                            "hide_legend": true,
+                            "studies": [],
+                            "withdateranges": false,
+                            "details": false,
+                            "hotlist": false,
+                            "calendar": false,
+                            "save_image": false
+                        });
+                        </script>
+                    </div>
+                </div>
+                
+                <div class="divider"></div>
+                
+                <div class="market-section">
+                    <div class="market-header">
+                        <div class="market-title">🔥 Market Overview</div>
+                        <div class="market-badge">REAL-TIME</div>
+                    </div>
+                    <div class="tradingview-market">
+                        <div class="tradingview-widget-container__widget"></div>
+                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+                        {
+                            "colorTheme": "dark",
+                            "dateRange": "1D",
+                            "showChart": false,
+                            "locale": "id",
+                            "width": "100%",
+                            "height": "100%",
+                            "largeChartUrl": "",
+                            "isTransparent": true,
+                            "showSymbolLogo": true,
+                            "showFloatingTooltip": true,
+                            "plotLineColorGrowing": "rgba(16, 185, 129, 1)",
+                            "plotLineColorFalling": "rgba(239, 68, 68, 1)",
+                            "gridLineColor": "rgba(42, 46, 57, 0)",
+                            "scaleFontColor": "rgba(212, 175, 55, 1)",
+                            "belowLineFillColorGrowing": "rgba(16, 185, 129, 0.12)",
+                            "belowLineFillColorFalling": "rgba(239, 68, 68, 0.12)",
+                            "symbolActiveColor": "rgba(212, 175, 55, 0.12)",
+                            "tabs": [
+                                {
+                                    "title": "Forex",
+                                    "symbols": [
+                                        { "s": "OANDA:XAUUSD", "d": "Gold (XAU/USD)" },
+                                        { "s": "OANDA:EURUSD", "d": "EUR/USD" },
+                                        { "s": "OANDA:GBPUSD", "d": "GBP/USD" },
+                                        { "s": "OANDA:USDJPY", "d": "USD/JPY" },
+                                        { "s": "OANDA:AUDUSD", "d": "AUD/USD" },
+                                        { "s": "OANDA:USDCAD", "d": "USD/CAD" }
+                                    ],
+                                    "originalTitle": "Forex"
+                                },
+                                {
+                                    "title": "Indices",
+                                    "symbols": [
+                                        { "s": "FOREXCOM:NAS100", "d": "Nasdaq 100" },
+                                        { "s": "FOREXCOM:US30", "d": "Dow Jones" },
+                                        { "s": "FOREXCOM:SPXUSD", "d": "S&P 500" }
+                                    ],
+                                    "originalTitle": "Indices"
+                                },
+                                {
+                                    "title": "Crypto",
+                                    "symbols": [
+                                        { "s": "BINANCE:BTCUSDT", "d": "Bitcoin" },
+                                        { "s": "BINANCE:ETHUSDT", "d": "Ethereum" },
+                                        { "s": "BINANCE:SOLUSDT", "d": "Solana" }
+                                    ],
+                                    "originalTitle": "Crypto"
+                                }
+                            ]
+                        }
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const user = localStorage.getItem('user');
+        if (!user) { window.location.href = 'login.html'; }
+        else { document.getElementById('userName').textContent = JSON.parse(user).nama; }
+        function logout() { localStorage.removeItem('user'); window.location.href = 'index.html'; }
+    </script>
+</body>
+</html>

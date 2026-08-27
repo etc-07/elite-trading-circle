@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite Trading Circle - Smart EA Platform</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#D4AF37">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%); color: #fff; min-height: 100vh; }
+        
+        /* Navbar */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background: rgba(10, 10, 10, 0.95); position: fixed; width: 100%; top: 0; z-index: 1000; backdrop-filter: blur(10px); border-bottom: 2px solid #D4AF37; }
+        .logo { display: flex; align-items: center; gap: 15px; font-size: 24px; font-weight: bold; }
+        .logo img { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; }
+        .logo-text { background: linear-gradient(135deg, #D4AF37 0%, #FFD700 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .nav-buttons { display: flex; gap: 15px; }
+        
+        /* Buttons */
+        .btn { padding: 12px 30px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; transition: all 0.3s; font-size: 14px; text-decoration: none; display: inline-block; }
+        .btn-login { background: transparent; border: 2px solid #D4AF37; color: #D4AF37; }
+        .btn-login:hover { background: #D4AF37; color: #0a0a0a; transform: translateY(-2px); }
+        .btn-join { background: linear-gradient(135deg, #D4AF37, #FFD700); color: #0a0a0a; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); }
+        .btn-join:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6); }
+        
+        /* Hero */
+        .hero { margin-top: 100px; padding: 80px 5%; text-align: center; background: radial-gradient(ellipse at top, rgba(212, 175, 55, 0.1), transparent); }
+        .hero-logo { width: 150px; height: 150px; border-radius: 20px; object-fit: cover; box-shadow: 0 10px 40px rgba(212, 175, 55, 0.3); margin-bottom: 30px; }
+        .hero h1 { font-size: 48px; margin-bottom: 20px; }
+        .hero h1 .highlight { background: linear-gradient(135deg, #D4AF37, #FFD700); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { font-size: 18px; color: #d4d4d4; max-width: 700px; margin: 0 auto 40px; line-height: 1.8; }
+        
+        /* Features Grid */
+        .features { padding: 60px 5%; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; }
+        .feature-card { background: rgba(26, 26, 26, 0.8); border: 2px solid rgba(212, 175, 55, 0.3); border-radius: 16px; padding: 30px; cursor: pointer; transition: all 0.3s; position: relative; }
+        .feature-card:hover { transform: translateY(-5px); border-color: #D4AF37; box-shadow: 0 10px 40px rgba(212, 175, 55, 0.3); }
+        .feature-icon { font-size: 40px; margin-bottom: 15px; }
+        .feature-card h3 { font-size: 20px; margin-bottom: 10px; color: #D4AF37; }
+        .feature-card p { color: #d4d4d4; font-size: 14px; line-height: 1.6; }
+        
+        /* Lock Badge */
+        .lock-badge { position: absolute; top: 15px; right: 15px; background: rgba(212, 175, 55, 0.2); color: #D4AF37; padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; border: 1px solid #D4AF37; }
+        
+        /* Footer */
+        .footer { background: rgba(10, 10, 10, 0.95); padding: 40px 5%; text-align: center; border-top: 2px solid rgba(212, 175, 55, 0.3); margin-top: 60px; }
+        .footer p { color: #888; font-size: 14px; margin-bottom: 10px; }
+        .footer a { color: #D4AF37; text-decoration: none; transition: 0.3s; }
+        .footer a:hover { color: #FFD700; }
+        .footer-links { display: flex; justify-content: center; gap: 20px; margin-top: 15px; align-items: center; }
+
+        @media (max-width: 768px) { 
+            .hero h1 { font-size: 32px; } 
+            .navbar { padding: 15px 5%; } 
+            .hero-logo { width: 120px; height: 120px; }
+            .btn { padding: 10px 20px; font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="logo.png" alt="Elite Trading Circle">
+            <span class="logo-text">Elite Trading Circle</span>
+        </div>
+        <div class="nav-buttons" id="nav-buttons">
+            <a href="login.html" class="btn btn-login">Masuk</a>
+            <a href="register.html" class="btn btn-join">Gabung</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <img src="logo-trade.png" alt="Elite Trading Circle" class="hero-logo">
+        <h1>Smart EA Platform<br><span class="highlight">Trading Otomatis Cerdas</span></h1>
+        <p>Solusi trading otomatis dengan Expert Advisor terbaik. Sewa EA, download gratis, dan monitor performa akun Anda.</p>
+    </section>
+
+    <section class="features">
+        <!-- Card 1: Sewa EA -->
+        <div class="feature-card" onclick="checkAuth('sewa-ea.html')">
+            <div class="lock-badge">🔒 Member Only</div>
+            <div class="feature-icon">💎</div>
+            <h3>Sewa EA Premium</h3>
+            <p>Lihat paket sewa EA 1-3 bulan</p>
+        </div>
+        
+        <!-- Card 2: Free EA (Sesuai Dashboard) -->
+        <div class="feature-card" onclick="checkAuth('free-ea.html')">
+            <div class="lock-badge">🔒 Member Only</div>
+            <div class="feature-icon"></div>
+            <h3>Free EA</h3>
+            <p>Dapatkan EA gratis via partner IB</p>
+        </div>
+        
+        <!-- Card 3: Akun Pantau -->
+        <div class="feature-card" onclick="checkAuth('akun-pantau.html')">
+            <div class="lock-badge">🔒 Member Only</div>
+            <div class="feature-icon"></div>
+            <h3>Akun Pantau</h3>
+            <p>Monitor performa akun trading</p>
+        </div>
+
+        <!-- Card 4: Buka Akun Exness (Sesuai Dashboard) -->
+        <div class="feature-card" onclick="checkAuth('exness-partner.html')">
+            <div class="lock-badge"> Member Only</div>
+            <div class="feature-icon">🏦</div>
+            <h3>Buka Akun Exness</h3>
+            <p>Registrasi via partner & dapatkan benefit eksklusif</p>
+        </div>
+
+        <!-- Card 5: Join WhatsApp Group -->
+        <div class="feature-card" onclick="checkAuth('whatsapp-group.html')">
+            <div class="lock-badge">🔒 Member Only</div>
+            <div class="feature-icon">👥</div>
+            <h3>Join WhatsApp Group</h3>
+            <p>Bergabung dengan komunitas Elite Trading</p>
+        </div>
+
+        <!-- Card 6: Chat Admin -->
+        <div class="feature-card" onclick="checkAuth('chat-admin.html')">
+            <div class="lock-badge"> Member Only</div>
+            <div class="feature-icon">💬</div>
+            <h3>Chat Admin</h3>
+            <p>Hubungi admin via Telegram</p>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2026 Elite Trading Circle. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="disclaimer.html">Disclaimer</a>
+            <span style="color: #D4AF37;">|</span>
+            <a href="register.html">Daftar Sekarang</a>
+        </div>
+    </footer>
+
+    <script>
+        window.onload = function() {
+            const user = localStorage.getItem('user');
+            if (user) {
+                document.getElementById('nav-buttons').innerHTML = `
+                    <a href="dashboard.html" class="btn btn-login">Dashboard</a>
+                    <button class="btn btn-join" onclick="doLogout()">Logout</button>
+                `;
+            }
+        };
+
+        function doLogout() {
+            localStorage.removeItem('user');
+            window.location.reload();
+        }
+
+        function checkAuth(targetUrl) {
+            const user = localStorage.getItem('user');
+            if (user) {
+                window.location.href = targetUrl;
+            } else {
+                localStorage.setItem('redirect_after_login', targetUrl);
+                window.location.href = 'register.html';
+            }
+        }
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js');
+        }
+    </script>
+</body>
+</html>

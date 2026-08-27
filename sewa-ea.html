@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sewa EA Premium - Elite Trading Circle</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#D4AF37">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%); color: #fff; min-height: 100vh; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background: rgba(10, 10, 10, 0.95); position: fixed; width: 100%; top: 0; z-index: 1000; backdrop-filter: blur(10px); border-bottom: 2px solid #D4AF37; }
+        .logo { display: flex; align-items: center; gap: 15px; font-size: 24px; font-weight: bold; }
+        .logo img { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; }
+        .logo-text { background: linear-gradient(135deg, #D4AF37 0%, #FFD700 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .nav-buttons { display: flex; gap: 15px; }
+        .btn { padding: 12px 30px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; transition: all 0.3s; font-size: 14px; text-decoration: none; display: inline-block; }
+        .btn-login { background: transparent; border: 2px solid #D4AF37; color: #D4AF37; }
+        .btn-login:hover { background: #D4AF37; color: #0a0a0a; transform: translateY(-2px); }
+        .btn-join { background: linear-gradient(135deg, #D4AF37, #FFD700); color: #0a0a0a; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); }
+        .btn-join:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6); }
+        
+        .container { padding: 120px 5% 60px; max-width: 1200px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 50px; }
+        .header h1 { font-size: 36px; margin-bottom: 15px; }
+        .header h1 .highlight { background: linear-gradient(135deg, #D4AF37, #FFD700); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header p { color: #d4d4d4; max-width: 700px; margin: 0 auto; line-height: 1.8; }
+        
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-bottom: 40px; }
+        .price-card { background: rgba(26, 26, 26, 0.8); border: 2px solid rgba(212, 175, 55, 0.3); border-radius: 16px; padding: 35px; text-align: center; transition: all 0.3s; position: relative; display: flex; flex-direction: column; }
+        .price-card:hover { transform: translateY(-8px); border-color: #D4AF37; box-shadow: 0 15px 40px rgba(212, 175, 55, 0.25); }
+        .price-card.popular { border-color: #D4AF37; box-shadow: 0 0 25px rgba(212, 175, 55, 0.15); }
+        .popular-tag { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #D4AF37, #FFD700); color: #0a0a0a; padding: 4px 20px; border-radius: 20px; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .tier-name { font-size: 22px; color: #D4AF37; margin-bottom: 20px; font-weight: 700; }
+        .price-row { margin-bottom: 12px; }
+        .price-label { color: #888; font-size: 13px; margin-bottom: 4px; }
+        .price-value { font-size: 28px; font-weight: 800; color: #fff; }
+        .price-value span { font-size: 14px; color: #888; font-weight: 400; }
+        .price-save { color: #10b981; font-size: 12px; font-weight: 600; margin-top: 2px; }
+        
+        .features-list { list-style: none; margin: 25px 0; text-align: left; flex-grow: 1; }
+        .features-list li { padding: 8px 0; color: #d4d4d4; font-size: 14px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .features-list li:last-child { border-bottom: none; }
+        .features-list li::before { content: "✓"; color: #D4AF37; font-weight: bold; font-size: 16px; }
+        
+        .btn-buy { display: block; width: 100%; padding: 15px; background: linear-gradient(135deg, #D4AF37, #FFD700); color: #0a0a0a; border-radius: 10px; font-weight: 700; font-size: 16px; text-align: center; text-decoration: none; transition: all 0.3s; margin-top: auto; }
+        .btn-buy:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(212, 175, 55, 0.5); }
+        .btn-buy-outline { background: transparent; border: 2px solid #D4AF37; color: #D4AF37; }
+        .btn-buy-outline:hover { background: #D4AF37; color: #0a0a0a; }
+        
+        .back-button { display: inline-block; margin-top: 30px; padding: 12px 30px; background: transparent; border: 2px solid #D4AF37; color: #D4AF37; border-radius: 8px; font-weight: 600; text-decoration: none; transition: all 0.3s; }
+        .back-button:hover { background: #D4AF37; color: #0a0a0a; transform: translateY(-2px); }
+        
+        @media (max-width: 768px) { .header h1 { font-size: 28px; } .pricing-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="logo.png" alt="Elite Trading Circle">
+            <span class="logo-text">Elite Trading Circle</span>
+        </div>
+        <div class="nav-buttons" id="nav-buttons">
+            <a href="dashboard.html" class="btn btn-login">Dashboard</a>
+            <button class="btn btn-join" onclick="doLogout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>Sewa <span class="highlight">EA Premium</span></h1>
+            <p>Pilih paket yang sesuai dengan kebutuhan trading Anda. Semua EA telah teruji dengan track record terbukti dan risk management yang ketat.</p>
+        </div>
+        
+        <div class="pricing-grid">
+            <!-- LOW TIER -->
+            <div class="price-card">
+                <div class="tier-name">Low Risk</div>
+                <div class="price-row">
+                    <div class="price-label">Paket 1 Bulan</div>
+                    <div class="price-value">$20<span>/bulan</span></div>
+                </div>
+                <div class="price-row">
+                    <div class="price-label">Paket 3 Bulan</div>
+                    <div class="price-value">$60<span>/3 bulan</span></div>
+                    <div class="price-save">Hemat $0</div>
+                </div>
+                <ul class="features-list">
+                    <li>Cocok untuk pemula</li>
+                    <li>Drawdown maksimal 10%</li>
+                    <li>Pair: XAU/USD</li>
+                    <li>Support standar</li>
+                    <li>Update bulanan</li>
+                </ul>
+                <a href="https://t.me/ELITE_TRADING_CIRCLE_27" target="_blank" class="btn-buy btn-buy-outline">Beli Paket Low</a>
+            </div>
+            
+            <!-- MEDIUM TIER -->
+            <div class="price-card popular">
+                <div class="popular-tag">PALING LARIS</div>
+                <div class="tier-name">Medium Risk</div>
+                <div class="price-row">
+                    <div class="price-label">Paket 1 Bulan</div>
+                    <div class="price-value">$50<span>/bulan</span></div>
+                </div>
+                <div class="price-row">
+                    <div class="price-label">Paket 3 Bulan</div>
+                    <div class="price-value">$149<span>/3 bulan</span></div>
+                    <div class="price-save">Hemat $1</div>
+                </div>
+                <ul class="features-list">
+                    <li>Cocok untuk trader aktif</li>
+                    <li>Drawdown maksimal 15%</li>
+                    <li>Pair: XAU/USD + Major Forex</li>
+                    <li>Priority support</li>
+                    <li>Update mingguan</li>
+                    <li>Setting optimalisasi</li>
+                </ul>
+                <a href="https://t.me/ELITE_TRADING_CIRCLE_27" target="_blank" class="btn-buy">Beli Paket Medium</a>
+            </div>
+            
+            <!-- HIGH TIER -->
+            <div class="price-card">
+                <div class="tier-name">High Risk</div>
+                <div class="price-row">
+                    <div class="price-label">Paket 1 Bulan</div>
+                    <div class="price-value">$70<span>/bulan</span></div>
+                </div>
+                <div class="price-row">
+                    <div class="price-label">Paket 3 Bulan</div>
+                    <div class="price-value">$190<span>/3 bulan</span></div>
+                    <div class="price-save">Hemat $20</div>
+                </div>
+                <ul class="features-list">
+                    <li>Untuk trader berpengalaman</li>
+                    <li>Drawdown maksimal 25%</li>
+                    <li>Semua pair tersedia</li>
+                    <li>VIP 1-on-1 support</li>
+                    <li>Update real-time</li>
+                    <li>Custom setting request</li>
+                    <li>Akses beta testing EA baru</li>
+                </ul>
+                <a href="https://t.me/ELITE_TRADING_CIRCLE_27" target="_blank" class="btn-buy btn-buy-outline">Beli Paket High</a>
+            </div>
+        </div>
+        
+        <div style="text-align: center;">
+            <a href="dashboard.html" class="back-button">← Kembali ke Dashboard</a>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            const user = localStorage.getItem('user');
+            if (!user) { alert('Silakan login terlebih dahulu!'); window.location.href = 'login.html'; }
+            document.getElementById('nav-buttons').innerHTML = `<a href="dashboard.html" class="btn btn-login">Dashboard</a><button class="btn btn-join" onclick="doLogout()">Logout</button>`;
+        };
+        function doLogout() { localStorage.removeItem('user'); window.location.href = 'index.html'; }
+    </script>
+</body>
+</html>

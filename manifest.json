@@ -1,0 +1,10 @@
+{
+  "name": "Elite Trading Circle",
+  "short_name": "Elite Trading",
+  "description": "Smart EA Platform - Trading Otomatis Cerdas",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#D4AF37",
+  "orientation": "portrait"
+}

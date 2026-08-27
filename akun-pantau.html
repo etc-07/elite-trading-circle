@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akun Pantau - Elite Trading Circle</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#D4AF37">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%); color: #fff; min-height: 100vh; }
+        
+        /* Navbar */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background: rgba(10, 10, 10, 0.95); position: fixed; width: 100%; top: 0; z-index: 1000; backdrop-filter: blur(10px); border-bottom: 2px solid #D4AF37; }
+        .logo { display: flex; align-items: center; gap: 15px; font-size: 24px; font-weight: bold; }
+        .logo img { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; }
+        .logo-text { background: linear-gradient(135deg, #D4AF37 0%, #FFD700 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .nav-buttons { display: flex; gap: 15px; }
+        
+        /* Buttons */
+        .btn { padding: 12px 30px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; transition: all 0.3s; font-size: 14px; text-decoration: none; display: inline-block; }
+        .btn-login { background: transparent; border: 2px solid #D4AF37; color: #D4AF37; }
+        .btn-login:hover { background: #D4AF37; color: #0a0a0a; transform: translateY(-2px); }
+        .btn-join { background: linear-gradient(135deg, #D4AF37, #FFD700); color: #0a0a0a; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); }
+        .btn-join:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6); }
+        
+        /* Content */
+        .container { padding: 120px 5% 60px; max-width: 1400px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 50px; }
+        .header h1 { font-size: 36px; margin-bottom: 15px; }
+        .header h1 .highlight { background: linear-gradient(135deg, #D4AF37, #FFD700); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header p { color: #d4d4d4; max-width: 700px; margin: 0 auto; line-height: 1.8; }
+        
+        /* Account Cards - Horizontal Scroll dengan Center Alignment */
+        .account-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .account-grid { 
+            display: flex;
+            gap: 30px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding: 20px 10px;
+            scrollbar-width: thin;
+            scrollbar-color: #D4AF37 #1a1a1a;
+            max-width: 100%;
+        }
+        
+        .account-grid::-webkit-scrollbar {
+            height: 8px;
+        }
+        
+        .account-grid::-webkit-scrollbar-track {
+            background: #1a1a1a;
+            border-radius: 10px;
+        }
+        
+        .account-grid::-webkit-scrollbar-thumb {
+            background: #D4AF37;
+            border-radius: 10px;
+        }
+        
+        .account-card { 
+            flex: 0 0 400px;
+            scroll-snap-align: start;
+            background: rgba(26, 26, 26, 0.9); 
+            border: 2px solid rgba(212, 175, 55, 0.3); 
+            border-radius: 20px; 
+            padding: 30px; 
+            transition: all 0.3s; 
+        }
+        
+        .account-card:hover { 
+            transform: translateY(-8px); 
+            border-color: #D4AF37; 
+            box-shadow: 0 15px 50px rgba(212, 175, 55, 0.4); 
+        }
+        
+        .account-header { 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            margin-bottom: 25px; 
+            padding-bottom: 20px; 
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3); 
+        }
+        
+        .broker-logo { 
+            width: 55px; 
+            height: 55px; 
+            background: linear-gradient(135deg, #D4AF37, #FFD700); 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: bold; 
+            color: #0a0a0a; 
+            font-size: 22px; 
+            flex-shrink: 0;
+        }
+        
+        .account-title h2 { 
+            font-size: 18px; 
+            color: #D4AF37; 
+            margin-bottom: 5px; 
+            font-weight: 700;
+            line-height: 1.3;
+        }
+        
+        .account-title p { 
+            color: #999; 
+            font-size: 13px; 
+            line-height: 1.4;
+        }
+        
+        .account-details { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px; 
+        }
+        
+        .detail { 
+            background: rgba(10, 10, 10, 0.6); 
+            padding: 18px; 
+            border-radius: 12px; 
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+        
+        .detail-label { 
+            color: #888; 
+            font-size: 12px; 
+            margin-bottom: 8px; 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+        
+        .detail-value { 
+            color: #fff; 
+            font-size: 15px; 
+            font-weight: 600; 
+            word-break: break-all;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .detail-value.password, .detail-value.partner { 
+            color: #D4AF37; 
+        }
+        
+        .note { 
+            background: rgba(26, 26, 26, 0.6); 
+            border-left: 4px solid #D4AF37; 
+            padding: 25px; 
+            margin-top: 40px; 
+            border-radius: 0 12px 12px 0; 
+        }
+        
+        .note h3 { 
+            color: #D4AF37; 
+            margin-bottom: 15px; 
+            font-size: 18px;
+        }
+        
+        .note ul { 
+            padding-left: 20px; 
+            color: #b0b0b0; 
+        }
+        
+        .note li { 
+            margin-bottom: 10px; 
+            line-height: 1.6;
+        }
+        
+        .back-button { 
+            display: inline-block; 
+            margin-top: 30px; 
+            padding: 14px 35px; 
+            background: transparent; 
+            border: 2px solid #D4AF37; 
+            color: #D4AF37; 
+            border-radius: 10px; 
+            font-weight: 600; 
+            text-decoration: none; 
+            transition: all 0.3s; 
+        }
+        
+        .back-button:hover { 
+            background: #D4AF37; 
+            color: #0a0a0a; 
+            transform: translateY(-2px); 
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .account-card { flex: 0 0 320px; padding: 25px; }
+            .account-title h2 { font-size: 16px; }
+            .account-details { grid-template-columns: 1fr; }
+            .header h1 { font-size: 28px; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="logo.png" alt="Elite Trading Circle">
+            <span class="logo-text">Elite Trading Circle</span>
+        </div>
+        <div class="nav-buttons" id="nav-buttons">
+            <a href="dashboard.html" class="btn btn-login">Dashboard</a>
+            <button class="btn btn-join" onclick="doLogout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1><span class="highlight">Akun Pantau</span> Investor</h1>
+            <p>Monitor performa akun trading kami secara real-time. Akun ini menggunakan view-only access untuk memastikan keamanan dana Anda.</p>
+        </div>
+        
+        <div class="account-wrapper">
+            <div class="account-grid">
+                <!-- Akun 1: CT Elite Trading Circle -->
+                <div class="account-card">
+                    <div class="account-header">
+                        <div class="broker-logo">E</div>
+                        <div class="account-title">
+                            <h2>CT Elite Trading Circle</h2>
+                            <p>Exness MT5 Real - Account Monitoring</p>
+                        </div>
+                    </div>
+                    <div class="account-details">
+                        <div class="detail">
+                            <div class="detail-label">ID Akun</div>
+                            <div class="detail-value">263546427</div>
+                        </div>
+                        <div class="detail">
+                            <div class="detail-label">Password Investor</div>
+                            <div class="detail-value password">Jakart@26</div>
+                        </div>
+                        <div class="detail">
+                            <div class="detail-label">Server</div>
+                            <div class="detail-value">Exness-MT5Real37</div>
+                        </div>
+                        <div class="detail">
+                            <div class="detail-label">Code Partner</div>
+                            <div class="detail-value partner">aowbanveal</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Akun 2: 2,5 USC Lowrisk Grow -->
+                <div class="account-card">
+                    <div class="account-header">
+                        <div class="broker-logo">E</div>
+                        <div class="account-title">
+                            <h2>2,5 USC Lowrisk Grow</h2>
+                            <p>Exness MT5 Real - Account Monitoring</p>
+                        </div>
+                    </div>
+                    <div class="account-details">
+                        <div class="detail">
+                            <div class="detail-label">ID Akun</div>
+                            <div class="detail-value">263549065</div>
+                        </div>
+                        <div class="detail">
+                            <div class="detail-label">Password Investor</div>
+                            <div class="detail-value password">Jakart@26</div>
+                        </div>
+                        <div class="detail">
+                            <div class="detail-label">Server</div>
+                            <div class="detail-value">Exness-MT5Real37</div>
+                        </div>
+                        <div class="detail">
+                            <div class="detail-label">Code Partner</div>
+                            <div class="detail-value partner">aowbanveal</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Akun 3: 5k USC Lowrisk Grow -->
+                <div class="account-card">
+                    <div class="account-header">
+                        <div class="broker-logo">E</div>
+                        <div class="account-title">
+                            <h2>5k USC Lowrisk Grow</h2>
+                            <p>Exness MT5 Real - Account Monitoring</p>
+                        </div>
+                    </div>
+                    <div class="account-details">
+                        <div class="detail">
+                            <div class="detail-label">ID Akun</div>
+                            <div class="detail-value">184125758</div>
+                        </div>
+                        <div class="detail">
+                            <div class="detail-label">Password Investor</div>
+                            <div class="detail-value password">Jakart@26</div>
+                        </div>
+                        <div class="detail">
+                            <div class="detail-label">Server</div>
+                            <div class="detail-value">Exness-MT5Real25</div>
+                        </div>
+                        <div class="detail">
+                            <div class="detail-label">Code Partner</div>
+                            <div class="detail-value partner">aowbanveal</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="note">
+            <h3>📌 Cara Menggunakan Akun Pantau:</h3>
+            <ul>
+                <li>Download platform MetaTrader 5 (MT5) dari website resmi Exness</li>
+                <li>Login menggunakan ID dan Password Investor di atas</li>
+                <li>Pilih server yang sesuai dengan informasi di atas</li>
+                <li>Gunakan Code Partner <strong>aowbanveal</strong> jika ingin mendaftar akun baru</li>
+                <li>Akun ini hanya bisa digunakan untuk view-only (tanpa akses transaksi)</li>
+                <li>Password investor hanya untuk monitoring, tidak bisa digunakan untuk penarikan dana</li>
+            </ul>
+        </div>
+        
+        <div style="text-align: center;">
+            <a href="dashboard.html" class="back-button">← Kembali ke Dashboard</a>
+        </div>
+    </div>
+
+    <script>
+        // Cek status login saat halaman dimuat
+        window.onload = function() {
+            const user = localStorage.getItem('user');
+            if (!user) {
+                alert('Silakan login terlebih dahulu untuk mengakses fitur ini!');
+                window.location.href = 'login.html';
+            }
+            
+            const userData = JSON.parse(user);
+            document.getElementById('nav-buttons').innerHTML = `
+                <a href="dashboard.html" class="btn btn-login">Dashboard</a>
+                <button class="btn btn-join" onclick="doLogout()">Logout</button>
+            `;
+        };
+
+        // Fungsi Logout
+        function doLogout() {
+            localStorage.removeItem('user');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
