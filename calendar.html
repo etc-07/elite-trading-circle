@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Economic Calendar - Elite Trading Circle</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: #f5f6fa; color: #333; min-height: 100vh; overflow-x: hidden; }
+        .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px; height: 600px; opacity: 0.04; pointer-events: none; z-index: 0; }
+        
+        /* Navbar Utama */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(255,255,255,0.97); position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 1px solid #eee; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
+        .logo { display: flex; align-items: center; gap: 12px; font-size: 20px; font-weight: bold; color: #1a1a1a; text-decoration: none; }
+        .logo img { width: 42px; height: 42px; border-radius: 8px; object-fit: cover; }
+        .logo-text { background: linear-gradient(135deg, #D4AF37, #B8941F); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .btn-logout { padding: 9px 20px; background: transparent; border: 1.5px solid #ef4444; color: #ef4444; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.3s; }
+        .btn-logout:hover { background: #ef4444; color: #fff; }
+        
+        /* TAB BAR ATAS */
+        .tab-bar { 
+            position: fixed; top: 73px; left: 0; right: 0; 
+            background: #fff; border-bottom: 1px solid #eee; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03); 
+            z-index: 999; 
+        }
+        .tab-scroll { 
+            display: flex; 
+            overflow-x: auto; 
+            -webkit-overflow-scrolling: touch; 
+            scrollbar-width: none; 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            padding: 0 5%; 
+            gap: 4px; 
+        }
+        .tab-scroll::-webkit-scrollbar { display: none; }
+        .tab { 
+            padding: 15px 18px; 
+            white-space: nowrap; 
+            color: #555; 
+            font-size: 14px; 
+            font-weight: 500; 
+            text-decoration: none; 
+            border-bottom: 3px solid transparent; 
+            transition: color 0.2s, border-color 0.2s; 
+        }
+        .tab:hover { color: #D4AF37; }
+        .tab.active { color: #D4AF37; font-weight: 700; border-bottom-color: #D4AF37; }
+        .tab-separator { width: 1px; background: #eee; margin: 10px 6px; flex-shrink: 0; }
+        
+        /* Konten Halaman */
+        .page-content { margin-top: 148px; padding: 30px 5% 60px; max-width: 1200px; margin-left: auto; margin-right: auto; position: relative; z-index: 1; }
+        
+        .page-header { text-align: center; margin-bottom: 35px; }
+        .page-title { font-size: 32px; color: #1a1a1a; font-weight: 700; margin-bottom: 12px; }
+        .page-title span { background: linear-gradient(135deg, #D4AF37, #FFD700); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .page-subtitle { color: #666; font-size: 15px; max-width: 620px; margin: 0 auto; line-height: 1.7; }
+        
+        /* Calendar Card */
+        .calendar-card { background: #fff; border: 1px solid #e8e8e8; border-radius: 14px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+        .calendar-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #f0f0f0; }
+        .calendar-top-title { font-size: 16px; font-weight: 700; color: #1a1a1a; }
+        .live-badge { background: #10b981; color: #fff; padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 6px; }
+        .live-dot { width: 7px; height: 7px; background: #fff; border-radius: 50%; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        
+        /* Legend */
+        .calendar-legend { display: flex; justify-content: center; gap: 25px; margin-bottom: 18px; flex-wrap: wrap; font-size: 13px; color: #555; }
+        .legend-item { display: flex; align-items: center; gap: 8px; }
+        .legend-color { width: 12px; height: 12px; border-radius: 3px; }
+        .legend-high { background: #ff4444; }
+        .legend-medium { background: #ff9800; }
+        .legend-low { background: #4caf50; }
+        
+        /* Widget Container */
+        .calendar-widget { width: 100%; height: 700px; border-radius: 10px; overflow: hidden; border: 1px solid #f0f0f0; }
+        
+        .calendar-note { text-align: center; color: #999; font-size: 12px; margin-top: 15px; }
+        
+        /* FLOATING CHAT ADMIN BUTTON */
+        .floating-chat {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #D4AF37, #FFD700);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
+            z-index: 998;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            animation: pulse-chat 2s infinite;
+        }
+        .floating-chat:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(212, 175, 55, 0.6);
+        }
+        .floating-chat span {
+            font-size: 28px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+        
+        @keyframes pulse-chat {
+            0% {
+                box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 0 rgba(212, 175, 55, 0.6);
+            }
+            70% {
+                box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 15px rgba(212, 175, 55, 0);
+            }
+            100% {
+                box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 0 rgba(212, 175, 55, 0);
+            }
+        }
+        
+        /* HP - Font & spacing otomatis mengecil */
+        @media (max-width: 768px) {
+            .navbar { padding: 12px 4%; }
+            .logo { font-size: 15px; gap: 8px; }
+            .logo img { width: 36px; height: 36px; }
+            .btn-logout { padding: 7px 14px; font-size: 12px; }
+            .tab-bar { top: 61px; }
+            .tab { padding: 12px 14px; font-size: 13px; }
+            
+            .page-content { margin-top: 125px; padding: 25px 4% 50px; }
+            .page-title { font-size: 24px; }
+            .page-subtitle { font-size: 13.5px; }
+            
+            .calendar-card { padding: 14px; }
+            .calendar-top-title { font-size: 14px; }
+            .calendar-legend { gap: 14px; font-size: 11.5px; }
+            .calendar-widget { height: 520px; }
+            .calendar-note { font-size: 11px; }
+            
+            .watermark { width: 300px; height: 300px; }
+            
+            .floating-chat {
+                width: 54px;
+                height: 54px;
+                bottom: 20px;
+                right: 20px;
+            }
+            .floating-chat span { font-size: 24px; }
+        }
+        
+        @media (max-width: 400px) {
+            .page-title { font-size: 21px; }
+            .calendar-widget { height: 480px; }
+        }
+    </style>
+</head>
+<body>
+    <img src="logo.png" alt="" class="watermark">
+    
+    <!-- Navbar Utama -->
+    <nav class="navbar">
+        <a href="dashboard.html" class="logo">
+            <img src="logo.png" alt="Elite Trading Circle">
+            <span class="logo-text">Elite Trading Circle</span>
+        </a>
+        <button class="btn-logout" onclick="logout()">Logout</button>
+    </nav>
+    
+    <!-- Tab Bar Atas -->
+    <div class="tab-bar">
+        <div class="tab-scroll">
+            <a href="dashboard.html" class="tab">Dashboard</a>
+            <a href="sewa-ea.html" class="tab">Sewa EA</a>
+            <a href="free-ea.html" class="tab">Free EA</a>
+            <a href="akun-pantau.html" class="tab">Akun Pantau</a>
+            <a href="exness-partner.html" class="tab">Partner</a>
+            <a href="calendar.html" class="tab active">Economic Calendar</a>
+            <a href="academy.html" class="tab">Academy</a>
+            <div class="tab-separator"></div>
+            <a href="whatsapp-group.html" class="tab">WhatsApp Group</a>
+        </div>
+    </div>
+    
+    <!-- Konten -->
+    <div class="page-content">
+        <div class="page-header">
+            <h1 class="page-title">Economic <span>Calendar</span></h1>
+            <p class="page-subtitle">Pantau jadwal rilis data ekonomi penting secara real-time untuk mendukung keputusan trading Anda</p>
+        </div>
+        
+        <div class="calendar-card">
+            <div class="calendar-top">
+                <div class="calendar-top-title">📅 Jadwal Rilis Data Ekonomi</div>
+                <div class="live-badge"><span class="live-dot"></span>REAL-TIME</div>
+            </div>
+            
+            <div class="calendar-legend">
+                <div class="legend-item"><div class="legend-color legend-high"></div><span>High Impact</span></div>
+                <div class="legend-item"><div class="legend-color legend-medium"></div><span>Medium Impact</span></div>
+                <div class="legend-item"><div class="legend-color legend-low"></div><span>Low Impact</span></div>
+            </div>
+            
+            <div class="calendar-widget">
+                <div class="tradingview-widget-container">
+                    <div class="tradingview-widget-container__widget"></div>
+                    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
+                    {
+                        "width": "100%",
+                        "height": "100%",
+                        "colorTheme": "light",
+                        "isTransparent": true,
+                        "locale": "id",
+                        "importanceFilter": "-1,0,1",
+                        "currencyFilter": "USD,EUR,GBP,JPY,AUD,CAD,CHF,NZD",
+                        "showPrevious": true,
+                        "showForecast": true,
+                        "showActual": true
+                    }
+                    </script>
+                </div>
+            </div>
+            
+            <p class="calendar-note">Semua data streaming dan diperbarui otomatis • Waktu menyesuaikan zona waktu perangkat Anda</p>
+        </div>
+    </div>
+    
+    <!-- Floating Chat Admin Button -->
+    <a href="https://t.me/ELITE_TRADING_CIRCLE_27" target="_blank" class="floating-chat" title="Chat Admin">
+        <span>💬</span>
+    </a>
+    
+    <script>
+        const user = localStorage.getItem('user');
+        if (!user) { window.location.href = 'login.html'; }
+        
+        function logout() { localStorage.removeItem('user'); window.location.href = 'index.html'; }
+    </script>
+</body>
+</html>

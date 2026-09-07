@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Academy - Elite Trading Circle</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: #f5f6fa; color: #333; min-height: 100vh; overflow-x: hidden; }
+        .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px; height: 600px; opacity: 0.04; pointer-events: none; z-index: 0; }
+        
+        /* Navbar Utama */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(255,255,255,0.97); position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 1px solid #eee; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
+        .logo { display: flex; align-items: center; gap: 12px; font-size: 20px; font-weight: bold; color: #1a1a1a; text-decoration: none; }
+        .logo img { width: 42px; height: 42px; border-radius: 8px; object-fit: cover; }
+        .logo-text { background: linear-gradient(135deg, #D4AF37, #B8941F); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .btn-logout { padding: 9px 20px; background: transparent; border: 1.5px solid #ef4444; color: #ef4444; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.3s; }
+        .btn-logout:hover { background: #ef4444; color: #fff; }
+        
+        /* TAB BAR ATAS */
+        .tab-bar { 
+            position: fixed; top: 73px; left: 0; right: 0; 
+            background: #fff; border-bottom: 1px solid #eee; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03); 
+            z-index: 999; 
+        }
+        .tab-scroll { 
+            display: flex; 
+            overflow-x: auto; 
+            -webkit-overflow-scrolling: touch; 
+            scrollbar-width: none; 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            padding: 0 5%; 
+            gap: 4px; 
+        }
+        .tab-scroll::-webkit-scrollbar { display: none; }
+        .tab { 
+            padding: 15px 18px; 
+            white-space: nowrap; 
+            color: #555; 
+            font-size: 14px; 
+            font-weight: 500; 
+            text-decoration: none; 
+            border-bottom: 3px solid transparent; 
+            transition: color 0.2s, border-color 0.2s; 
+        }
+        .tab:hover { color: #D4AF37; }
+        .tab.active { color: #D4AF37; font-weight: 700; border-bottom-color: #D4AF37; }
+        .tab-separator { width: 1px; background: #eee; margin: 10px 6px; flex-shrink: 0; }
+        
+        /* Konten Halaman */
+        .page-content { margin-top: 148px; padding: 30px 5% 60px; max-width: 1200px; margin-left: auto; margin-right: auto; position: relative; z-index: 1; }
+        
+        .page-header { text-align: center; margin-bottom: 40px; }
+        .page-title { font-size: 32px; color: #1a1a1a; font-weight: 700; margin-bottom: 12px; }
+        .page-title span { background: linear-gradient(135deg, #D4AF37, #FFD700); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .page-subtitle { color: #666; font-size: 15px; max-width: 620px; margin: 0 auto; line-height: 1.7; }
+        
+        /* Stats Bar */
+        .stats-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; max-width: 700px; margin: 0 auto 45px; }
+        .stat-item { background: #fff; border: 1px solid #e8e8e8; border-radius: 12px; padding: 18px 10px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
+        .stat-number { font-size: 24px; font-weight: 700; color: #D4AF37; display: block; }
+        .stat-label { font-size: 12px; color: #888; margin-top: 4px; display: block; }
+        
+        /* Course Grid */
+        .course-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; }
+        .course-card { background: #fff; border: 1px solid #e8e8e8; border-radius: 14px; padding: 28px 24px; position: relative; overflow: hidden; transition: all 0.3s; display: flex; flex-direction: column; }
+        .course-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, #D4AF37, #FFD700); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
+        .course-card:hover { transform: translateY(-5px); border-color: #D4AF37; box-shadow: 0 10px 30px rgba(212, 175, 55, 0.15); }
+        .course-card:hover::before { transform: scaleX(1); }
+        
+        .course-number { position: absolute; top: 15px; right: 20px; font-size: 42px; font-weight: 800; color: rgba(212, 175, 55, 0.12); line-height: 1; }
+        
+        .course-level { display: inline-block; padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 15px; align-self: flex-start; }
+        .level-beginner { background: #d1fae5; color: #065f46; }
+        .level-intermediate { background: #fef3c7; color: #92400e; }
+        .level-advanced { background: #fee2e2; color: #991b1b; }
+        
+        .course-card h3 { font-size: 18px; color: #1a1a1a; font-weight: 700; margin-bottom: 10px; line-height: 1.4; }
+        .course-card p { color: #666; font-size: 13.5px; line-height: 1.7; margin-bottom: 20px; flex: 1; }
+        
+        .course-meta { display: flex; gap: 18px; font-size: 12px; color: #888; border-top: 1px solid #f0f0f0; padding-top: 15px; margin-bottom: 18px; }
+        .course-meta span { display: flex; align-items: center; gap: 6px; }
+        .meta-dot { width: 6px; height: 6px; border-radius: 50%; background: #D4AF37; }
+        
+        .btn-course { display: block; text-align: center; padding: 12px; border-radius: 8px; background: transparent; border: 2px solid #D4AF37; color: #D4AF37; font-weight: 600; font-size: 14px; text-decoration: none; transition: all 0.3s; }
+        .btn-course:hover { background: linear-gradient(135deg, #D4AF37, #FFD700); color: #1a1a1a; }
+        
+        /* FLOATING CHAT ADMIN BUTTON */
+        .floating-chat {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #D4AF37, #FFD700);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
+            z-index: 998;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            animation: pulse-chat 2s infinite;
+        }
+        .floating-chat:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(212, 175, 55, 0.6);
+        }
+        .floating-chat span {
+            font-size: 28px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+        
+        @keyframes pulse-chat {
+            0% {
+                box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 0 rgba(212, 175, 55, 0.6);
+            }
+            70% {
+                box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 15px rgba(212, 175, 55, 0);
+            }
+            100% {
+                box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 0 rgba(212, 175, 55, 0);
+            }
+        }
+        
+        /* TABLET */
+        @media (max-width: 1024px) {
+            .course-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        
+        /* HP */
+        @media (max-width: 768px) {
+            .navbar { padding: 12px 4%; }
+            .logo { font-size: 15px; gap: 8px; }
+            .logo img { width: 36px; height: 36px; }
+            .btn-logout { padding: 7px 14px; font-size: 12px; }
+            .tab-bar { top: 61px; }
+            .tab { padding: 12px 14px; font-size: 13px; }
+            
+            .page-content { margin-top: 125px; padding: 25px 4% 50px; }
+            .page-title { font-size: 24px; }
+            .page-subtitle { font-size: 13.5px; }
+            
+            .stats-bar { gap: 10px; margin-bottom: 35px; }
+            .stat-item { padding: 14px 6px; }
+            .stat-number { font-size: 19px; }
+            .stat-label { font-size: 10.5px; }
+            
+            .course-grid { grid-template-columns: 1fr; gap: 16px; }
+            .course-card { padding: 22px 18px; }
+            .course-number { font-size: 34px; top: 12px; right: 15px; }
+            .course-card h3 { font-size: 16px; }
+            .course-card p { font-size: 13px; }
+            .course-meta { gap: 14px; font-size: 11.5px; }
+            .btn-course { font-size: 13px; padding: 11px; }
+            
+            .watermark { width: 300px; height: 300px; }
+            
+            .floating-chat {
+                width: 54px;
+                height: 54px;
+                bottom: 20px;
+                right: 20px;
+            }
+            .floating-chat span { font-size: 24px; }
+        }
+        
+        /* HP kecil */
+        @media (max-width: 400px) {
+            .page-title { font-size: 21px; }
+            .stats-bar { grid-template-columns: repeat(3, 1fr); }
+            .stat-number { font-size: 17px; }
+        }
+    </style>
+</head>
+<body>
+    <img src="logo.png" alt="" class="watermark">
+    
+    <!-- Navbar Utama -->
+    <nav class="navbar">
+        <a href="dashboard.html" class="logo">
+            <img src="logo.png" alt="Elite Trading Circle">
+            <span class="logo-text">Elite Trading Circle</span>
+        </a>
+        <button class="btn-logout" onclick="logout()">Logout</button>
+    </nav>
+    
+    <!-- Tab Bar Atas -->
+    <div class="tab-bar">
+        <div class="tab-scroll">
+            <a href="dashboard.html" class="tab">Dashboard</a>
+            <a href="sewa-ea.html" class="tab">Sewa EA</a>
+            <a href="free-ea.html" class="tab">Free EA</a>
+            <a href="akun-pantau.html" class="tab">Akun Pantau</a>
+            <a href="exness-partner.html" class="tab">Partner</a>
+            <a href="calendar.html" class="tab">Economic Calendar</a>
+            <a href="academy.html" class="tab active">Academy</a>
+            <div class="tab-separator"></div>
+            <a href="whatsapp-group.html" class="tab">WhatsApp Group</a>
+        </div>
+    </div>
+    
+    <!-- Konten -->
+    <div class="page-content">
+        <div class="page-header">
+            <h1 class="page-title">Trading <span>Academy</span></h1>
+            <p class="page-subtitle">Pelajari trading dari dasar hingga mahir dengan materi eksklusif dan terstruktur dari tim Elite Trading Circle</p>
+        </div>
+        
+        <div class="stats-bar">
+            <div class="stat-item">
+                <span class="stat-number">77+</span>
+                <span class="stat-label">Modul Materi</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">6</span>
+                <span class="stat-label">Kursus</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">26</span>
+                <span class="stat-label">Jam Belajar</span>
+            </div>
+        </div>
+        
+        <div class="course-grid">
+            <div class="course-card">
+                <div class="course-number">01</div>
+                <span class="course-level level-beginner">Beginner</span>
+                <h3>Dasar-Dasar Trading Forex</h3>
+                <p>Pelajari konsep dasar trading forex: jenis pair, pip, lot, leverage, dan cara membaca chart untuk pemula.</p>
+                <div class="course-meta">
+                    <span><span class="meta-dot"></span>12 Modul</span>
+                    <span><span class="meta-dot"></span>3 Jam</span>
+                </div>
+                <a href="#" class="btn-course" onclick="alert('Modul segera hadir!')">Mulai Belajar</a>
+            </div>
+            
+            <div class="course-card">
+                <div class="course-number">02</div>
+                <span class="course-level level-intermediate">Intermediate</span>
+                <h3>Technical Analysis Mastery</h3>
+                <p>Kuasai analisis teknikal: support & resistance, trendline, indikator populer, dan pola candlestick.</p>
+                <div class="course-meta">
+                    <span><span class="meta-dot"></span>18 Modul</span>
+                    <span><span class="meta-dot"></span>6 Jam</span>
+                </div>
+                <a href="#" class="btn-course" onclick="alert('Modul segera hadir!')">Mulai Belajar</a>
+            </div>
+            
+            <div class="course-card">
+                <div class="course-number">03</div>
+                <span class="course-level level-advanced">Advanced</span>
+                <h3>EA Trading Strategies</h3>
+                <p>Strategi menggunakan Expert Advisor: setup, backtest, risk management, dan optimasi trading otomatis.</p>
+                <div class="course-meta">
+                    <span><span class="meta-dot"></span>15 Modul</span>
+                    <span><span class="meta-dot"></span>5 Jam</span>
+                </div>
+                <a href="#" class="btn-course" onclick="alert('Modul segera hadir!')">Mulai Belajar</a>
+            </div>
+            
+            <div class="course-card">
+                <div class="course-number">04</div>
+                <span class="course-level level-intermediate">Intermediate</span>
+                <h3>Risk Management Pro</h3>
+                <p>Teknik manajemen risiko profesional: position sizing, stop loss yang benar, dan psikologi trading.</p>
+                <div class="course-meta">
+                    <span><span class="meta-dot"></span>10 Modul</span>
+                    <span><span class="meta-dot"></span>4 Jam</span>
+                </div>
+                <a href="#" class="btn-course" onclick="alert('Modul segera hadir!')">Mulai Belajar</a>
+            </div>
+            
+            <div class="course-card">
+                <div class="course-number">05</div>
+                <span class="course-level level-advanced">Advanced</span>
+                <h3>Gold Trading Masterclass</h3>
+                <p>Strategi khusus XAU/USD: analisis fundamental gold, sesi trading terbaik, dan teknik scalping gold.</p>
+                <div class="course-meta">
+                    <span><span class="meta-dot"></span>14 Modul</span>
+                    <span><span class="meta-dot"></span>5 Jam</span>
+                </div>
+                <a href="#" class="btn-course" onclick="alert('Modul segera hadir!')">Mulai Belajar</a>
+            </div>
+            
+            <div class="course-card">
+                <div class="course-number">06</div>
+                <span class="course-level level-intermediate">Intermediate</span>
+                <h3>News Trading Strategy</h3>
+                <p>Cara trading berdasarkan rilis data ekonomi: NFP, CPI, FOMC, dan event high-impact lainnya.</p>
+                <div class="course-meta">
+                    <span><span class="meta-dot"></span>8 Modul</span>
+                    <span><span class="meta-dot"></span>3 Jam</span>
+                </div>
+                <a href="#" class="btn-course" onclick="alert('Modul segera hadir!')">Mulai Belajar</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Floating Chat Admin Button -->
+    <a href="https://t.me/ELITE_TRADING_CIRCLE_27" target="_blank" class="floating-chat" title="Chat Admin">
+        <span>💬</span>
+    </a>
+    
+    <script>
+        const user = localStorage.getItem('user');
+        if (!user) { window.location.href = 'login.html'; }
+        
+        function logout() { localStorage.removeItem('user'); window.location.href = 'index.html'; }
+    </script>
+</body>
+</html>
