@@ -2,94 +2,144 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Dashboard - Elite Trading Circle</title>
     <link rel="icon" type="image/png" href="logo.png">
+    
+    <!-- ANTI-FLICKER SCRIPT (Wajib di Head) -->
+    <script>
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    </script>
+
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background: #f5f6fa; color: #333; min-height: 100vh; overflow-x: hidden; }
-        .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px; height: 600px; opacity: 0.04; pointer-events: none; z-index: 0; }
+        /* --- 1. CSS VARIABLES --- */
+        :root {
+            --bg-color: #f5f6fa;
+            --text-color: #333333;
+            --text-muted: #666666;
+            --card-bg: #ffffff;
+            --nav-bg: rgba(255, 255, 255, 0.85);
+            --tab-bg: rgba(255, 255, 255, 0.9);
+            --border-color: #eeeeee;
+            --gold-primary: #D4AF37;
+            --gold-secondary: #FFD700;
+            --gold-dark: #B8941F;
+            --alert-bg: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            --alert-border: #ef4444;
+            --alert-text: #991b1b;
+            --alert-sub: #dc2626;
+        }
+
+        html.dark-mode {
+            --bg-color: #0f1115;
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --card-bg: #1a1d24;
+            --nav-bg: rgba(15, 17, 21, 0.85);
+            --tab-bg: rgba(15, 17, 21, 0.9);
+            --border-color: #2a2e38;
+            --alert-bg: linear-gradient(135deg, #2a1515 0%, #1a0f0f 100%);
+            --alert-border: #dc2626;
+            --alert-text: #fca5a5;
+            --alert-sub: #f87171;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
+        body { background: var(--bg-color); color: var(--text-color); min-height: 100vh; overflow-x: hidden; }
+
+        /* --- 2. PRELOADER --- */
+        #preloader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-color); z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        #preloader.hide { opacity: 0; visibility: hidden; pointer-events: none; }
         
-        /* Navbar Utama */
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(255,255,255,0.97); position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 1px solid #eee; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
-        .logo { display: flex; align-items: center; gap: 12px; font-size: 20px; font-weight: bold; color: #1a1a1a; text-decoration: none; }
+        .loader-logo {
+            width: 140px; height: 140px; object-fit: contain;
+            animation: logoEntrance 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards, goldPulse 2s infinite alternate;
+        }
+        @keyframes logoEntrance {
+            0% { transform: scale(0.5) translateY(40px); opacity: 0; filter: blur(10px); }
+            100% { transform: scale(1) translateY(0); opacity: 1; filter: blur(0); }
+        }
+        @keyframes goldPulse {
+            0% { filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4)); }
+            100% { filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.8)); }
+        }
+
+        /* --- 3. NAVBAR & TAB BAR --- */
+        .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px; height: 600px; background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center; opacity: 0.04; pointer-events: none; z-index: 0; }
+        html.dark-mode .watermark { opacity: 0.02; }
+
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: var(--nav-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 1px solid var(--border-color); box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
+        .logo { display: flex; align-items: center; gap: 12px; font-size: 20px; font-weight: bold; color: var(--text-color); text-decoration: none; }
         .logo img { width: 42px; height: 42px; border-radius: 8px; object-fit: cover; }
-        .logo-text { background: linear-gradient(135deg, #D4AF37, #B8941F); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo-text { background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .nav-right { display: flex; align-items: center; gap: 12px; }
+
+        .theme-toggle {
+            background: var(--bg-color); border: 2px solid var(--gold-primary); color: var(--gold-primary);
+            width: 42px; height: 42px; border-radius: 50%; cursor: pointer; font-size: 18px;
+            display: flex; align-items: center; justify-content: center; transition: all 0.3s;
+            line-height: 1; flex-shrink: 0; -webkit-tap-highlight-color: transparent;
+        }
+        .theme-toggle:hover { background: var(--gold-primary); color: var(--bg-color); box-shadow: 0 0 15px rgba(212, 175, 55, 0.5); transform: scale(1.05); }
+        .theme-toggle:active { transform: scale(0.95); }
+
         .btn-logout { padding: 9px 20px; background: transparent; border: 1.5px solid #ef4444; color: #ef4444; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.3s; }
         .btn-logout:hover { background: #ef4444; color: #fff; }
-        
-        /* TAB BAR */
-        .tab-bar { position: fixed; top: 73px; left: 0; right: 0; background: #fff; border-bottom: 1px solid #eee; box-shadow: 0 2px 8px rgba(0,0,0,0.03); z-index: 999; }
+
+        .tab-bar { position: fixed; top: 73px; left: 0; right: 0; background: var(--tab-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color); box-shadow: 0 2px 8px rgba(0,0,0,0.03); z-index: 999; }
         .tab-scroll { display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; max-width: 1400px; margin: 0 auto; padding: 0 5%; gap: 4px; }
         .tab-scroll::-webkit-scrollbar { display: none; }
-        .tab { padding: 15px 18px; white-space: nowrap; color: #555; font-size: 14px; font-weight: 500; text-decoration: none; border-bottom: 3px solid transparent; transition: color 0.2s, border-color 0.2s; }
-        .tab:hover { color: #D4AF37; }
-        .tab.active { color: #D4AF37; font-weight: 700; border-bottom-color: #D4AF37; }
-        .tab-separator { width: 1px; background: #eee; margin: 10px 6px; flex-shrink: 0; }
-        
-        /* TICKER TAPE - harga berjalan */
-        .ticker-wrap { 
-            margin-top: 122px; 
-            background: #fff; 
-            border-bottom: 1px solid #eee;
-            height: 46px;
-            overflow: hidden;
-        }
+        .tab { padding: 15px 18px; white-space: nowrap; color: var(--text-muted); font-size: 14px; font-weight: 500; text-decoration: none; border-bottom: 3px solid transparent; transition: color 0.2s, border-color 0.2s; }
+        .tab:hover { color: var(--gold-primary); }
+        .tab.active { color: var(--gold-primary); font-weight: 700; border-bottom-color: var(--gold-primary); }
+        .tab-separator { width: 1px; background: var(--border-color); margin: 10px 6px; flex-shrink: 0; }
+
+        /* --- 4. DASHBOARD CONTENT --- */
+        .ticker-wrap { margin-top: 122px; background: var(--card-bg); border-bottom: 1px solid var(--border-color); height: 46px; overflow: hidden; }
         .ticker-inner { height: 100%; }
-        
-        /* Dashboard */
+
         .dashboard { padding: 25px 5%; max-width: 1400px; margin-left: auto; margin-right: auto; position: relative; z-index: 1; }
-        .welcome { background: #fff; padding: 25px 30px; border-radius: 14px; color: #1a1a1a; border-left: 5px solid #D4AF37; box-shadow: 0 2px 12px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; }
-        .welcome h1 { font-size: 22px; margin-bottom: 4px; font-weight: 700; }
-        .welcome p { font-size: 14px; color: #666; }
-        .welcome-badge { background: linear-gradient(135deg, #D4AF37, #FFD700); color: #1a1a1a; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 700; }
         
+        .welcome { background: var(--card-bg); padding: 25px 30px; border-radius: 14px; color: var(--text-color); border-left: 5px solid var(--gold-primary); box-shadow: 0 2px 12px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; border: 1px solid var(--border-color); }
+        .welcome h1 { font-size: 22px; margin-bottom: 4px; font-weight: 700; word-wrap: break-word; }
+        .welcome p { font-size: 14px; color: var(--text-muted); }
+        .welcome-badge { background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary)); color: #1a1a1a; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+
         .main-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; align-items: start; margin-bottom: 25px; }
-        .card-box { background: #fff; border: 1px solid #e8e8e8; border-radius: 14px; padding: 18px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #f0f0f0; }
-        .card-title { font-size: 15px; color: #1a1a1a; font-weight: 700; }
-        .card-badge { background: #10b981; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: bold; }
-        .card-badge.gold { background: rgba(212, 175, 55, 0.15); color: #B8941F; }
-        .tradingview-chart { width: 100%; height: 380px; border-radius: 10px; overflow: hidden; border: 1px solid #f0f0f0; }
-        .tradingview-market { width: 100%; height: 500px; border-radius: 10px; overflow: hidden; }
         
-        /* ALERT HIGH IMPACT - Merah + TOA */
+        .card-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 18px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
+        .card-title { font-size: 15px; color: var(--text-color); font-weight: 700; }
+        .card-badge { background: #10b981; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: bold; }
+        .card-badge.gold { background: rgba(212, 175, 55, 0.15); color: var(--gold-dark); }
+        
+        .tradingview-chart { width: 100%; height: 380px; border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color); }
+        .tradingview-market { width: 100%; height: 500px; border-radius: 10px; overflow: hidden; }
+
+        /* ALERT HIGH IMPACT */
         .high-impact-alert {
-            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
-            border: 2px solid #ef4444;
-            border-radius: 14px;
-            padding: 20px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.15);
-            position: relative;
-            overflow: hidden;
+            background: var(--alert-bg); border: 2px solid var(--alert-border);
+            border-radius: 14px; padding: 20px; margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.15); position: relative; overflow: hidden;
         }
         .high-impact-alert::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; height: 4px;
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
             background: linear-gradient(90deg, #ef4444, #dc2626);
         }
-        .alert-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 15px;
-            padding-bottom: 12px;
-            border-bottom: 1px dashed rgba(239, 68, 68, 0.3);
-        }
+        .alert-header { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px dashed rgba(239, 68, 68, 0.3); }
         .toa-icon {
-            width: 44px;
-            height: 44px;
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
-            animation: pulse-red 2s infinite;
-            flex-shrink: 0;
+            width: 44px; height: 44px; background: linear-gradient(135deg, #ef4444, #dc2626);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 22px; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+            animation: pulse-red 2s infinite; flex-shrink: 0;
         }
         @keyframes pulse-red {
             0% { box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4), 0 0 0 0 rgba(239, 68, 68, 0.6); }
@@ -97,45 +147,21 @@
             100% { box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4), 0 0 0 0 rgba(239, 68, 68, 0); }
         }
         .alert-title-wrap { flex: 1; }
-        .alert-title { font-size: 16px; font-weight: 800; color: #991b1b; margin-bottom: 2px; }
-        .alert-subtitle { font-size: 12px; color: #dc2626; font-weight: 500; }
-        .alert-badge { 
-            background: #ef4444; 
-            color: #fff; 
-            padding: 5px 14px; 
-            border-radius: 20px; 
-            font-size: 11px; 
-            font-weight: 700; 
-            letter-spacing: 0.5px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
+        .alert-title { font-size: 16px; font-weight: 800; color: var(--alert-text); margin-bottom: 2px; }
+        .alert-subtitle { font-size: 12px; color: var(--alert-sub); font-weight: 500; }
+        .alert-badge { background: #ef4444; color: #fff; padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 6px; }
         .alert-badge .live-dot { width: 6px; height: 6px; background: #fff; border-radius: 50%; animation: blink 1s infinite; }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
         
-        .alert-widget { 
-            width: 100%; 
-            height: 280px; 
-            border-radius: 10px; 
-            overflow: hidden;
-            background: #fff;
-            border: 1px solid rgba(239, 68, 68, 0.2);
-        }
-        .alert-note {
-            margin-top: 12px;
-            font-size: 12px;
-            color: #991b1b;
-            text-align: center;
-            font-style: italic;
-        }
-        
+        .alert-widget { width: 100%; height: 280px; border-radius: 10px; overflow: hidden; background: var(--card-bg); border: 1px solid rgba(239, 68, 68, 0.2); }
+        .alert-note { margin-top: 12px; font-size: 12px; color: var(--alert-text); text-align: center; font-style: italic; }
+
         /* NEWS FEED */
-        .news-card { background: #fff; border: 1px solid #e8e8e8; border-radius: 14px; padding: 18px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
-        .news-widget { width: 100%; height: 600px; border-radius: 10px; overflow: hidden; border: 1px solid #f0f0f0; }
-        
+        .news-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 18px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+        .news-widget { width: 100%; height: 600px; border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color); }
+
         /* FLOATING CHAT */
-        .floating-chat { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: linear-gradient(135deg, #D4AF37, #FFD700); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4); z-index: 998; text-decoration: none; transition: all 0.3s ease; animation: pulse 2s infinite; }
+        .floating-chat { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4); z-index: 998; text-decoration: none; transition: all 0.3s ease; animation: pulse 2s infinite; }
         .floating-chat:hover { transform: scale(1.1); box-shadow: 0 6px 25px rgba(212, 175, 55, 0.6); }
         .floating-chat span { font-size: 28px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
         @keyframes pulse {
@@ -143,13 +169,15 @@
             70% { box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 15px rgba(212, 175, 55, 0); }
             100% { box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 0 rgba(212, 175, 55, 0); }
         }
-        
+
         @media (max-width: 1024px) { .main-layout { grid-template-columns: 1fr; } }
         
         @media (max-width: 768px) {
             .navbar { padding: 12px 4%; }
             .logo { font-size: 15px; gap: 8px; }
             .logo img { width: 36px; height: 36px; }
+            .nav-right { gap: 8px; }
+            .theme-toggle { width: 38px; height: 38px; font-size: 16px; }
             .btn-logout { padding: 7px 14px; font-size: 12px; }
             .tab-bar { top: 61px; }
             .tab { padding: 12px 14px; font-size: 13px; }
@@ -160,20 +188,23 @@
             .tradingview-chart { height: 300px; }
             .tradingview-market { height: 420px; }
             .watermark { width: 300px; height: 300px; }
-            
             .high-impact-alert { padding: 16px; }
             .toa-icon { width: 38px; height: 38px; font-size: 18px; }
             .alert-title { font-size: 14px; }
             .alert-subtitle { font-size: 11px; }
             .alert-widget { height: 320px; }
             .news-widget { height: 500px; }
-            
             .floating-chat { width: 54px; height: 54px; bottom: 20px; right: 20px; }
             .floating-chat span { font-size: 24px; }
         }
     </style>
 </head>
 <body>
+    <!-- PRELOADER -->
+    <div id="preloader">
+        <img src="logo.png" alt="Loading Elite Trading Circle" class="loader-logo">
+    </div>
+
     <img src="logo.png" alt="" class="watermark">
     
     <!-- Navbar Utama -->
@@ -182,7 +213,10 @@
             <img src="logo.png" alt="Elite Trading Circle">
             <span class="logo-text">Elite Trading Circle</span>
         </a>
-        <button class="btn-logout" onclick="logout()">Logout</button>
+        <div class="nav-right">
+            <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark Mode" id="themeToggle">🌙</button>
+            <button class="btn-logout" onclick="logout()">Logout</button>
+        </div>
     </nav>
     
     <!-- Tab Bar -->
@@ -196,11 +230,11 @@
             <a href="calendar.html" class="tab">Economic Calendar</a>
             <a href="academy.html" class="tab">Academy</a>
             <div class="tab-separator"></div>
-            <a href="whatsapp-group.html" class="tab">WhatsApp Group</a>
+            <a href="group.html" class="tab">Group</a>
         </div>
     </div>
     
-    <!-- TICKER TAPE - Harga Berjalan -->
+    <!-- TICKER TAPE -->
     <div class="ticker-wrap">
         <div class="ticker-inner">
             <div class="tradingview-widget-container">
@@ -217,11 +251,7 @@
                         { "proName": "FOREXCOM:NSXUSD", "title": "Nasdaq" },
                         { "proName": "FOREXCOM:DJI", "title": "Dow Jones" }
                     ],
-                    "showSymbolLogo": true,
-                    "isTransparent": true,
-                    "displayMode": "adaptive",
-                    "colorTheme": "light",
-                    "locale": "id"
+                    "showSymbolLogo": true, "isTransparent": true, "displayMode": "adaptive", "colorTheme": "light", "locale": "id"
                 }
                 </script>
             </div>
@@ -237,7 +267,7 @@
             <div class="welcome-badge">MEMBER AKTIF</div>
         </div>
         
-        <!-- PERINGATAN HIGH IMPACT - MERAH + TOA -->
+        <!-- PERINGATAN HIGH IMPACT -->
         <div class="high-impact-alert">
             <div class="alert-header">
                 <div class="toa-icon">📢</div>
@@ -253,16 +283,9 @@
                     <div class="tradingview-widget-container__widget"></div>
                     <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
                     {
-                        "width": "100%",
-                        "height": "100%",
-                        "colorTheme": "light",
-                        "isTransparent": false,
-                        "locale": "id",
-                        "importanceFilter": "-1",
-                        "currencyFilter": "USD,EUR,GBP,JPY,AUD,CAD,CHF,NZD",
-                        "showPrevious": false,
-                        "showForecast": true,
-                        "showActual": false
+                        "width": "100%", "height": "100%", "colorTheme": "light", "isTransparent": true, "locale": "id",
+                        "importanceFilter": "-1", "currencyFilter": "USD,EUR,GBP,JPY,AUD,CAD,CHF,NZD",
+                        "showPrevious": false, "showForecast": true, "showActual": false
                     }
                     </script>
                 </div>
@@ -283,8 +306,8 @@
                     <script type="text/javascript">
                     new TradingView.widget({
                         "autosize": true, "symbol": "OANDA:XAUUSD", "interval": "60",
-                        "timezone": "Asia/Jakarta", "theme": "light", "style": "1", "locale": "id",
-                        "toolbar_bg": "#ffffff", "enable_publishing": false, "allow_symbol_change": true,
+                        "timezone": "Asia/Jakarta", "theme": "dark", "style": "1", "locale": "id",
+                        "toolbar_bg": "rgba(0,0,0,0)", "enable_publishing": false, "allow_symbol_change": true,
                         "container_id": "tradingview_chart", "hide_top_toolbar": false,
                         "hide_side_toolbar": true, "hide_legend": false, "withdateranges": true, "details": false
                     });
@@ -305,18 +328,14 @@
                         "width": "100%", "height": "100%", "isTransparent": true, "showSymbolLogo": true,
                         "tabs": [
                             { "title": "Forex", "symbols": [
-                                { "s": "OANDA:XAUUSD", "d": "Gold" },
-                                { "s": "OANDA:EURUSD", "d": "EUR/USD" },
-                                { "s": "OANDA:GBPUSD", "d": "GBP/USD" },
-                                { "s": "OANDA:USDJPY", "d": "USD/JPY" }
+                                { "s": "OANDA:XAUUSD", "d": "Gold" }, { "s": "OANDA:EURUSD", "d": "EUR/USD" },
+                                { "s": "OANDA:GBPUSD", "d": "GBP/USD" }, { "s": "OANDA:USDJPY", "d": "USD/JPY" }
                             ]},
                             { "title": "Indices", "symbols": [
-                                { "s": "FOREXCOM:NAS100", "d": "Nasdaq 100" },
-                                { "s": "FOREXCOM:US30", "d": "Dow Jones" }
+                                { "s": "FOREXCOM:NAS100", "d": "Nasdaq 100" }, { "s": "FOREXCOM:US30", "d": "Dow Jones" }
                             ]},
                             { "title": "Crypto", "symbols": [
-                                { "s": "BINANCE:BTCUSDT", "d": "Bitcoin" },
-                                { "s": "BINANCE:ETHUSDT", "d": "Ethereum" }
+                                { "s": "BINANCE:BTCUSDT", "d": "Bitcoin" }, { "s": "BINANCE:ETHUSDT", "d": "Ethereum" }
                             ]}
                         ]
                     }
@@ -336,13 +355,8 @@
                     <div class="tradingview-widget-container__widget"></div>
                     <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-timeline.js" async>
                     {
-                        "feedMode": "all_symbols",
-                        "isTransparent": true,
-                        "displayMode": "regular",
-                        "width": "100%",
-                        "height": "100%",
-                        "colorTheme": "light",
-                        "locale": "id"
+                        "feedMode": "all_symbols", "isTransparent": true, "displayMode": "regular",
+                        "width": "100%", "height": "100%", "colorTheme": "light", "locale": "id"
                     }
                     </script>
                 </div>
@@ -350,17 +364,54 @@
         </div>
     </div>
     
-    <!-- Floating Chat Admin -->
-    <a href="https://t.me/ELITE_TRADING_CIRCLE_27" target="_blank" class="floating-chat" title="Chat Admin">
+    <!-- Floating Chat (UPDATED LINK) -->
+    <a href="https://t.me/elitetradingcircle07" target="_blank" class="floating-chat" title="Join Telegram Group">
         <span>💬</span>
     </a>
     
     <script>
-        const user = localStorage.getItem('user');
-        if (!user) { window.location.href = 'login.html'; }
-        else { document.getElementById('userName').textContent = JSON.parse(user).nama; }
+        // 1. Preloader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('preloader').classList.add('hide');
+            }, 1200); 
+        });
+
+        // 2. Dark Mode Logic (Bulletproof)
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark-mode');
+            const isDark = document.documentElement.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
+        }
+
+        // 3. Init & Auth Check
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const themeToggle = document.getElementById('themeToggle');
+            if (savedTheme === 'dark') {
+                themeToggle.textContent = '☀️';
+            } else {
+                themeToggle.textContent = '🌙';
+            }
+            
+            const user = localStorage.getItem('user');
+            if (!user) { 
+                window.location.href = 'login.html'; 
+            } else { 
+                try {
+                    const userData = JSON.parse(user);
+                    document.getElementById('userName').textContent = userData.nama || 'User';
+                } catch(e) {
+                    document.getElementById('userName').textContent = 'User';
+                }
+            }
+        });
         
-        function logout() { localStorage.removeItem('user'); window.location.href = 'index.html'; }
+        function logout() { 
+            localStorage.removeItem('user'); 
+            window.location.href = 'index.html'; 
+        }
     </script>
 </body>
 </html>
