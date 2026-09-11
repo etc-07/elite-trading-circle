@@ -2,120 +2,143 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Daftar - Elite Trading Circle</title>
     <link rel="icon" type="image/png" href="logo.png">
+    
+    <!-- AUTO APPLY DARK MODE (Baca dari localStorage) -->
+    <script>
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    </script>
+
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        :root {
+            --bg-color: #f5f6fa;
+            --text-color: #333333;
+            --text-muted: #666666;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --input-bg: #f8f9fa;
+            --border-color: #e0e0e0;
+            --gold-primary: #D4AF37;
+            --gold-secondary: #FFD700;
+            --gold-dark: #B8941F;
+        }
+
+        html.dark-mode {
+            --bg-color: #0f1115;
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --card-bg: rgba(26, 29, 36, 0.95);
+            --input-bg: #1a1d24;
+            --border-color: #2a2e38;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
         
         body { 
-            background: #ffffff; 
-            color: #333; 
+            background: var(--bg-color); 
+            color: var(--text-color); 
             min-height: 100vh; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
             padding: 20px;
             position: relative;
+            overflow-x: hidden;
+        }
+
+        /* PRELOADER */
+        #preloader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-color); z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        #preloader.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+        
+        .loader-logo {
+            width: 140px; height: 140px; object-fit: contain;
+            animation: logoEntrance 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards, goldPulse 2s infinite alternate;
+        }
+        @keyframes logoEntrance {
+            0% { transform: scale(0.5) translateY(40px); opacity: 0; filter: blur(10px); }
+            100% { transform: scale(1) translateY(0); opacity: 1; filter: blur(0); }
+        }
+        @keyframes goldPulse {
+            0% { filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4)); }
+            100% { filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.8)); }
         }
 
         /* Background Logo Watermark */
         .bg-logo {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 600px;
-            height: 600px;
-            background-image: url('logo.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            opacity: 0.15;
-            z-index: 0;
-            pointer-events: none;
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 600px; height: 600px; background-image: url('logo.png');
+            background-size: contain; background-repeat: no-repeat; background-position: center;
+            opacity: 0.08; z-index: 0; pointer-events: none;
         }
+        html.dark-mode .bg-logo { opacity: 0.03; }
 
         /* Register Container */
         .container { 
-            background: rgba(255, 255, 255, 0.95); 
+            background: var(--card-bg); 
             border-radius: 20px; 
             padding: 50px 40px; 
             width: 100%; 
             max-width: 450px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-            border-top: 4px solid #D4AF37;
-            position: relative;
-            z-index: 1;
-            backdrop-filter: blur(10px);
+            border-top: 4px solid var(--gold-primary);
+            position: relative; z-index: 1;
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
         }
 
         .logo { text-align: center; margin-bottom: 35px; }
         .logo-icon { 
-            width: 90px; 
-            height: 90px; 
-            margin: 0 auto 20px; 
-            border-radius: 16px; 
-            object-fit: cover;
+            width: 90px; height: 90px; margin: 0 auto 20px; 
+            border-radius: 16px; object-fit: cover;
             box-shadow: 0 8px 20px rgba(212, 175, 55, 0.2);
         }
         
         h1 { 
-            text-align: center; 
-            color: #1a1a1a; 
-            font-size: 28px; 
-            font-weight: 700; 
-            margin-bottom: 10px; 
+            text-align: center; color: var(--text-color); 
+            font-size: 28px; font-weight: 700; margin-bottom: 10px; 
+            word-wrap: break-word;
         }
         
         .subtitle {
-            text-align: center;
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 35px;
+            text-align: center; color: var(--text-muted);
+            font-size: 14px; margin-bottom: 35px; word-wrap: break-word;
         }
 
         .form-group { margin-bottom: 22px; }
         
         .form-group label { 
-            display: block; 
-            margin-bottom: 8px; 
-            color: #1a1a1a; 
-            font-size: 14px; 
-            font-weight: 600; 
+            display: block; margin-bottom: 8px; 
+            color: var(--text-color); font-size: 14px; font-weight: 600; 
         }
         
         .form-group input { 
-            width: 100%; 
-            padding: 14px 16px; 
-            border: 1px solid #e0e0e0; 
-            border-radius: 10px; 
-            background: #f8f9fa; 
-            color: #1a1a1a; 
-            font-size: 15px; 
-            outline: none; 
-            transition: all 0.3s ease;
+            width: 100%; padding: 14px 16px; 
+            border: 1px solid var(--border-color); border-radius: 10px; 
+            background: var(--input-bg); color: var(--text-color); 
+            font-size: 15px; outline: none; transition: all 0.3s ease;
         }
         
-        .form-group input::placeholder { color: #999; }
+        .form-group input::placeholder { color: var(--text-muted); opacity: 0.7; }
         
         .form-group input:focus { 
-            border-color: #D4AF37; 
-            background: #ffffff;
-            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1); 
+            border-color: var(--gold-primary); 
+            background: var(--card-bg);
+            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.15); 
         }
 
         .btn-register { 
-            width: 100%; 
-            padding: 16px; 
-            background: linear-gradient(135deg, #D4AF37, #FFD700); 
-            border: none; 
-            border-radius: 10px; 
-            color: #1a1a1a; 
-            font-size: 16px; 
-            font-weight: 700; 
-            cursor: pointer; 
-            margin-top: 15px;
+            width: 100%; padding: 16px; 
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary)); 
+            border: none; border-radius: 10px; 
+            color: #000000; font-size: 16px; font-weight: 700; 
+            cursor: pointer; margin-top: 15px;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
         }
@@ -126,54 +149,57 @@
         }
 
         .btn-register:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
+            opacity: 0.6; cursor: not-allowed; transform: none;
         }
 
         .divider {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            margin: 25px 0;
-            color: #999;
-            font-size: 13px;
+            display: flex; align-items: center; text-align: center;
+            margin: 25px 0; color: var(--text-muted); font-size: 13px;
         }
         .divider::before, .divider::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid #e0e0e0;
+            content: ''; flex: 1; border-bottom: 1px solid var(--border-color);
         }
         .divider span { padding: 0 15px; }
 
         .back-link { 
-            text-align: center; 
-            margin-top: 15px; 
-            color: #666; 
-            font-size: 14px;
+            text-align: center; margin-top: 15px; 
+            color: var(--text-muted); font-size: 14px; word-wrap: break-word;
         }
         
         .back-link a { 
-            color: #D4AF37; 
-            text-decoration: none; 
-            font-weight: 600;
-            transition: color 0.3s;
+            color: var(--gold-primary); text-decoration: none; 
+            font-weight: 600; transition: color 0.3s;
         }
         
         .back-link a:hover { 
-            color: #B8941F; 
-            text-decoration: underline; 
+            color: var(--gold-secondary); text-decoration: underline; 
         }
 
-        /* Responsive */
-        @media (max-width: 480px) {
-            .container { padding: 40px 25px; }
+        /* RESPONSIVE - TABLET & HP */
+        @media (max-width: 768px) {
+            .container { padding: 40px 30px; }
+            .logo-icon { width: 80px; height: 80px; }
+            h1 { font-size: 26px; }
+        }
+
+        @media (max-width: 400px) {
+            body { padding: 15px; }
+            .container { padding: 35px 20px; border-radius: 16px; }
             .logo-icon { width: 70px; height: 70px; }
             h1 { font-size: 24px; }
+            .subtitle { font-size: 13px; }
+            .form-group input { padding: 12px 14px; font-size: 14px; }
+            .btn-register { padding: 14px; font-size: 15px; }
+            .form-group { margin-bottom: 18px; }
         }
     </style>
 </head>
 <body>
+    <!-- PRELOADER -->
+    <div id="preloader">
+        <img src="logo.png" alt="Loading Elite Trading Circle" class="loader-logo">
+    </div>
+
     <!-- Background Logo Watermark -->
     <div class="bg-logo"></div>
 
@@ -187,28 +213,28 @@
         <form id="registerForm" onsubmit="handleRegister(event)">
             <div class="form-group">
                 <label for="nama">Nama Lengkap</label>
-                <input type="text" name="nama" id="nama" placeholder="James Hans" required>
+                <input type="text" name="nama" id="nama" placeholder="James Hans" required autocomplete="name">
             </div>
             
             <div class="form-group">
                 <label for="email">Alamat Email</label>
-                <input type="email" name="email" id="email" placeholder="nama@email.com" required>
+                <input type="email" name="email" id="email" placeholder="nama@email.com" required autocomplete="email">
             </div>
             
             <div class="form-group">
                 <label for="whatsapp">No. WhatsApp</label>
-                <input type="tel" name="whatsapp" id="whatsapp" placeholder="0812345..." required>
+                <input type="tel" name="whatsapp" id="whatsapp" placeholder="0812345..." required autocomplete="tel">
             </div>
             
             <!-- PERHATIAN: name="password" DIHAPUS agar tidak terkirim ke Google Sheets -->
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" placeholder="Minimal 8 karakter" required>
+                <input type="password" id="password" placeholder="Minimal 8 karakter" required autocomplete="new-password">
             </div>
             
             <div class="form-group">
                 <label for="confirmPassword">Konfirmasi Password</label>
-                <input type="password" id="confirmPassword" placeholder="Ulangi password" required>
+                <input type="password" id="confirmPassword" placeholder="Ulangi password" required autocomplete="new-password">
             </div>
             
             <button type="submit" class="btn-register" id="btnSubmit">Daftar Gratis</button>
@@ -225,9 +251,17 @@
     </div>
 
     <script>
-        // URL APPS SCRIPT LO - JANGAN DIUBAH
+        // 1. Preloader Logic
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('preloader').classList.add('hide');
+            }, 1200); 
+        });
+
+        // 2. URL APPS SCRIPT - JANGAN DIUBAH
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx3X5m5ExThoJLoxXDychVjpHORL72hcxGJXFMTjqi7l2-IkaD7uszfGX4O9s3RRpGx/exec';
 
+        // 3. Register Logic
         function handleRegister(e) {
             e.preventDefault();
             
@@ -244,7 +278,7 @@
                 return; 
             }
 
-            // BUAT OBJECT USER DATA (Password tetap disimpan di localStorage untuk login)
+            // BUAT OBJECT USER DATA
             const userData = {
                 nama: document.getElementById('nama').value,
                 email: document.getElementById('email').value,
@@ -262,7 +296,7 @@
             btn.disabled = true;
             btn.textContent = 'Memproses pendaftaran...';
 
-            // KIRIM KE GOOGLE SHEETS (Password TIDAK akan ikut karena tidak ada name="password")
+            // KIRIM KE GOOGLE SHEETS (Password TIDAK ikut karena tidak ada name="password")
             const form = document.getElementById('registerForm');
             const formData = new FormData(form);
             
