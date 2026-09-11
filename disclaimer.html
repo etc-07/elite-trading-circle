@@ -2,48 +2,148 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Disclaimer Risiko - Elite Trading Circle</title>
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#D4AF37">
+
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%); color: #fff; min-height: 100vh; }
+        :root {
+            --bg-color: #0a0a0a;
+            --text-color: #ffffff;
+            --text-muted: #d4d4d4;
+            --card-bg: rgba(26, 26, 26, 0.8);
+            --nav-bg: rgba(10, 10, 10, 0.95);
+            --gold-primary: #D4AF37;
+            --gold-secondary: #FFD700;
+            --border-color: rgba(212, 175, 55, 0.3);
+            --warning-color: #ef4444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: background-color 0.3s ease, color 0.3s ease; }
+        body { background: var(--bg-color); color: var(--text-color); min-height: 100vh; overflow-x: hidden; }
         
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background: rgba(10, 10, 10, 0.95); position: fixed; width: 100%; top: 0; z-index: 1000; backdrop-filter: blur(10px); border-bottom: 2px solid #D4AF37; }
-        .logo { display: flex; align-items: center; gap: 15px; font-size: 24px; font-weight: bold; }
+        /* PRELOADER */
+        #preloader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-color); z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        #preloader.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+        
+        .loader-logo {
+            width: 140px; height: 140px; object-fit: contain;
+            animation: logoEntrance 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards, goldPulse 2s infinite alternate;
+        }
+        @keyframes logoEntrance {
+            0% { transform: scale(0.5) translateY(40px); opacity: 0; filter: blur(10px); }
+            100% { transform: scale(1) translateY(0); opacity: 1; filter: blur(0); }
+        }
+        @keyframes goldPulse {
+            0% { filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4)); }
+            100% { filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.8)); }
+        }
+
+        /* NAVBAR */
+        .navbar { display: flex; justify-content: center; align-items: center; padding: 15px 5%; background: var(--nav-bg); position: fixed; width: 100%; top: 0; z-index: 1000; backdrop-filter: blur(10px); border-bottom: 2px solid var(--border-color); }
+        .logo { display: flex; align-items: center; gap: 15px; font-size: 22px; font-weight: bold; text-decoration: none; color: var(--text-color); }
         .logo img { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; }
-        .logo-text { background: linear-gradient(135deg, #D4AF37 0%, #FFD700 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo-text { background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-secondary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        .container { padding: 120px 5% 60px; max-width: 900px; margin: 0 auto; }
+        /* CONTAINER */
+        .container { padding: 110px 5% 60px; max-width: 900px; margin: 0 auto; }
         .header { text-align: center; margin-bottom: 40px; }
-        .header h1 { font-size: 36px; margin-bottom: 15px; }
-        .header h1 .highlight { background: linear-gradient(135deg, #D4AF37, #FFD700); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header h1 { font-size: 36px; margin-bottom: 15px; word-wrap: break-word; }
+        .header h1 .highlight { background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        .disclaimer-box { background: rgba(26, 26, 26, 0.8); border: 2px solid rgba(212, 175, 55, 0.3); border-radius: 16px; padding: 40px; margin-bottom: 30px; }
-        .disclaimer-box h2 { color: #D4AF37; font-size: 22px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
-        .disclaimer-box p { color: #d4d4d4; line-height: 1.8; margin-bottom: 15px; font-size: 15px; }
-        .disclaimer-box ul { padding-left: 20px; color: #d4d4d4; line-height: 1.8; margin-bottom: 15px; }
-        .disclaimer-box li { margin-bottom: 10px; }
+        .disclaimer-box { 
+            background: var(--card-bg); 
+            border: 2px solid var(--border-color); 
+            border-radius: 16px; 
+            padding: 40px; 
+            margin-bottom: 30px; 
+        }
+        .disclaimer-box h2 { 
+            color: var(--gold-primary); 
+            font-size: 22px; 
+            margin-bottom: 15px; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            word-wrap: break-word;
+        }
+        .disclaimer-box p { color: var(--text-muted); line-height: 1.8; margin-bottom: 15px; font-size: 15px; word-wrap: break-word; }
+        .disclaimer-box ul { padding-left: 20px; color: var(--text-muted); line-height: 1.8; margin-bottom: 15px; }
+        .disclaimer-box li { margin-bottom: 10px; word-wrap: break-word; }
         
-        .warning-text { color: #ef4444; font-weight: 600; }
+        .warning-text { color: var(--warning-color); font-weight: 600; }
         
-        .back-button { display: inline-block; padding: 12px 30px; background: transparent; border: 2px solid #D4AF37; color: #D4AF37; border-radius: 8px; font-weight: 600; text-decoration: none; transition: all 0.3s; }
-        .back-button:hover { background: #D4AF37; color: #0a0a0a; transform: translateY(-2px); }
+        .back-button { 
+            display: inline-block; 
+            padding: 12px 30px; 
+            background: transparent; 
+            border: 2px solid var(--gold-primary); 
+            color: var(--gold-primary); 
+            border-radius: 8px; 
+            font-weight: 600; 
+            text-decoration: none; 
+            transition: all 0.3s; 
+        }
+        .back-button:hover { 
+            background: var(--gold-primary); 
+            color: #000; 
+            transform: translateY(-2px); 
+        }
         
-        .footer { background: rgba(10, 10, 10, 0.95); padding: 40px 5%; text-align: center; border-top: 2px solid rgba(212, 175, 55, 0.3); margin-top: 60px; }
+        .footer { 
+            background: var(--nav-bg); 
+            padding: 40px 5%; 
+            text-align: center; 
+            border-top: 2px solid var(--border-color); 
+            margin-top: 60px; 
+        }
         .footer p { color: #888; font-size: 14px; }
         
-        @media (max-width: 768px) { .header h1 { font-size: 28px; } .disclaimer-box { padding: 25px; } }
+        /* RESPONSIVE - TABLET & HP */
+        @media (max-width: 768px) {
+            .navbar { padding: 12px 4%; }
+            .logo { font-size: 18px; gap: 10px; }
+            .logo img { width: 38px; height: 38px; }
+            
+            .container { padding: 90px 4% 50px; }
+            .header h1 { font-size: 28px; }
+            .disclaimer-box { padding: 25px; }
+            .disclaimer-box h2 { font-size: 20px; }
+            .disclaimer-box p, .disclaimer-box li { font-size: 14px; }
+        }
+
+        @media (max-width: 400px) {
+            .navbar { padding: 10px 3%; }
+            .logo { font-size: 15px; gap: 8px; }
+            .logo img { width: 32px; height: 32px; }
+            
+            .container { padding: 80px 3% 40px; }
+            .header h1 { font-size: 24px; }
+            .disclaimer-box { padding: 20px; }
+            .disclaimer-box h2 { font-size: 18px; }
+            .disclaimer-box p, .disclaimer-box li { font-size: 13px; line-height: 1.7; }
+            .back-button { padding: 10px 24px; font-size: 13px; }
+        }
     </style>
 </head>
 <body>
+    <!-- PRELOADER -->
+    <div id="preloader">
+        <img src="logo.png" alt="Loading" class="loader-logo">
+    </div>
+
     <nav class="navbar">
-        <div class="logo">
+        <a href="index.html" class="logo">
             <img src="logo.png" alt="Elite Trading Circle">
             <span class="logo-text">Elite Trading Circle</span>
-        </div>
+        </a>
     </nav>
 
     <div class="container">
@@ -78,5 +178,13 @@
     <footer class="footer">
         <p>&copy; 2026 Elite Trading Circle. All rights reserved.</p>
     </footer>
+
+    <script>
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('preloader').classList.add('hide');
+            }, 1200); 
+        });
+    </script>
 </body>
 </html>
