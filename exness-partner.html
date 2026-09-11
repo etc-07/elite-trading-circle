@@ -2,67 +2,103 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Partner Exness - Elite Trading Circle</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Partner Dupoin - Elite Trading Circle</title>
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#D4AF37">
+    
+    <!-- ANTI-FLICKER: Auto apply tema dari localStorage -->
+    <script>
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    </script>
+
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background: #f5f6fa; color: #333; min-height: 100vh; overflow-x: hidden; }
-        .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px; height: 600px; opacity: 0.04; pointer-events: none; z-index: 0; }
+        /* --- CSS VARIABLES (LIGHT & DARK) --- */
+        :root {
+            --bg-color: #f5f6fa;
+            --text-color: #333333;
+            --text-muted: #666666;
+            --text-soft: #444444;
+            --card-bg: #ffffff;
+            --nav-bg: rgba(255, 255, 255, 0.9);
+            --tab-bg: rgba(255, 255, 255, 0.92);
+            --border-color: #e8e8e8;
+            --border-soft: #f0f0f0;
+            --gold-primary: #D4AF37;
+            --gold-secondary: #FFD700;
+            --gold-dark: #B8941F;
+        }
+
+        html.dark-mode {
+            --bg-color: #0f1115;
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --text-soft: #c5c5c5;
+            --card-bg: #1a1d24;
+            --nav-bg: rgba(15, 17, 21, 0.9);
+            --tab-bg: rgba(15, 17, 21, 0.92);
+            --border-color: #2a2e38;
+            --border-soft: #262a33;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
+        body { background: var(--bg-color); color: var(--text-color); min-height: 100vh; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+
+        /* PRELOADER */
+        #preloader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-color); z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        #preloader.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+        .loader-logo {
+            width: 140px; height: 140px; object-fit: contain;
+            animation: logoEntrance 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards, goldPulse 2s infinite alternate;
+        }
+        @keyframes logoEntrance {
+            0% { transform: scale(0.5) translateY(40px); opacity: 0; filter: blur(10px); }
+            100% { transform: scale(1) translateY(0); opacity: 1; filter: blur(0); }
+        }
+        @keyframes goldPulse {
+            0% { filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4)); }
+            100% { filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.8)); }
+        }
+
+        .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px; height: 600px; background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center; opacity: 0.04; pointer-events: none; z-index: 0; }
+        html.dark-mode .watermark { opacity: 0.02; }
         
-        /* Navbar Utama */
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(255,255,255,0.97); position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 1px solid #eee; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
-        .logo { display: flex; align-items: center; gap: 12px; font-size: 20px; font-weight: bold; color: #1a1a1a; text-decoration: none; }
+        /* Navbar */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: var(--nav-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 1px solid var(--border-color); box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
+        .logo { display: flex; align-items: center; gap: 12px; font-size: 20px; font-weight: bold; color: var(--text-color); text-decoration: none; }
         .logo img { width: 42px; height: 42px; border-radius: 8px; object-fit: cover; }
-        .logo-text { background: linear-gradient(135deg, #D4AF37, #B8941F); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo-text { background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .btn-logout { padding: 9px 20px; background: transparent; border: 1.5px solid #ef4444; color: #ef4444; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.3s; }
         .btn-logout:hover { background: #ef4444; color: #fff; }
         
-        /* TAB BAR ATAS */
-        .tab-bar { 
-            position: fixed; top: 73px; left: 0; right: 0; 
-            background: #fff; border-bottom: 1px solid #eee; 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03); 
-            z-index: 999; 
-        }
-        .tab-scroll { 
-            display: flex; 
-            overflow-x: auto; 
-            -webkit-overflow-scrolling: touch; 
-            scrollbar-width: none; 
-            max-width: 1400px; 
-            margin: 0 auto; 
-            padding: 0 5%; 
-            gap: 4px; 
-        }
+        /* TAB BAR */
+        .tab-bar { position: fixed; top: 73px; left: 0; right: 0; background: var(--tab-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color); box-shadow: 0 2px 8px rgba(0,0,0,0.03); z-index: 999; }
+        .tab-scroll { display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; max-width: 1400px; margin: 0 auto; padding: 0 5%; gap: 4px; }
         .tab-scroll::-webkit-scrollbar { display: none; }
-        .tab { 
-            padding: 15px 18px; 
-            white-space: nowrap; 
-            color: #555; 
-            font-size: 14px; 
-            font-weight: 500; 
-            text-decoration: none; 
-            border-bottom: 3px solid transparent; 
-            transition: color 0.2s, border-color 0.2s; 
-        }
-        .tab:hover { color: #D4AF37; }
-        .tab.active { color: #D4AF37; font-weight: 700; border-bottom-color: #D4AF37; }
-        .tab-separator { width: 1px; background: #eee; margin: 10px 6px; flex-shrink: 0; }
+        .tab { padding: 15px 18px; white-space: nowrap; color: var(--text-muted); font-size: 14px; font-weight: 500; text-decoration: none; border-bottom: 3px solid transparent; transition: color 0.2s, border-color 0.2s; }
+        .tab:hover { color: var(--gold-primary); }
+        .tab.active { color: var(--gold-primary); font-weight: 700; border-bottom-color: var(--gold-primary); }
+        .tab-separator { width: 1px; background: var(--border-color); margin: 10px 6px; flex-shrink: 0; }
         
         /* Content */
         .container { padding: 148px 5% 60px; max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
         .header { text-align: center; margin-bottom: 40px; }
-        .header h1 { font-size: 36px; margin-bottom: 15px; color: #1a1a1a; font-weight: 700; }
-        .header h1 .highlight { background: linear-gradient(135deg, #D4AF37, #FFD700); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .header p { color: #666; max-width: 700px; margin: 0 auto; line-height: 1.8; font-size: 15px; }
+        .header h1 { font-size: 36px; margin-bottom: 15px; color: var(--text-color); font-weight: 700; word-wrap: break-word; }
+        .header h1 .highlight { background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header p { color: var(--text-muted); max-width: 700px; margin: 0 auto; line-height: 1.8; font-size: 15px; word-wrap: break-word; }
         
         /* Partner Card */
         .partner-card { 
-            background: #fff; 
-            border: 1px solid #e8e8e8; 
+            background: var(--card-bg); 
+            border: 1px solid var(--border-color); 
             border-radius: 16px; 
             padding: 40px; 
             transition: all 0.3s; 
@@ -70,99 +106,140 @@
             box-shadow: 0 2px 12px rgba(0,0,0,0.05);
         }
         .partner-card:hover { 
-            border-color: #D4AF37; 
+            border-color: var(--gold-primary); 
             box-shadow: 0 10px 30px rgba(212, 175, 55, 0.12); 
         }
-        
-        .code-box { 
-            background: rgba(212, 175, 55, 0.06); 
-            border: 2px dashed #D4AF37; 
-            border-radius: 12px; 
-            padding: 25px; 
-            text-align: center; 
-            margin: 30px 0; 
-        }
-        .code-label { color: #888; font-size: 14px; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
-        .code-value { 
-            color: #B8941F; 
-            font-size: 32px; 
-            font-weight: 800; 
-            letter-spacing: 2px; 
-            font-family: 'Courier New', monospace;
-            user-select: all;
-        }
-        .code-note { color: #ef4444; font-size: 13px; margin-top: 10px; font-weight: 600; }
         
         /* Steps */
         .steps { display: grid; gap: 20px; margin-bottom: 30px; }
         .step { display: flex; gap: 15px; align-items: flex-start; }
         .step-num { 
-            width: 38px; 
-            height: 38px; 
-            background: linear-gradient(135deg, #D4AF37, #FFD700); 
-            color: #1a1a1a; 
-            border-radius: 50%; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            font-weight: bold; 
-            flex-shrink: 0;
+            width: 38px; height: 38px; 
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary)); 
+            color: #1a1a1a; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            font-weight: bold; flex-shrink: 0;
             box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
         }
-        .step-content h3 { color: #1a1a1a; font-size: 17px; margin-bottom: 5px; font-weight: 700; }
-        .step-content p { color: #555; font-size: 14px; line-height: 1.6; }
-        .step-content strong { color: #B8941F; }
+        .step-content h3 { color: var(--text-color); font-size: 17px; margin-bottom: 5px; font-weight: 700; }
+        .step-content p { color: var(--text-soft); font-size: 14px; line-height: 1.6; word-wrap: break-word; }
+        .step-content strong { color: var(--gold-primary); }
+        html.dark-mode .step-content strong { color: var(--gold-secondary); }
         
         /* CTA Button */
         .btn-register { 
-            display: block; 
-            width: 100%; 
-            padding: 18px; 
-            background: linear-gradient(135deg, #D4AF37, #FFD700); 
-            color: #1a1a1a; 
-            border-radius: 12px; 
-            font-weight: 800; 
-            font-size: 17px; 
-            text-align: center; 
-            text-decoration: none; 
-            transition: all 0.3s; 
+            display: block; width: 100%; padding: 18px; 
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary)); 
+            color: #1a1a1a; border-radius: 12px; 
+            font-weight: 800; font-size: 17px; text-align: center; 
+            text-decoration: none; transition: all 0.3s; 
             box-shadow: 0 5px 20px rgba(212, 175, 55, 0.3);
+            margin-bottom: 30px;
         }
         .btn-register:hover { 
             transform: translateY(-3px); 
             box-shadow: 0 8px 30px rgba(212, 175, 55, 0.5); 
         }
         
-        .back-button { 
-            display: inline-block; 
-            margin-top: 30px; 
-            padding: 12px 30px; 
-            background: transparent; 
-            border: 2px solid #D4AF37; 
-            color: #D4AF37; 
-            border-radius: 8px; 
-            font-weight: 600; 
-            text-decoration: none; 
-            transition: all 0.3s; 
+        /* DIVIDER "ATAU" */
+        .divider-or {
+            display: flex; align-items: center; text-align: center;
+            margin: 25px 0; color: var(--text-muted); font-size: 13px; font-weight: 600;
+            letter-spacing: 1px;
         }
-        .back-button:hover { 
-            background: #D4AF37; 
-            color: #1a1a1a; 
-            transform: translateY(-2px); 
+        .divider-or::before, .divider-or::after {
+            content: ''; flex: 1; border-bottom: 1px solid var(--border-color);
         }
+        .divider-or span { padding: 0 15px; }
         
-        /* FLOATING CHAT ADMIN BUTTON */
-        .floating-chat {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #D4AF37, #FFD700);
-            border-radius: 50%;
+        /* QR CODE SECTION */
+        .qr-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 35px 30px;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+        .qr-section:hover {
+            border-color: var(--gold-primary);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.12);
+        }
+        .qr-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 10px;
+        }
+        .qr-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        .qr-wrapper {
+            display: inline-block;
+            padding: 15px;
+            background: #ffffff;
+            border-radius: 12px;
+            border: 2px solid var(--gold-primary);
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.15);
+            transition: all 0.3s;
+        }
+        .qr-wrapper:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 30px rgba(212, 175, 55, 0.25);
+        }
+        .qr-image {
+            width: 220px;
+            height: 220px;
+            object-fit: contain;
+            display: block;
+        }
+        .qr-note {
+            margin-top: 15px;
+            font-size: 12px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .qr-note-icon {
+            width: 16px;
+            height: 16px;
+            background: var(--gold-primary);
+            color: #1a1a1a;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        .back-button { 
+            display: inline-block; margin-top: 30px; padding: 12px 30px; 
+            background: transparent; border: 2px solid var(--gold-primary); 
+            color: var(--gold-primary); border-radius: 8px; 
+            font-weight: 600; text-decoration: none; transition: all 0.3s; 
+        }
+        .back-button:hover { 
+            background: var(--gold-primary); color: #1a1a1a; transform: translateY(-2px); 
+        }
+        
+        /* FLOATING CHAT */
+        .floating-chat {
+            position: fixed; bottom: 30px; right: 30px;
+            width: 60px; height: 60px;
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary));
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
             cursor: pointer;
             box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
             z-index: 998;
@@ -170,28 +247,15 @@
             transition: all 0.3s ease;
             animation: pulse 2s infinite;
         }
-        .floating-chat:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 25px rgba(212, 175, 55, 0.6);
-        }
-        .floating-chat span {
-            font-size: 28px;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-        }
-        
+        .floating-chat:hover { transform: scale(1.1); box-shadow: 0 6px 25px rgba(212, 175, 55, 0.6); }
+        .floating-chat span { font-size: 28px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
         @keyframes pulse {
-            0% {
-                box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 0 rgba(212, 175, 55, 0.6);
-            }
-            70% {
-                box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 15px rgba(212, 175, 55, 0);
-            }
-            100% {
-                box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 0 rgba(212, 175, 55, 0);
-            }
+            0% { box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 0 rgba(212, 175, 55, 0.6); }
+            70% { box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 15px rgba(212, 175, 55, 0); }
+            100% { box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 0 rgba(212, 175, 55, 0); }
         }
         
-        /* HP */
+        /* RESPONSIVE */
         @media (max-width: 768px) {
             .navbar { padding: 12px 4%; }
             .logo { font-size: 15px; gap: 8px; }
@@ -206,37 +270,40 @@
             .header p { font-size: 13.5px; }
             
             .partner-card { padding: 25px 20px; }
-            .code-box { padding: 20px 15px; }
-            .code-label { font-size: 12px; }
-            .code-value { font-size: 24px; }
-            .code-note { font-size: 12px; }
-            
             .step-num { width: 32px; height: 32px; font-size: 14px; }
             .step-content h3 { font-size: 15px; }
             .step-content p { font-size: 13px; }
-            
             .btn-register { padding: 16px; font-size: 15px; }
             .back-button { padding: 11px 25px; font-size: 14px; }
             
-            .watermark { width: 300px; height: 300px; }
+            .qr-section { padding: 25px 20px; }
+            .qr-title { font-size: 16px; }
+            .qr-subtitle { font-size: 12px; }
+            .qr-image { width: 180px; height: 180px; }
+            .qr-wrapper { padding: 12px; }
             
-            .floating-chat {
-                width: 54px;
-                height: 54px;
-                bottom: 20px;
-                right: 20px;
-            }
+            .watermark { width: 300px; height: 300px; }
+            .floating-chat { width: 54px; height: 54px; bottom: 20px; right: 20px; }
             .floating-chat span { font-size: 24px; }
         }
         
         @media (max-width: 400px) {
+            .navbar { padding: 10px 3%; }
+            .logo { font-size: 13px; gap: 6px; }
+            .logo img { width: 30px; height: 30px; }
+            .btn-logout { padding: 6px 12px; font-size: 11px; }
             .header h1 { font-size: 23px; }
-            .code-value { font-size: 20px; }
             .partner-card { padding: 22px 18px; }
+            .qr-image { width: 160px; height: 160px; }
         }
     </style>
 </head>
 <body>
+    <!-- PRELOADER -->
+    <div id="preloader">
+        <img src="logo.png" alt="Loading Elite Trading Circle" class="loader-logo">
+    </div>
+
     <img src="logo.png" alt="" class="watermark">
     
     <!-- Navbar Utama -->
@@ -259,75 +326,97 @@
             <a href="calendar.html" class="tab">Economic Calendar</a>
             <a href="academy.html" class="tab">Academy</a>
             <div class="tab-separator"></div>
-            <a href="whatsapp-group.html" class="tab">WhatsApp Group</a>
+            <a href="group.html" class="tab">Group</a>
         </div>
     </div>
 
     <div class="container">
         <div class="header">
-            <h1>Buka Akun <span class="highlight">Exness Partner</span></h1>
-            <p>Dapatkan akses ke kondisi trading premium dengan spread rendah, eksekusi cepat, dan dukungan eksklusif dari Elite Trading Circle.</p>
+            <h1>Buka Akun <span class="highlight">Dupoin Partner</span></h1>
+            <p>Dapatkan akses ke kondisi trading premium dengan spread rendah, eksekusi cepat, dan dukungan eksklusif dari Elite Trading Circle melalui broker resmi Dupoin.</p>
         </div>
         
         <div class="partner-card">
-            <div class="code-box">
-                <div class="code-label">Wajib Masukkan Partner Code</div>
-                <div class="code-value">aowbanveal</div>
-                <div class="code-note">⚠️ Pastikan kode ini terisi saat registrasi untuk mendapatkan benefit eksklusif</div>
-            </div>
-            
             <div class="steps">
                 <div class="step">
                     <div class="step-num">1</div>
                     <div class="step-content">
-                        <h3>Klik Tombol Daftar di Bawah</h3>
-                        <p>Anda akan diarahkan ke halaman registrasi resmi Exness melalui link partner kami.</p>
+                        <h3>Pilih Metode Pendaftaran</h3>
+                        <p>Anda bisa mendaftar dengan <strong>mengklik tombol di bawah</strong> atau <strong>scan QR code</strong> menggunakan kamera HP Anda.</p>
                     </div>
                 </div>
                 <div class="step">
                     <div class="step-num">2</div>
                     <div class="step-content">
                         <h3>Isi Data Registrasi</h3>
-                        <p>Lengkapi formulir pendaftaran dengan data diri yang valid. Pastikan kolom Partner/Referral Code sudah terisi <strong>aowbanveal</strong>.</p>
+                        <p>Lengkapi formulir pendaftaran dengan data diri yang valid. <strong>Kode partner akan otomatis terpasang</strong> karena Anda menggunakan link resmi kami, jadi tidak perlu input manual.</p>
                     </div>
                 </div>
                 <div class="step">
                     <div class="step-num">3</div>
                     <div class="step-content">
                         <h3>Verifikasi Akun (KYC)</h3>
-                        <p>Upload dokumen identitas dan bukti alamat untuk mengaktifkan akun trading Anda secara penuh.</p>
+                        <p>Upload dokumen identitas dan bukti alamat untuk mengaktifkan akun trading Dupoin Anda secara penuh dan aman.</p>
                     </div>
                 </div>
                 <div class="step">
                     <div class="step-num">4</div>
                     <div class="step-content">
                         <h3>Deposit & Mulai Trading</h3>
-                        <p>Lakukan deposit pertama Anda dan nikmati akses ke EA Premium serta support prioritas dari tim kami.</p>
+                        <p>Lakukan deposit pertama Anda dan nikmati akses ke EA Premium serta support prioritas dari tim Elite Trading Circle.</p>
                     </div>
                 </div>
             </div>
             
-            <a href="https://one.exnessonelink.com/a/aowbanveal" target="_blank" class="btn-register">
-                Daftar Akun Exness Sekarang →
+            <!-- OPSI 1: TOMBOL KLIK -->
+            <a href="https://i.dupoin.vip/XS6tfAsuh" target="_blank" class="btn-register">
+                 Daftar Akun Dupoin Sekarang
             </a>
+            
+            <!-- DIVIDER -->
+            <div class="divider-or"><span>ATAU</span></div>
+            
+            <!-- OPSI 2: QR CODE SCAN -->
+            <div class="qr-section">
+                <div class="qr-title">📱 Scan QR Code untuk Daftar</div>
+                <div class="qr-subtitle">Buka kamera HP atau aplikasi QR scanner, arahkan ke kode di bawah ini</div>
+                <div class="qr-wrapper">
+                    <img src="barcode.png" alt="QR Code Pendaftaran Dupoin" class="qr-image">
+                </div>
+                <div class="qr-note">
+                    <span class="qr-note-icon">✓</span>
+                    <span>Link partner otomatis terpasang saat scan</span>
+                </div>
+            </div>
         </div>
         
-        <a href="dashboard.html" class="back-button">← Kembali ke Dashboard</a>
+        <div style="text-align: center;">
+            <a href="dashboard.html" class="back-button">← Kembali ke Dashboard</a>
+        </div>
     </div>
     
-    <!-- Floating Chat Admin Button -->
-    <a href="https://t.me/ELITE_TRADING_CIRCLE_27" target="_blank" class="floating-chat" title="Chat Admin">
+    <!-- Floating Chat Admin -->
+    <a href="https://t.me/elitetradingcircle07" target="_blank" class="floating-chat" title="Chat Admin">
         <span>💬</span>
     </a>
 
     <script>
-        window.onload = function() {
+        // 1. Preloader Logic
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('preloader').classList.add('hide');
+            }, 1200); 
+        });
+
+        // 2. Auth Check
+        window.addEventListener('DOMContentLoaded', () => {
             const user = localStorage.getItem('user');
             if (!user) { 
                 alert('Silakan login terlebih dahulu untuk mengakses fitur ini!'); 
                 window.location.href = 'login.html'; 
             }
-        };
+        });
+        
         function logout() { 
             localStorage.removeItem('user'); 
             window.location.href = 'index.html'; 
