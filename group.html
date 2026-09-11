@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Telegram Group - Elite Trading Circle</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <style>
+        /* --- 1. CSS VARIABLES (LIGHT & DARK MODE) --- */
+        :root {
+            --bg-color: #f5f6fa;
+            --text-color: #333333;
+            --text-muted: #666666;
+            --card-bg: #ffffff;
+            --nav-bg: rgba(255, 255, 255, 0.85);
+            --tab-bg: rgba(255, 255, 255, 0.9);
+            --border-color: #eeeeee;
+            --gold-primary: #D4AF37;
+            --gold-secondary: #FFD700;
+            --gold-dark: #B8941F;
+            --telegram-blue: #2AABEE;
+            --telegram-dark: #229ED9;
+        }
+
+        body.dark-mode {
+            --bg-color: #0f1115;
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --card-bg: #1a1d24;
+            --nav-bg: rgba(15, 17, 21, 0.85);
+            --tab-bg: rgba(15, 17, 21, 0.9);
+            --border-color: #2a2e38;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
+        body { background: var(--bg-color); color: var(--text-color); min-height: 100vh; overflow-x: hidden; }
+
+        /* --- 2. PRELOADER ANIMASI --- */
+        #preloader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-color); z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        #preloader.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+        
+        .loader-logo {
+            width: 140px; height: 140px; object-fit: contain;
+            animation: logoEntrance 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards, goldPulse 2s infinite alternate;
+        }
+        @keyframes logoEntrance {
+            0% { transform: scale(0.5) translateY(40px); opacity: 0; filter: blur(10px); }
+            100% { transform: scale(1) translateY(0); opacity: 1; filter: blur(0); }
+        }
+        @keyframes goldPulse {
+            0% { filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4)); }
+            100% { filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.8)); }
+        }
+
+        /* --- 3. GLASSMORPHISM NAVBAR & TAB BAR --- */
+        .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px; height: 600px; background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center; opacity: 0.04; pointer-events: none; z-index: 0; }
+        body.dark-mode .watermark { opacity: 0.02; }
+
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: var(--nav-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 1px solid var(--border-color); box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
+        .logo { display: flex; align-items: center; gap: 12px; font-size: 20px; font-weight: bold; color: var(--text-color); text-decoration: none; }
+        .logo img { width: 42px; height: 42px; border-radius: 8px; object-fit: cover; }
+        .logo-text { background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .nav-right { display: flex; align-items: center; gap: 12px; }
+
+        .theme-toggle {
+            background: transparent; border: 1.5px solid var(--gold-primary); color: var(--gold-primary);
+            width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 18px;
+            display: flex; align-items: center; justify-content: center; transition: all 0.3s;
+        }
+        .theme-toggle:hover { background: var(--gold-primary); color: #000; box-shadow: 0 0 15px rgba(212, 175, 55, 0.5); transform: scale(1.05); }
+
+        .btn-logout { padding: 9px 20px; background: transparent; border: 1.5px solid #ef4444; color: #ef4444; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.3s; }
+        .btn-logout:hover { background: #ef4444; color: #fff; }
+
+        .tab-bar { position: fixed; top: 73px; left: 0; right: 0; background: var(--tab-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color); box-shadow: 0 2px 8px rgba(0,0,0,0.03); z-index: 999; }
+        .tab-scroll { display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; max-width: 1400px; margin: 0 auto; padding: 0 5%; gap: 4px; }
+        .tab-scroll::-webkit-scrollbar { display: none; }
+        .tab { padding: 15px 18px; white-space: nowrap; color: var(--text-muted); font-size: 14px; font-weight: 500; text-decoration: none; border-bottom: 3px solid transparent; transition: color 0.2s, border-color 0.2s; }
+        .tab:hover { color: var(--gold-primary); }
+        .tab.active { color: var(--gold-primary); font-weight: 700; border-bottom-color: var(--gold-primary); }
+        .tab-separator { width: 1px; background: var(--border-color); margin: 10px 6px; flex-shrink: 0; }
+
+        /* --- 4. PAGE CONTENT --- */
+        .page-content { margin-top: 148px; padding: 40px 5% 80px; max-width: 700px; margin-left: auto; margin-right: auto; position: relative; z-index: 1; text-align: center; }
+        
+        .tg-icon-wrapper {
+            width: 110px;
+            height: 110px;
+            background: linear-gradient(135deg, var(--telegram-blue), var(--telegram-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 55px;
+            margin: 0 auto 30px;
+            box-shadow: 0 10px 30px rgba(42, 171, 238, 0.3);
+            animation: floatIcon 3s ease-in-out infinite;
+        }
+        @keyframes floatIcon {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        h1 { font-size: 32px; color: var(--text-color); margin-bottom: 20px; font-weight: 700; }
+        h1 span { background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .desc { color: var(--text-muted); margin-bottom: 35px; line-height: 1.8; font-size: 16px; }
+        
+        .btn-join { 
+            display: inline-flex; 
+            align-items: center;
+            gap: 10px;
+            padding: 18px 40px; 
+            background: linear-gradient(135deg, var(--telegram-blue), var(--telegram-dark)); 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 12px; 
+            font-size: 17px; 
+            font-weight: 700; 
+            box-shadow: 0 4px 15px rgba(42, 171, 238, 0.4);
+            transition: all 0.3s;
+        }
+        .btn-join:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 8px 25px rgba(42, 171, 238, 0.6); 
+        }
+        
+        .benefits { 
+            background: var(--card-bg); 
+            border: 1px solid var(--border-color); 
+            border-radius: 16px; 
+            padding: 30px; 
+            margin-top: 40px; 
+            text-align: left;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+        }
+        .benefits h3 { 
+            color: var(--text-color); 
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .benefits ul { 
+            padding-left: 10px; 
+            color: var(--text-muted); 
+            line-height: 2.2;
+            font-size: 15px;
+            list-style: none;
+        }
+        .benefits li { 
+            margin-bottom: 8px; 
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .benefits li::before {
+            content: '✅';
+            flex-shrink: 0;
+        }
+        
+        .back-button { 
+            display: inline-block; 
+            margin-top: 35px; 
+            padding: 12px 30px; 
+            background: transparent; 
+            border: 2px solid var(--gold-primary); 
+            color: var(--gold-primary); 
+            border-radius: 8px; 
+            font-weight: 600; 
+            text-decoration: none; 
+            transition: all 0.3s; 
+        }
+        .back-button:hover { 
+            background: var(--gold-primary); 
+            color: #000; 
+            transform: translateY(-2px); 
+        }
+        
+        /* FLOATING CHAT ADMIN BUTTON */
+        .floating-chat {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
+            z-index: 998;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+        .floating-chat:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(212, 175, 55, 0.6);
+        }
+        .floating-chat span {
+            font-size: 28px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 0 rgba(212, 175, 55, 0.6); }
+            70% { box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 15px rgba(212, 175, 55, 0); }
+            100% { box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 0 rgba(212, 175, 55, 0); }
+        }
+        
+        /* RESPONSIVE - HP */
+        @media (max-width: 768px) {
+            .navbar { padding: 12px 4%; }
+            .logo { font-size: 15px; gap: 8px; }
+            .logo img { width: 36px; height: 36px; }
+            .nav-right { gap: 8px; }
+            .theme-toggle { width: 36px; height: 36px; font-size: 16px; }
+            .btn-logout { padding: 7px 14px; font-size: 12px; }
+            .tab-bar { top: 61px; }
+            .tab { padding: 12px 14px; font-size: 13px; }
+            
+            .page-content { margin-top: 125px; padding: 30px 4% 60px; }
+            h1 { font-size: 26px; }
+            .desc { font-size: 14px; }
+            .tg-icon-wrapper { width: 90px; height: 90px; font-size: 45px; }
+            .btn-join { padding: 16px 30px; font-size: 15px; width: 100%; justify-content: center; }
+            .benefits { padding: 25px 20px; }
+            .benefits h3 { font-size: 16px; }
+            .benefits li { font-size: 13px; }
+            
+            .watermark { width: 300px; height: 300px; }
+            .floating-chat { width: 54px; height: 54px; bottom: 20px; right: 20px; }
+            .floating-chat span { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- PRELOADER ANIMASI -->
+    <div id="preloader">
+        <img src="logo.png" alt="Loading Elite Trading Circle" class="loader-logo">
+    </div>
+
+    <img src="logo.png" alt="" class="watermark">
+    
+    <!-- Navbar Utama -->
+    <nav class="navbar">
+        <a href="dashboard.html" class="logo">
+            <img src="logo.png" alt="Elite Trading Circle">
+            <span class="logo-text">Elite Trading Circle</span>
+        </a>
+        <div class="nav-right">
+            <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark Mode">🌙</button>
+            <button class="btn-logout" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+    
+    <!-- Tab Bar Atas -->
+    <div class="tab-bar">
+        <div class="tab-scroll">
+            <a href="dashboard.html" class="tab">Dashboard</a>
+            <a href="sewa-ea.html" class="tab">Sewa EA</a>
+            <a href="free-ea.html" class="tab">Free EA</a>
+            <a href="akun-pantau.html" class="tab">Akun Pantau</a>
+            <a href="exness-partner.html" class="tab">Partner</a>
+            <a href="calendar.html" class="tab">Economic Calendar</a>
+            <a href="academy.html" class="tab">Academy</a>
+            <div class="tab-separator"></div>
+            <a href="group.html" class="tab active">Group</a>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="page-content">
+        <div class="tg-icon-wrapper">✈️</div>
+        <h1>Bergabung dengan Komunitas <span>Telegram</span> Kami</h1>
+        <p class="desc">Dapatkan akses eksklusif ke update signal real-time, diskusi strategi, dan pengumuman penting langsung dari tim Elite Trading Circle melalui platform Telegram yang cepat dan aman.</p>
+        
+        <a href="https://t.me/elitetradingcircle07" target="_blank" class="btn-join">
+            <span>✈️</span> Gabung Group Telegram Sekarang
+        </a>
+        
+        <div class="benefits">
+            <h3>🚀 Keuntungan Join Group:</h3>
+            <ul>
+                <li>Notifikasi signal trading & update market secara real-time</li>
+                <li>Akses diskusi eksklusif dan sharing ilmu dengan member lain</li>
+                <li>Pengumuman penting seputar maintenance & update EA terbaru</li>
+                <li>Dukungan langsung (fast response) dari admin & tim support</li>
+                <li>Gratis dan terbuka untuk semua member aktif Elite Trading Circle</li>
+            </ul>
+        </div>
+        
+        <a href="dashboard.html" class="back-button">← Kembali ke Dashboard</a>
+    </div>
+    
+    <!-- Floating Chat Admin Button -->
+    <a href="https://t.me/elitetradingcircle07" target="_blank" class="floating-chat" title="Join Telegram Group">
+        <span>💬</span>
+    </a>
+
+    <script>
+        // 1. Logic Preloader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('preloader').classList.add('hide');
+            }, 1200); 
+        });
+
+        // 2. Logic Dark Mode
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            document.querySelector('.theme-toggle').textContent = isDark ? '☀️' : '🌙';
+        }
+
+        // Cek preferensi user saat load
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.querySelector('.theme-toggle').textContent = '☀️';
+            }
+        });
+
+        // 3. Logic Auth Check
+        const user = localStorage.getItem('user');
+        if (!user) { 
+            alert('Silakan login terlebih dahulu!'); 
+            window.location.href = 'login.html'; 
+        }
+        
+        function logout() { 
+            localStorage.removeItem('user'); 
+            window.location.href = 'index.html'; 
+        }
+    </script>
+</body>
+</html>
