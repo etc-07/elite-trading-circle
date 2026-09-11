@@ -2,67 +2,128 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Sewa EA Premium - Elite Trading Circle</title>
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#D4AF37">
+    
+    <!-- ANTI-FLICKER: Auto apply tema dari localStorage -->
+    <script>
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    </script>
+
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background: #f5f6fa; color: #333; min-height: 100vh; overflow-x: hidden; }
-        .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px; height: 600px; opacity: 0.04; pointer-events: none; z-index: 0; }
+        /* --- CSS VARIABLES (LIGHT & DARK) --- */
+        :root {
+            --bg-color: #f5f6fa;
+            --text-color: #333333;
+            --text-muted: #666666;
+            --text-soft: #444444;
+            --card-bg: #ffffff;
+            --nav-bg: rgba(255, 255, 255, 0.9);
+            --tab-bg: rgba(255, 255, 255, 0.92);
+            --border-color: #e8e8e8;
+            --border-soft: #f0f0f0;
+            --label-color: #888888;
+            --gold-primary: #D4AF37;
+            --gold-secondary: #FFD700;
+            --gold-dark: #B8941F;
+            --green: #10b981;
+            --gold-bg-soft: rgba(212, 175, 55, 0.06);
+        }
+
+        html.dark-mode {
+            --bg-color: #0f1115;
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --text-soft: #c5c5c5;
+            --card-bg: #1a1d24;
+            --nav-bg: rgba(15, 17, 21, 0.9);
+            --tab-bg: rgba(15, 17, 21, 0.92);
+            --border-color: #2a2e38;
+            --border-soft: #262a33;
+            --label-color: #9aa0a6;
+            --gold-bg-soft: rgba(212, 175, 55, 0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
+        body { background: var(--bg-color); color: var(--text-color); min-height: 100vh; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+
+        /* PRELOADER */
+        #preloader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-color); z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        #preloader.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+        .loader-logo {
+            width: 140px; height: 140px; object-fit: contain;
+            animation: logoEntrance 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards, goldPulse 2s infinite alternate;
+        }
+        @keyframes logoEntrance {
+            0% { transform: scale(0.5) translateY(40px); opacity: 0; filter: blur(10px); }
+            100% { transform: scale(1) translateY(0); opacity: 1; filter: blur(0); }
+        }
+        @keyframes goldPulse {
+            0% { filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4)); }
+            100% { filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.8)); }
+        }
+
+        .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px; height: 600px; background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center; opacity: 0.04; pointer-events: none; z-index: 0; }
+        html.dark-mode .watermark { opacity: 0.02; }
         
-        /* Navbar Utama */
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(255,255,255,0.97); position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 1px solid #eee; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
-        .logo { display: flex; align-items: center; gap: 12px; font-size: 20px; font-weight: bold; color: #1a1a1a; text-decoration: none; }
+        /* Navbar */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: var(--nav-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 1px solid var(--border-color); box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
+        .logo { display: flex; align-items: center; gap: 12px; font-size: 20px; font-weight: bold; color: var(--text-color); text-decoration: none; }
         .logo img { width: 42px; height: 42px; border-radius: 8px; object-fit: cover; }
-        .logo-text { background: linear-gradient(135deg, #D4AF37, #B8941F); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo-text { background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .btn-logout { padding: 9px 20px; background: transparent; border: 1.5px solid #ef4444; color: #ef4444; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.3s; }
         .btn-logout:hover { background: #ef4444; color: #fff; }
         
-        /* TAB BAR ATAS (ala Investing.com) */
-        .tab-bar { 
-            position: fixed; top: 73px; left: 0; right: 0; 
-            background: #fff; border-bottom: 1px solid #eee; 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03); 
-            z-index: 999; 
-        }
-        .tab-scroll { 
-            display: flex; 
-            overflow-x: auto; 
-            -webkit-overflow-scrolling: touch; 
-            scrollbar-width: none; 
-            max-width: 1400px; 
-            margin: 0 auto; 
-            padding: 0 5%; 
-            gap: 4px; 
-        }
+        /* TAB BAR */
+        .tab-bar { position: fixed; top: 73px; left: 0; right: 0; background: var(--tab-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color); box-shadow: 0 2px 8px rgba(0,0,0,0.03); z-index: 999; }
+        .tab-scroll { display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; max-width: 1400px; margin: 0 auto; padding: 0 5%; gap: 4px; }
         .tab-scroll::-webkit-scrollbar { display: none; }
-        .tab { 
-            padding: 15px 18px; 
-            white-space: nowrap; 
-            color: #555; 
-            font-size: 14px; 
-            font-weight: 500; 
-            text-decoration: none; 
-            border-bottom: 3px solid transparent; 
-            transition: color 0.2s, border-color 0.2s; 
-        }
-        .tab:hover { color: #D4AF37; }
-        .tab.active { color: #D4AF37; font-weight: 700; border-bottom-color: #D4AF37; }
-        .tab-separator { width: 1px; background: #eee; margin: 10px 6px; flex-shrink: 0; }
+        .tab { padding: 15px 18px; white-space: nowrap; color: var(--text-muted); font-size: 14px; font-weight: 500; text-decoration: none; border-bottom: 3px solid transparent; transition: color 0.2s, border-color 0.2s; }
+        .tab:hover { color: var(--gold-primary); }
+        .tab.active { color: var(--gold-primary); font-weight: 700; border-bottom-color: var(--gold-primary); }
+        .tab-separator { width: 1px; background: var(--border-color); margin: 10px 6px; flex-shrink: 0; }
         
         /* Konten */
         .container { padding: 148px 5% 60px; max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
-        .header { text-align: center; margin-bottom: 50px; }
-        .header h1 { font-size: 36px; margin-bottom: 15px; color: #1a1a1a; font-weight: 700; }
-        .header h1 .highlight { background: linear-gradient(135deg, #D4AF37, #FFD700); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .header p { color: #666; max-width: 700px; margin: 0 auto; line-height: 1.8; font-size: 15px; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { font-size: 36px; margin-bottom: 15px; color: var(--text-color); font-weight: 700; word-wrap: break-word; }
+        .header h1 .highlight { background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header p { color: var(--text-muted); max-width: 700px; margin: 0 auto; line-height: 1.8; font-size: 15px; word-wrap: break-word; }
         
+        /* BROKER FLEXIBILITY NOTE */
+        .broker-note {
+            background: var(--gold-bg-soft);
+            border: 1px solid var(--gold-primary);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin: 20px auto 0;
+            max-width: 800px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-soft);
+            font-size: 14px;
+            line-height: 1.5;
+            text-align: left;
+        }
+        .broker-note strong { color: var(--gold-primary); }
+        html.dark-mode .broker-note strong { color: var(--gold-secondary); }
+        .broker-note-icon { font-size: 24px; flex-shrink: 0; }
+
         .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-bottom: 40px; }
         .price-card { 
-            background: #fff; 
-            border: 1px solid #e8e8e8; 
+            background: var(--card-bg); 
+            border: 1px solid var(--border-color); 
             border-radius: 16px; 
             padding: 35px; 
             text-align: center; 
@@ -74,51 +135,45 @@
         }
         .price-card:hover { 
             transform: translateY(-8px); 
-            border-color: #D4AF37; 
+            border-color: var(--gold-primary); 
             box-shadow: 0 15px 40px rgba(212, 175, 55, 0.15); 
         }
         .price-card.popular { 
-            border-color: #D4AF37; 
+            border-color: var(--gold-primary); 
             box-shadow: 0 5px 25px rgba(212, 175, 55, 0.12);
             border-width: 2px;
         }
         .popular-tag { 
-            position: absolute; 
-            top: -12px; 
-            left: 50%; 
-            transform: translateX(-50%); 
-            background: linear-gradient(135deg, #D4AF37, #FFD700); 
-            color: #1a1a1a; 
-            padding: 5px 22px; 
-            border-radius: 20px; 
-            font-size: 11px; 
-            font-weight: 800; 
-            text-transform: uppercase; 
-            letter-spacing: 1px;
+            position: absolute; top: -12px; left: 50%; transform: translateX(-50%); 
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary)); 
+            color: #1a1a1a; padding: 5px 22px; border-radius: 20px; 
+            font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
             box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+            white-space: nowrap;
         }
         
-        .tier-name { font-size: 22px; color: #1a1a1a; margin-bottom: 20px; font-weight: 700; }
+        .tier-name { font-size: 22px; color: var(--text-color); margin-bottom: 20px; font-weight: 700; }
         .price-row { margin-bottom: 12px; }
-        .price-label { color: #888; font-size: 13px; margin-bottom: 4px; }
-        .price-value { font-size: 28px; font-weight: 800; color: #1a1a1a; }
-        .price-value span { font-size: 14px; color: #888; font-weight: 400; }
-        .price-save { color: #10b981; font-size: 12px; font-weight: 600; margin-top: 2px; }
+        .price-label { color: var(--label-color); font-size: 13px; margin-bottom: 4px; }
+        .price-value { font-size: 28px; font-weight: 800; color: var(--text-color); }
+        .price-value span { font-size: 14px; color: var(--label-color); font-weight: 400; }
+        .price-save { color: var(--green); font-size: 12px; font-weight: 600; margin-top: 2px; }
         
         .features-list { list-style: none; margin: 25px 0; text-align: left; flex-grow: 1; }
         .features-list li { 
             padding: 10px 0; 
-            color: #444; 
+            color: var(--text-soft); 
             font-size: 14px; 
             display: flex; 
             align-items: center; 
             gap: 10px; 
-            border-bottom: 1px solid #f0f0f0; 
+            border-bottom: 1px solid var(--border-soft); 
+            word-wrap: break-word;
         }
         .features-list li:last-child { border-bottom: none; }
         .features-list li::before { 
             content: "✓"; 
-            color: #D4AF37; 
+            color: var(--gold-primary); 
             font-weight: bold; 
             font-size: 16px;
             flex-shrink: 0;
@@ -128,7 +183,7 @@
             display: block; 
             width: 100%; 
             padding: 15px; 
-            background: linear-gradient(135deg, #D4AF37, #FFD700); 
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary)); 
             color: #1a1a1a; 
             border-radius: 10px; 
             font-weight: 700; 
@@ -143,38 +198,33 @@
         .btn-buy:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4); }
         .btn-buy-outline { 
             background: transparent; 
-            border: 2px solid #D4AF37; 
-            color: #D4AF37; 
+            border: 2px solid var(--gold-primary); 
+            color: var(--gold-primary); 
         }
-        .btn-buy-outline:hover { background: #D4AF37; color: #1a1a1a; }
+        .btn-buy-outline:hover { background: var(--gold-primary); color: #1a1a1a; }
         
         .back-button { 
             display: inline-block; 
             margin-top: 30px; 
             padding: 12px 30px; 
             background: transparent; 
-            border: 2px solid #D4AF37; 
-            color: #D4AF37; 
+            border: 2px solid var(--gold-primary); 
+            color: var(--gold-primary); 
             border-radius: 8px; 
             font-weight: 600; 
             text-decoration: none; 
             transition: all 0.3s; 
         }
-        .back-button:hover { background: #D4AF37; color: #1a1a1a; transform: translateY(-2px); }
+        .back-button:hover { background: var(--gold-primary); color: #1a1a1a; transform: translateY(-2px); }
         .back-wrapper { text-align: center; }
         
-        /* FLOATING CHAT ADMIN BUTTON */
+        /* FLOATING CHAT */
         .floating-chat {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #D4AF37, #FFD700);
+            position: fixed; bottom: 30px; right: 30px;
+            width: 60px; height: 60px;
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary));
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             cursor: pointer;
             box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
             z-index: 998;
@@ -182,33 +232,19 @@
             transition: all 0.3s ease;
             animation: pulse 2s infinite;
         }
-        .floating-chat:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 25px rgba(212, 175, 55, 0.6);
-        }
-        .floating-chat span {
-            font-size: 28px;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-        }
-        
+        .floating-chat:hover { transform: scale(1.1); box-shadow: 0 6px 25px rgba(212, 175, 55, 0.6); }
+        .floating-chat span { font-size: 28px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
         @keyframes pulse {
-            0% {
-                box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 0 rgba(212, 175, 55, 0.6);
-            }
-            70% {
-                box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 15px rgba(212, 175, 55, 0);
-            }
-            100% {
-                box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 0 rgba(212, 175, 55, 0);
-            }
+            0% { box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 0 rgba(212, 175, 55, 0.6); }
+            70% { box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 15px rgba(212, 175, 55, 0); }
+            100% { box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 0 rgba(212, 175, 55, 0); }
         }
         
-        /* Tablet */
+        /* RESPONSIVE */
         @media (max-width: 1024px) {
             .pricing-grid { gap: 20px; }
         }
         
-        /* HP - bar tetap rapi, bisa swipe */
         @media (max-width: 768px) {
             .navbar { padding: 12px 4%; }
             .logo { font-size: 15px; gap: 8px; }
@@ -218,9 +254,11 @@
             .tab { padding: 12px 14px; font-size: 13px; }
             
             .container { padding: 125px 4% 50px; }
-            .header { margin-bottom: 35px; }
+            .header { margin-bottom: 25px; }
             .header h1 { font-size: 26px; }
             .header p { font-size: 13.5px; }
+            
+            .broker-note { flex-direction: column; text-align: center; padding: 16px; font-size: 13px; }
             
             .pricing-grid { grid-template-columns: 1fr; gap: 20px; }
             .price-card { padding: 30px 22px; }
@@ -231,26 +269,27 @@
             .back-button { padding: 11px 25px; font-size: 14px; }
             
             .watermark { width: 300px; height: 300px; }
-            
-            /* Floating button lebih kecil di HP */
-            .floating-chat {
-                width: 54px;
-                height: 54px;
-                bottom: 20px;
-                right: 20px;
-            }
-            .floating-chat span {
-                font-size: 24px;
-            }
+            .floating-chat { width: 54px; height: 54px; bottom: 20px; right: 20px; }
+            .floating-chat span { font-size: 24px; }
         }
         
         @media (max-width: 400px) {
+            .navbar { padding: 10px 3%; }
+            .logo { font-size: 13px; gap: 6px; }
+            .logo img { width: 30px; height: 30px; }
+            .btn-logout { padding: 6px 12px; font-size: 11px; }
             .header h1 { font-size: 23px; }
             .price-card { padding: 28px 18px; }
+            .container { padding: 115px 3% 40px; }
         }
     </style>
 </head>
 <body>
+    <!-- PRELOADER -->
+    <div id="preloader">
+        <img src="logo.png" alt="Loading Elite Trading Circle" class="loader-logo">
+    </div>
+
     <img src="logo.png" alt="" class="watermark">
     
     <!-- Navbar Utama -->
@@ -273,7 +312,7 @@
             <a href="calendar.html" class="tab">Economic Calendar</a>
             <a href="academy.html" class="tab">Academy</a>
             <div class="tab-separator"></div>
-            <a href="whatsapp-group.html" class="tab">WhatsApp Group</a>
+            <a href="group.html" class="tab">Group</a>
         </div>
     </div>
 
@@ -281,6 +320,12 @@
         <div class="header">
             <h1>Sewa <span class="highlight">EA Premium</span></h1>
             <p>Pilih paket yang sesuai dengan kebutuhan trading Anda. Semua EA telah teruji dengan track record terbukti dan risk management yang ketat.</p>
+            
+            <!-- HIGHLIGHT FLEKSIBILITAS BROKER -->
+            <div class="broker-note">
+                <span class="broker-note-icon">🌐</span>
+                <span><strong>100% Fleksibel:</strong> EA yang Anda sewa dapat dijalankan di <strong>semua broker</strong> yang mendukung platform MetaTrader 4 (MT4) atau MetaTrader 5 (MT5). Bebas pilih broker favorit Anda, tidak terikat pada broker tertentu!</span>
+            </div>
         </div>
         
         <div class="pricing-grid">
@@ -297,13 +342,14 @@
                     <div class="price-save">Hemat $0</div>
                 </div>
                 <ul class="features-list">
+                    <li>Kompatibel dengan semua broker (MT4/MT5)</li>
                     <li>Cocok untuk pemula</li>
                     <li>Drawdown maksimal 10%</li>
                     <li>Pair: XAU/USD</li>
                     <li>Support standar</li>
                     <li>Update bulanan</li>
                 </ul>
-                <a href="https://t.me/ELITE_TRADING_CIRCLE_27" target="_blank" class="btn-buy btn-buy-outline">Beli Paket Low</a>
+                <a href="https://t.me/elitetradingcircle07" target="_blank" class="btn-buy btn-buy-outline">Beli Paket Low</a>
             </div>
             
             <!-- MEDIUM TIER -->
@@ -320,6 +366,7 @@
                     <div class="price-save">Hemat $1</div>
                 </div>
                 <ul class="features-list">
+                    <li>Kompatibel dengan semua broker (MT4/MT5)</li>
                     <li>Cocok untuk trader aktif</li>
                     <li>Drawdown maksimal 15%</li>
                     <li>Pair: XAU/USD + Major Forex</li>
@@ -327,7 +374,7 @@
                     <li>Update mingguan</li>
                     <li>Setting optimalisasi</li>
                 </ul>
-                <a href="https://t.me/ELITE_TRADING_CIRCLE_27" target="_blank" class="btn-buy">Beli Paket Medium</a>
+                <a href="https://t.me/elitetradingcircle07" target="_blank" class="btn-buy">Beli Paket Medium</a>
             </div>
             
             <!-- HIGH TIER -->
@@ -343,6 +390,7 @@
                     <div class="price-save">Hemat $20</div>
                 </div>
                 <ul class="features-list">
+                    <li>Kompatibel dengan semua broker (MT4/MT5)</li>
                     <li>Untuk trader berpengalaman</li>
                     <li>Drawdown maksimal 25%</li>
                     <li>Semua pair tersedia</li>
@@ -351,7 +399,7 @@
                     <li>Custom setting request</li>
                     <li>Akses beta testing EA baru</li>
                 </ul>
-                <a href="https://t.me/ELITE_TRADING_CIRCLE_27" target="_blank" class="btn-buy btn-buy-outline">Beli Paket High</a>
+                <a href="https://t.me/elitetradingcircle07" target="_blank" class="btn-buy btn-buy-outline">Beli Paket High</a>
             </div>
         </div>
         
@@ -360,19 +408,27 @@
         </div>
     </div>
     
-    <!-- Floating Chat Admin Button -->
-    <a href="https://t.me/ELITE_TRADING_CIRCLE_27" target="_blank" class="floating-chat" title="Chat Admin">
+    <!-- Floating Chat -->
+    <a href="https://t.me/elitetradingcircle07" target="_blank" class="floating-chat" title="Join Telegram Group">
         <span>💬</span>
     </a>
 
     <script>
-        window.onload = function() {
+        // 1. Preloader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('preloader').classList.add('hide');
+            }, 1200); 
+        });
+
+        // 2. Auth Check
+        window.addEventListener('DOMContentLoaded', () => {
             const user = localStorage.getItem('user');
             if (!user) { 
                 alert('Silakan login terlebih dahulu!'); 
                 window.location.href = 'login.html'; 
             }
-        };
+        });
         
         function logout() { 
             localStorage.removeItem('user'); 
