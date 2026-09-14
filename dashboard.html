@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="vendor-analytics.js"></script>
     <title>Dashboard - Elite Trading Circle</title>
     <link rel="icon" type="image/png" href="logo.png">
-    
-    <!-- ANTI-FLICKER SCRIPT (Wajib di Head) -->
     <script>
         if (localStorage.getItem('theme') === 'dark') {
             document.documentElement.classList.add('dark-mode');
@@ -14,7 +13,6 @@
     </script>
 
     <style>
-        /* --- 1. CSS VARIABLES --- */
         :root {
             --bg-color: #f5f6fa;
             --text-color: #333333;
@@ -49,7 +47,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
         body { background: var(--bg-color); color: var(--text-color); min-height: 100vh; overflow-x: hidden; }
 
-        /* --- 2. PRELOADER --- */
         #preloader {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--bg-color); z-index: 9999;
@@ -71,7 +68,6 @@
             100% { filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.8)); }
         }
 
-        /* --- 3. NAVBAR & TAB BAR --- */
         .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px; height: 600px; background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center; opacity: 0.04; pointer-events: none; z-index: 0; }
         html.dark-mode .watermark { opacity: 0.02; }
 
@@ -102,7 +98,6 @@
         .tab.active { color: var(--gold-primary); font-weight: 700; border-bottom-color: var(--gold-primary); }
         .tab-separator { width: 1px; background: var(--border-color); margin: 10px 6px; flex-shrink: 0; }
 
-        /* --- 4. DASHBOARD CONTENT --- */
         .ticker-wrap { margin-top: 122px; background: var(--card-bg); border-bottom: 1px solid var(--border-color); height: 46px; overflow: hidden; }
         .ticker-inner { height: 100%; }
 
@@ -124,7 +119,6 @@
         .tradingview-chart { width: 100%; height: 380px; border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color); }
         .tradingview-market { width: 100%; height: 500px; border-radius: 10px; overflow: hidden; }
 
-        /* ALERT HIGH IMPACT */
         .high-impact-alert {
             background: var(--alert-bg); border: 2px solid var(--alert-border);
             border-radius: 14px; padding: 20px; margin-bottom: 25px;
@@ -156,11 +150,9 @@
         .alert-widget { width: 100%; height: 280px; border-radius: 10px; overflow: hidden; background: var(--card-bg); border: 1px solid rgba(239, 68, 68, 0.2); }
         .alert-note { margin-top: 12px; font-size: 12px; color: var(--alert-text); text-align: center; font-style: italic; }
 
-        /* NEWS FEED */
         .news-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 18px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
         .news-widget { width: 100%; height: 600px; border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color); }
 
-        /* FLOATING CHAT */
         .floating-chat { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4); z-index: 998; text-decoration: none; transition: all 0.3s ease; animation: pulse 2s infinite; }
         .floating-chat:hover { transform: scale(1.1); box-shadow: 0 6px 25px rgba(212, 175, 55, 0.6); }
         .floating-chat span { font-size: 28px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
@@ -200,14 +192,12 @@
     </style>
 </head>
 <body>
-    <!-- PRELOADER -->
     <div id="preloader">
         <img src="logo.png" alt="Loading Elite Trading Circle" class="loader-logo">
     </div>
 
     <img src="logo.png" alt="" class="watermark">
     
-    <!-- Navbar Utama -->
     <nav class="navbar">
         <a href="dashboard.html" class="logo">
             <img src="logo.png" alt="Elite Trading Circle">
@@ -219,7 +209,6 @@
         </div>
     </nav>
     
-    <!-- Tab Bar -->
     <div class="tab-bar">
         <div class="tab-scroll">
             <a href="dashboard.html" class="tab active">Dashboard</a>
@@ -234,7 +223,6 @@
         </div>
     </div>
     
-    <!-- TICKER TAPE -->
     <div class="ticker-wrap">
         <div class="ticker-inner">
             <div class="tradingview-widget-container">
@@ -267,7 +255,6 @@
             <div class="welcome-badge">MEMBER AKTIF</div>
         </div>
         
-        <!-- PERINGATAN HIGH IMPACT -->
         <div class="high-impact-alert">
             <div class="alert-header">
                 <div class="toa-icon">📢</div>
@@ -293,7 +280,6 @@
             <p class="alert-note">⚡ Disarankan untuk menghindari trading agresif 30 menit sebelum & sesudah rilis data di atas</p>
         </div>
         
-        <!-- Chart + Market Overview -->
         <div class="main-layout">
             <div class="card-box">
                 <div class="card-header">
@@ -344,7 +330,6 @@
             </div>
         </div>
         
-        <!-- NEWS FEED -->
         <div class="news-card">
             <div class="card-header">
                 <div class="card-title">📰 Latest Market News</div>
@@ -364,28 +349,24 @@
         </div>
     </div>
     
-    <!-- Floating Chat (UPDATED LINK) -->
     <a href="https://t.me/etc_ea_v2_bot" target="_blank" class="floating-chat" title="Chat Bot EA">
         <span>💬</span>
     </a>
     
     <script>
-        // 1. Preloader
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('preloader').classList.add('hide');
             }, 1200); 
         });
 
-        // 2. Dark Mode Logic (Bulletproof)
         function toggleTheme() {
             document.documentElement.classList.toggle('dark-mode');
             const isDark = document.documentElement.classList.contains('dark-mode');
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
+            document.getElementById('themeToggle').textContent = isDark ? '☀️' : '';
         }
 
-        // 3. Init & Auth Check
         window.addEventListener('DOMContentLoaded', () => {
             const savedTheme = localStorage.getItem('theme');
             const themeToggle = document.getElementById('themeToggle');
