@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="vendor-analytics.js"></script>
     <title>Daftar - Elite Trading Circle</title>
     <link rel="icon" type="image/png" href="logo.png">
     
-    <!-- AUTO APPLY DARK MODE (Baca dari localStorage) -->
     <script>
         if (localStorage.getItem('theme') === 'dark') {
             document.documentElement.classList.add('dark-mode');
@@ -49,7 +49,6 @@
             overflow-x: hidden;
         }
 
-        /* PRELOADER */
         #preloader {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--bg-color); z-index: 9999;
@@ -71,7 +70,6 @@
             100% { filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.8)); }
         }
 
-        /* Background Logo Watermark */
         .bg-logo {
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
             width: 600px; height: 600px; background-image: url('logo.png');
@@ -80,7 +78,6 @@
         }
         html.dark-mode .bg-logo { opacity: 0.03; }
 
-        /* Register Container */
         .container { 
             background: var(--card-bg); 
             border-radius: 20px; 
@@ -175,7 +172,6 @@
             color: var(--gold-secondary); text-decoration: underline; 
         }
 
-        /* RESPONSIVE - TABLET & HP */
         @media (max-width: 768px) {
             .container { padding: 40px 30px; }
             .logo-icon { width: 80px; height: 80px; }
@@ -195,12 +191,10 @@
     </style>
 </head>
 <body>
-    <!-- PRELOADER -->
     <div id="preloader">
         <img src="logo.png" alt="Loading Elite Trading Circle" class="loader-logo">
     </div>
 
-    <!-- Background Logo Watermark -->
     <div class="bg-logo"></div>
 
     <div class="container">
@@ -226,7 +220,6 @@
                 <input type="tel" name="whatsapp" id="whatsapp" placeholder="0812345..." required autocomplete="tel">
             </div>
             
-            <!-- PERHATIAN: name="password" DIHAPUS agar tidak terkirim ke Google Sheets -->
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" placeholder="Minimal 8 karakter" required autocomplete="new-password">
@@ -251,24 +244,20 @@
     </div>
 
     <script>
-        // 1. Preloader Logic
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('preloader').classList.add('hide');
             }, 1200); 
         });
 
-        // 2. URL APPS SCRIPT - JANGAN DIUBAH
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx3X5m5ExThoJLoxXDychVjpHORL72hcxGJXFMTjqi7l2-IkaD7uszfGX4O9s3RRpGx/exec';
 
-        // 3. Register Logic
         function handleRegister(e) {
             e.preventDefault();
             
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
             
-            // Validasi password
             if (password !== confirmPassword) { 
                 alert('Password tidak cocok!'); 
                 return; 
@@ -278,7 +267,6 @@
                 return; 
             }
 
-            // BUAT OBJECT USER DATA
             const userData = {
                 nama: document.getElementById('nama').value,
                 email: document.getElementById('email').value,
@@ -287,16 +275,13 @@
                 registerDate: new Date().toISOString()
             };
 
-            // SIMPAN KE LOCALSTORAGE (BIAR BISA LOGIN)
             localStorage.setItem('user_' + userData.email, JSON.stringify(userData));
             
-            // SET LOADING
             const btn = document.getElementById('btnSubmit');
             const originalText = btn.textContent;
             btn.disabled = true;
             btn.textContent = 'Memproses pendaftaran...';
 
-            // KIRIM KE GOOGLE SHEETS (Password TIDAK ikut karena tidak ada name="password")
             const form = document.getElementById('registerForm');
             const formData = new FormData(form);
             
