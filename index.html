@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="vendor-analytics.js"></script>
     <title>Elite Trading Circle - Smart EA Platform</title>
     <link rel="icon" type="image/png" href="logo.png">
     
@@ -218,7 +219,7 @@
             document.documentElement.classList.toggle('dark-mode');
             const isDark = document.documentElement.classList.contains('dark-mode');
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
+            document.getElementById('themeToggle').textContent = isDark ? '☀️' : '';
         }
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -227,7 +228,7 @@
             if (savedTheme === 'dark') {
                 themeToggle.textContent = '☀️';
             } else {
-                themeToggle.textContent = '🌙';
+                themeToggle.textContent = '';
             }
             
             const user = localStorage.getItem('user');
