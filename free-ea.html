@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="vendor-analytics.js"></script>
     <title>Free EA - Elite Trading Circle</title>
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#D4AF37">
-    
-    <!-- ANTI-FLICKER: Auto apply tema dari localStorage -->
     <script>
         if (localStorage.getItem('theme') === 'dark') {
             document.documentElement.classList.add('dark-mode');
@@ -16,7 +15,6 @@
     </script>
 
     <style>
-        /* --- CSS VARIABLES (LIGHT & DARK) --- */
         :root {
             --bg-color: #f5f6fa;
             --text-color: #333333;
@@ -51,7 +49,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
         body { background: var(--bg-color); color: var(--text-color); min-height: 100vh; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
 
-        /* PRELOADER */
         #preloader {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--bg-color); z-index: 9999;
@@ -75,7 +72,6 @@
         .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px; height: 600px; background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center; opacity: 0.04; pointer-events: none; z-index: 0; }
         html.dark-mode .watermark { opacity: 0.02; }
         
-        /* Navbar */
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: var(--nav-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 1px solid var(--border-color); box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
         .logo { display: flex; align-items: center; gap: 12px; font-size: 20px; font-weight: bold; color: var(--text-color); text-decoration: none; }
         .logo img { width: 42px; height: 42px; border-radius: 8px; object-fit: cover; }
@@ -83,7 +79,6 @@
         .btn-logout { padding: 9px 20px; background: transparent; border: 1.5px solid #ef4444; color: #ef4444; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.3s; }
         .btn-logout:hover { background: #ef4444; color: #fff; }
         
-        /* TAB BAR */
         .tab-bar { position: fixed; top: 73px; left: 0; right: 0; background: var(--tab-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color); box-shadow: 0 2px 8px rgba(0,0,0,0.03); z-index: 999; }
         .tab-scroll { display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; max-width: 1400px; margin: 0 auto; padding: 0 5%; gap: 4px; }
         .tab-scroll::-webkit-scrollbar { display: none; }
@@ -92,7 +87,6 @@
         .tab.active { color: var(--gold-primary); font-weight: 700; border-bottom-color: var(--gold-primary); }
         .tab-separator { width: 1px; background: var(--border-color); margin: 10px 6px; flex-shrink: 0; }
         
-        /* Konten */
         .container { padding: 148px 5% 60px; max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
         .header { text-align: center; margin-bottom: 40px; }
         .header h1 { font-size: 36px; margin-bottom: 15px; color: var(--text-color); font-weight: 700; word-wrap: break-word; }
@@ -125,7 +119,6 @@
         .requirement-box li strong { color: var(--gold-primary); }
         html.dark-mode .requirement-box li strong { color: var(--gold-secondary); }
 
-        /* LIFETIME BENEFIT BOX */
         .lifetime-benefit {
             margin-top: 15px;
             padding: 15px;
@@ -194,7 +187,6 @@
         .back-button:hover { background: var(--gold-primary); color: #1a1a1a; transform: translateY(-2px); }
         .back-wrapper { text-align: center; }
         
-        /* FLOATING CHAT */
         .floating-chat {
             position: fixed; bottom: 30px; right: 30px;
             width: 60px; height: 60px;
@@ -216,7 +208,6 @@
             100% { box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 0 rgba(212, 175, 55, 0); }
         }
         
-        /* RESPONSIVE */
         @media (max-width: 768px) { 
             .navbar { padding: 12px 4%; }
             .logo { font-size: 15px; gap: 8px; }
@@ -263,14 +254,12 @@
     </style>
 </head>
 <body>
-    <!-- PRELOADER -->
     <div id="preloader">
         <img src="logo.png" alt="Loading Elite Trading Circle" class="loader-logo">
     </div>
 
     <img src="logo.png" alt="" class="watermark">
     
-    <!-- Navbar Utama -->
     <nav class="navbar">
         <a href="dashboard.html" class="logo">
             <img src="logo.png" alt="Elite Trading Circle">
@@ -279,7 +268,6 @@
         <button class="btn-logout" onclick="logout()">Logout</button>
     </nav>
     
-    <!-- Tab Bar Atas -->
     <div class="tab-bar">
         <div class="tab-scroll">
             <a href="dashboard.html" class="tab">Dashboard</a>
@@ -313,7 +301,6 @@
                     <li>Kirimkan screenshot bukti deposit ke Admin kami melalui Telegram untuk verifikasi.</li>
                 </ol>
                 
-                <!-- HIGHLIGHT LIFETIME BENEFIT -->
                 <div class="lifetime-benefit">
                     <strong>🎉 Benefit Eksklusif</strong>
                     <span>Akun yang memenuhi syarat berhak mendapatkan <strong>Free EA SELAMANYA</strong> (Lifetime Access) tanpa biaya bulanan!</span>
@@ -324,7 +311,6 @@
         </div>
         
         <div class="options-grid">
-            <!-- OPSI 1: Belum Daftar -->
             <div class="option-card">
                 <div class="option-num">1</div>
                 <h3>Belum Punya Akun?</h3>
@@ -332,7 +318,6 @@
                 <a href="exness-partner.html" class="btn-option btn-register">Daftar Akun Dupoin →</a>
             </div>
             
-            <!-- OPSI 2: Sudah Daftar -->
             <div class="option-card">
                 <div class="option-num">2</div>
                 <h3>Sudah Terdaftar & Deposit?</h3>
@@ -346,20 +331,17 @@
         </div>
     </div>
     
-    <!-- Floating Chat Admin -->
     <a href="https://t.me/etc_ea_v2_bot" target="_blank" class="floating-chat" title="Chat Bot EA">
         <span>💬</span>
     </a>
 
     <script>
-        // 1. Preloader Logic
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('preloader').classList.add('hide');
             }, 1200); 
         });
 
-        // 2. Auth Check
         window.addEventListener('DOMContentLoaded', () => {
             const user = localStorage.getItem('user');
             if (!user) { 
