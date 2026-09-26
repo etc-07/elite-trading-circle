@@ -456,13 +456,16 @@
         const musicToggle = document.getElementById('musicToggle');
         let isPlaying = false;
 
+        // Ganti lagu otomatis saat lagu habis
         bgMusic.addEventListener('ended', () => {
             currentTrack = (currentTrack + 1) % playlist.length;
             bgMusic.src = playlist[currentTrack];
             bgMusic.play();
         });
 
-        musicToggle.addEventListener('click', () => {
+        // Toggle On/Off Manual
+        musicToggle.addEventListener('click', (e) => {
+            e.stopPropagation(); // Mencegah trigger klik global
             if (isPlaying) {
                 bgMusic.pause();
                 musicToggle.classList.remove('playing');
@@ -476,21 +479,44 @@
             }
         });
 
-        window.addEventListener('load', () => {
-            if (sessionStorage.getItem('allow_music_autoplay') === 'true') {
-                bgMusic.src = playlist[0];
-                bgMusic.play().then(() => {
+        // FUNGSI UTAMA: Coba Autoplay, kalau gagal tunggu klik pertama user
+        function attemptAutoPlay() {
+            bgMusic.src = playlist[0];
+            bgMusic.play().then(() => {
+                // BERHASIL AUTOPLAY (biasanya karena datang dari login)
+                musicToggle.classList.add('playing');
+                musicToggle.classList.remove('muted');
+                isPlaying = true;
+                console.log("✅ Musik berhasil diputar otomatis!");
+            }).catch(e => {
+                // DIBLOKIR BROWSER (karena langsung buka dashboard tanpa interaksi)
+                console.log("⏳ Autoplay diblokir browser. Menunggu klik pertama user...");
+                
+                // Pasang jebakan: Begitu user klik DI MANA SAJA di halaman, musik langsung nyala
+                document.body.addEventListener('click', function startMusicOnFirstClick() {
+                    bgMusic.play();
                     musicToggle.classList.add('playing');
                     musicToggle.classList.remove('muted');
                     isPlaying = true;
-                    sessionStorage.removeItem('allow_music_autoplay'); 
-                }).catch(e => {
-                    console.log("Autoplay diblokir browser, klik tombol musik untuk memulai.");
-                });
+                    console.log("✅ Musik dimulai melalui interaksi user (First Click Fallback).");
+                    
+                    // Hapus event listener ini agar tidak mengganggu setelah musik nyala
+                    document.body.removeEventListener('click', startMusicOnFirstClick);
+                }, { once: true }); // { once: true } artinya event ini cuma jalan 1 kali
+            });
+        }
+
+        // Jalankan saat halaman selesai dimuat
+        window.addEventListener('load', () => {
+            // Jika ada flag dari login.html, hapus agar bersih
+            if (sessionStorage.getItem('allow_music_autoplay') === 'true') {
+                sessionStorage.removeItem('allow_music_autoplay'); 
             }
+            // Eksekusi logika autoplay cerdas
+            attemptAutoPlay();
         });
 
-        // 3. SPA Navigation SUPER ROBUST (Mencegah Reload Halaman)
+        // SPA Navigation SUPER ROBUST (Mencegah Reload Halaman)
         document.addEventListener('click', function(e) {
             const link = e.target.closest('a');
             
@@ -547,6 +573,7 @@
             }
         });
 
+        // Handle tombol back/forward browser
         window.addEventListener('popstate', () => {
             window.location.reload(); 
         });
