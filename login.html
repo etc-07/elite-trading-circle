@@ -242,31 +242,33 @@
             btn.innerText = 'Memproses...';
             btn.disabled = true;
 
-            setTimeout(() => {
-                const userData = localStorage.getItem('user_' + email);
-                if (!userData) { 
-                    alert('Email tidak terdaftar!'); 
-                    resetBtn();
-                    return; 
-                }
-                
-                const user = JSON.parse(userData);
-                if (user.password !== password) { 
-                    alert('Password salah!'); 
-                    resetBtn();
-                    return; 
-                }
-                
-                localStorage.setItem('user', JSON.stringify(user));
-                const redirectPage = localStorage.getItem('redirect_after_login');
-                
-                if (redirectPage) {
-                    localStorage.removeItem('redirect_after_login');
-                    window.location.href = redirectPage;
-                } else {
-                    window.location.href = 'dashboard.html';
-                }
-            }, 800);
+            // PROSES INSTAN: Hapus setTimeout 800ms agar tidak ada delay
+            const userData = localStorage.getItem('user_' + email);
+            if (!userData) { 
+                alert('Email tidak terdaftar!'); 
+                resetBtn();
+                return; 
+            }
+            
+            const user = JSON.parse(userData);
+            if (user.password !== password) { 
+                alert('Password salah!'); 
+                resetBtn();
+                return; 
+            }
+            
+            // Simpan data user
+            localStorage.setItem('user', JSON.stringify(user));
+            
+            // KUNCI RAHASIA: Beri sinyal ke dashboard bahwa user baru saja berinteraksi (klik login)
+            // Ini akan membypass blokir autoplay musik dari browser
+            sessionStorage.setItem('allow_music_autoplay', 'true');
+            
+            const redirectPage = localStorage.getItem('redirect_after_login') || 'dashboard.html';
+            localStorage.removeItem('redirect_after_login');
+            
+            // Redirect instan tanpa delay
+            window.location.href = redirectPage;
         }
 
         function resetBtn() {
