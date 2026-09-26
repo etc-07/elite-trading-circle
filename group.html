@@ -84,7 +84,8 @@
         .tab.active { color: var(--gold-primary); font-weight: 700; border-bottom-color: var(--gold-primary); }
         .tab-separator { width: 1px; background: var(--border-color); margin: 10px 6px; flex-shrink: 0; }
 
-        .page-content { margin-top: 148px; padding: 40px 5% 80px; max-width: 700px; margin-left: auto; margin-right: auto; position: relative; z-index: 1; text-align: center; }
+        /* PENTING: Tambahkan ID agar bisa di-target oleh script SPA di dashboard */
+        #page-content.page-content { margin-top: 148px; padding: 40px 5% 80px; max-width: 700px; margin-left: auto; margin-right: auto; position: relative; z-index: 1; text-align: center; }
         
         .tg-icon-wrapper {
             width: 110px;
@@ -224,7 +225,7 @@
             .tab-bar { top: 61px; }
             .tab { padding: 12px 14px; font-size: 13px; }
             
-            .page-content { margin-top: 125px; padding: 30px 4% 60px; }
+            #page-content.page-content { margin-top: 125px; padding: 30px 4% 60px; }
             h1 { font-size: 26px; }
             .desc { font-size: 14px; }
             .tg-icon-wrapper { width: 90px; height: 90px; font-size: 45px; }
@@ -271,7 +272,8 @@
         </div>
     </div>
 
-    <div class="page-content">
+    <!-- WRAPPER INI PENTING: ID page-content agar bisa di-target script SPA -->
+    <div id="page-content" class="page-content">
         <div class="tg-icon-wrapper">✈️</div>
         <h1>Bergabung dengan Komunitas <span>Telegram</span> Kami</h1>
         <p class="desc">Dapatkan akses eksklusif ke update signal real-time, diskusi strategi, dan pengumuman penting langsung dari tim Elite Trading Circle melalui platform Telegram yang cepat dan aman.</p>
@@ -293,6 +295,7 @@
         
         <a href="dashboard.html" class="back-button">← Kembali ke Dashboard</a>
     </div>
+    <!-- END PAGE CONTENT WRAPPER -->
     
     <a href="https://t.me/etc_ea_v2_bot" target="_blank" class="floating-chat" title="Chat Bot EA">
         <span>💬</span>
@@ -309,14 +312,14 @@
             document.body.classList.toggle('dark-mode');
             const isDark = document.body.classList.contains('dark-mode');
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            document.querySelector('.theme-toggle').textContent = isDark ? '☀️' : '';
+            document.querySelector('.theme-toggle').textContent = isDark ? '☀️' : '🌙';
         }
 
         window.addEventListener('DOMContentLoaded', () => {
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme === 'dark') {
                 document.body.classList.add('dark-mode');
-                document.querySelector('.theme-toggle').textContent = '️';
+                document.querySelector('.theme-toggle').textContent = '☀️';
             }
         });
 
