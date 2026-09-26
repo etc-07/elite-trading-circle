@@ -81,7 +81,8 @@
         .tab.active { color: var(--gold-primary); font-weight: 700; border-bottom-color: var(--gold-primary); }
         .tab-separator { width: 1px; background: var(--border-color); margin: 10px 6px; flex-shrink: 0; }
         
-        .page-content { margin-top: 148px; padding: 30px 5% 60px; max-width: 1200px; margin-left: auto; margin-right: auto; position: relative; z-index: 1; }
+        /* PENTING: Tambahkan ID agar bisa di-target oleh script SPA di dashboard */
+        #page-content.page-content { margin-top: 148px; padding: 30px 5% 60px; max-width: 1200px; margin-left: auto; margin-right: auto; position: relative; z-index: 1; }
         
         .page-header { text-align: center; margin-bottom: 40px; }
         .page-title { font-size: 32px; color: var(--text-color); font-weight: 700; margin-bottom: 12px; word-wrap: break-word; }
@@ -171,7 +172,7 @@
             .tab-bar { top: 61px; }
             .tab { padding: 12px 14px; font-size: 13px; }
             
-            .page-content { margin-top: 125px; padding: 25px 4% 50px; }
+            #page-content.page-content { margin-top: 125px; padding: 25px 4% 50px; }
             .page-title { font-size: 24px; }
             .page-subtitle { font-size: 13.5px; }
             
@@ -233,7 +234,8 @@
         </div>
     </div>
     
-    <div class="page-content">
+    <!-- WRAPPER INI PENTING: ID page-content agar bisa di-target script SPA -->
+    <div id="page-content" class="page-content">
         <div class="page-header">
             <h1 class="page-title">Trading <span>Academy</span></h1>
             <p class="page-subtitle">Pelajari trading dari dasar hingga mahir dengan materi eksklusif dan terstruktur dari tim Elite Trading Circle</p>
@@ -328,6 +330,7 @@
             </div>
         </div>
     </div>
+    <!-- END PAGE CONTENT WRAPPER -->
     
     <a href="https://t.me/etc_ea_v2_bot" target="_blank" class="floating-chat" title="Chat Bot EA">
         <span>💬</span>
