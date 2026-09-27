@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="vendor-analytics.js"></script>
+    <title>Portofolio - Elite Trading Circle</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <script>
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    </script>
+
+    <style>
+        :root {
+            --bg-color: #f5f6fa;
+            --text-color: #333333;
+            --text-muted: #666666;
+            --card-bg: #ffffff;
+            --nav-bg: rgba(255, 255, 255, 0.85);
+            --tab-bg: rgba(255, 255, 255, 0.9);
+            --border-color: #eeeeee;
+            --gold-primary: #D4AF37;
+            --gold-secondary: #FFD700;
+            --gold-dark: #B8941F;
+        }
+
+        html.dark-mode {
+            --bg-color: #0f1115;
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --card-bg: #1a1d24;
+            --nav-bg: rgba(15, 17, 21, 0.85);
+            --tab-bg: rgba(15, 17, 21, 0.9);
+            --border-color: #2a2e38;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
+        body { background: var(--bg-color); color: var(--text-color); min-height: 100vh; overflow-x: hidden; }
+
+        #preloader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-color); z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        #preloader.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+        
+        .loader-logo {
+            width: 140px; height: 140px; object-fit: contain;
+            animation: logoEntrance 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards, goldPulse 2s infinite alternate;
+        }
+        @keyframes logoEntrance {
+            0% { transform: scale(0.5) translateY(40px); opacity: 0; filter: blur(10px); }
+            100% { transform: scale(1) translateY(0); opacity: 1; filter: blur(0); }
+        }
+        @keyframes goldPulse {
+            0% { filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4)); }
+            100% { filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.8)); }
+        }
+
+        .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px; height: 600px; background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center; opacity: 0.04; pointer-events: none; z-index: 0; }
+        html.dark-mode .watermark { opacity: 0.02; }
+
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: var(--nav-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 1px solid var(--border-color); box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
+        .logo { display: flex; align-items: center; gap: 12px; font-size: 20px; font-weight: bold; color: var(--text-color); text-decoration: none; }
+        .logo img { width: 42px; height: 42px; border-radius: 8px; object-fit: cover; }
+        .logo-text { background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .nav-right { display: flex; align-items: center; gap: 12px; }
+
+        .theme-toggle {
+            background: var(--bg-color); border: 2px solid var(--gold-primary); color: var(--gold-primary);
+            width: 42px; height: 42px; border-radius: 50%; cursor: pointer; font-size: 18px;
+            display: flex; align-items: center; justify-content: center; transition: all 0.3s;
+            line-height: 1; flex-shrink: 0; -webkit-tap-highlight-color: transparent;
+        }
+        .theme-toggle:hover { background: var(--gold-primary); color: var(--bg-color); box-shadow: 0 0 15px rgba(212, 175, 55, 0.5); transform: scale(1.05); }
+        .theme-toggle:active { transform: scale(0.95); }
+
+        .btn-logout { padding: 9px 20px; background: transparent; border: 1.5px solid #ef4444; color: #ef4444; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.3s; }
+        .btn-logout:hover { background: #ef4444; color: #fff; }
+
+        .tab-bar { position: fixed; top: 73px; left: 0; right: 0; background: var(--tab-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color); box-shadow: 0 2px 8px rgba(0,0,0,0.03); z-index: 999; }
+        .tab-scroll { display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; max-width: 1400px; margin: 0 auto; padding: 0 5%; gap: 4px; }
+        .tab-scroll::-webkit-scrollbar { display: none; }
+        .tab { padding: 15px 18px; white-space: nowrap; color: var(--text-muted); font-size: 14px; font-weight: 500; text-decoration: none; border-bottom: 3px solid transparent; transition: color 0.2s, border-color 0.2s; }
+        .tab:hover { color: var(--gold-primary); }
+        .tab.active { color: var(--gold-primary); font-weight: 700; border-bottom-color: var(--gold-primary); }
+        .tab-separator { width: 1px; background: var(--border-color); margin: 10px 6px; flex-shrink: 0; }
+
+        .page-content { margin-top: 148px; padding: 40px 5% 80px; max-width: 1200px; margin-left: auto; margin-right: auto; position: relative; z-index: 1; }
+        
+        .page-header { text-align: center; margin-bottom: 40px; }
+        .page-title { font-size: 32px; color: var(--text-color); font-weight: 700; margin-bottom: 12px; word-wrap: break-word; }
+        .page-title span { background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .page-subtitle { color: var(--text-muted); font-size: 15px; max-width: 700px; margin: 0 auto; line-height: 1.8; word-wrap: break-word; }
+        
+        .portfolio-intro {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+        }
+        .portfolio-intro h3 {
+            color: var(--text-color);
+            font-size: 20px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        .portfolio-intro p {
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+        .portfolio-intro ul {
+            padding-left: 20px;
+            color: var(--text-muted);
+            line-height: 2;
+        }
+        .portfolio-intro li {
+            margin-bottom: 5px;
+        }
+        
+        .mql5-container {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+        }
+        .mql5-header {
+            margin-bottom: 25px;
+        }
+        .mql5-header h3 {
+            color: var(--text-color);
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .mql5-header p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        .mql5-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 40px;
+            background: linear-gradient(135deg, #2AABEE, #229ED9);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(42, 171, 238, 0.4);
+            transition: all 0.3s;
+            margin: 20px 0;
+        }
+        .mql5-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(42, 171, 238, 0.6);
+        }
+        .mql5-info {
+            margin-top: 20px;
+            padding: 20px;
+            background: var(--gold-bg-soft, rgba(212, 175, 55, 0.1));
+            border-radius: 10px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        
+        .back-button {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 30px;
+            background: transparent;
+            border: 2px solid var(--gold-primary);
+            color: var(--gold-primary);
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .back-button:hover {
+            background: var(--gold-primary);
+            color: #000;
+            transform: translateY(-2px);
+        }
+
+        .floating-chat {
+            position: fixed; bottom: 30px; right: 30px;
+            width: 60px; height: 60px;
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary));
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
+            z-index: 998;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+        .floating-chat:hover { transform: scale(1.1); box-shadow: 0 6px 25px rgba(212, 175, 55, 0.6); }
+        .floating-chat span { font-size: 28px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+        @keyframes pulse {
+            0% { box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 0 rgba(212, 175, 55, 0.6); }
+            70% { box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 15px rgba(212, 175, 55, 0); }
+            100% { box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 0 rgba(212, 175, 55, 0); }
+        }
+
+        @media (max-width: 768px) {
+            .navbar { padding: 12px 4%; }
+            .logo { font-size: 15px; gap: 8px; }
+            .logo img { width: 36px; height: 36px; }
+            .nav-right { gap: 8px; }
+            .theme-toggle { width: 38px; height: 38px; font-size: 16px; }
+            .btn-logout { padding: 7px 14px; font-size: 12px; }
+            .tab-bar { top: 61px; }
+            .tab { padding: 12px 14px; font-size: 13px; }
+            
+            .page-content { margin-top: 125px; padding: 30px 4% 60px; }
+            .page-title { font-size: 26px; }
+            .page-subtitle { font-size: 13.5px; }
+            
+            .portfolio-intro { padding: 25px 20px; }
+            .portfolio-intro h3 { font-size: 18px; }
+            .portfolio-intro p { font-size: 13px; }
+            
+            .mql5-container { padding: 25px 20px; }
+            .mql5-button { padding: 16px 30px; font-size: 15px; width: 100%; justify-content: center; }
+            
+            .back-button { padding: 11px 25px; font-size: 14px; }
+            
+            .watermark { width: 300px; height: 300px; }
+            .floating-chat { width: 54px; height: 54px; bottom: 20px; right: 20px; }
+            .floating-chat span { font-size: 24px; }
+        }
+
+        /* --- CSS TOMBOL MUSIK --- */
+        .music-toggle-btn {
+            position: fixed; bottom: 100px; right: 30px; width: 50px; height: 50px;
+            background: rgba(212, 175, 55, 0.9); border: 2px solid var(--gold-primary);
+            border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            gap: 3px; z-index: 9999; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); transition: all 0.3s ease;
+        }
+        .music-toggle-btn:hover { transform: scale(1.1); }
+        .music-toggle-btn .bar { width: 4px; height: 12px; background: #1a1a1a; border-radius: 2px; transition: height 0.1s ease; }
+        .music-toggle-btn.playing .bar { animation: equalize 0.8s ease-in-out infinite alternate; }
+        .music-toggle-btn.playing .bar:nth-child(1) { animation-delay: 0.1s; }
+        .music-toggle-btn.playing .bar:nth-child(2) { animation-delay: 0.3s; }
+        .music-toggle-btn.playing .bar:nth-child(3) { animation-delay: 0.0s; }
+        .music-toggle-btn.playing .bar:nth-child(4) { animation-delay: 0.4s; }
+        @keyframes equalize { 0% { height: 8px; } 100% { height: 22px; } }
+        .music-toggle-btn.muted::after {
+            content: ''; position: absolute; width: 70%; height: 3px; background: #ef4444;
+            transform: rotate(-45deg); border-radius: 2px; box-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
+        }
+        @media (max-width: 768px) {
+            .music-toggle-btn { width: 46px; height: 46px; bottom: 90px; right: 20px; }
+            .music-toggle-btn .bar { width: 3px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="preloader">
+        <img src="logo.png" alt="Loading Elite Trading Circle" class="loader-logo">
+    </div>
+
+    <img src="logo.png" alt="" class="watermark">
+    
+    <nav class="navbar">
+        <a href="dashboard.html" class="logo">
+            <img src="logo.png" alt="Elite Trading Circle">
+            <span class="logo-text">Elite Trading Circle</span>
+        </a>
+        <div class="nav-right">
+            <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark Mode" id="themeToggle"></button>
+            <button class="btn-logout" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+    
+    <div class="tab-bar">
+        <div class="tab-scroll">
+            <a href="dashboard.html" class="tab">Dashboard</a>
+            <a href="sewa-ea.html" class="tab">Sewa EA</a>
+            <a href="free-ea.html" class="tab">Free EA</a>
+            <a href="akun-pantau.html" class="tab">Akun Pantau</a>
+            <a href="exness-partner.html" class="tab">Partner</a>
+            <a href="calendar.html" class="tab">Economic Calendar</a>
+            <a href="academy.html" class="tab">Academy</a>
+            <a href="group.html" class="tab">Group</a>
+            <a href="porto.html" class="tab active">Portofolio</a>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <div class="page-header">
+            <h1 class="page-title">Portofolio <span>Trading</span></h1>
+            <p class="page-subtitle">Pantau performa dan track record trading kami secara real-time melalui platform MQL5 yang terpercaya dan terverifikasi</p>
+        </div>
+        
+        <div class="portfolio-intro">
+            <h3> Tentang Portofolio Kami</h3>
+            <p>Portofolio trading Elite Trading Circle dikelola secara profesional dengan fokus pada konsistensi profit dan manajemen risiko yang ketat. Kami menggunakan Expert Advisor (EA) premium yang telah teruji performanya.</p>
+            <p><strong>Keunggulan Portofolio Kami:</strong></p>
+            <ul>
+                <li>Track record transparan dan terverifikasi di MQL5</li>
+                <li>Risk management yang ketat dengan drawdown terkontrol</li>
+                <li>Trading pada pair XAU/USD (Gold) dan major forex</li>
+                <li>Update real-time 24/5 selama market berjalan</li>
+                <li>History trading yang dapat dipublikasi dan diaudit</li>
+            </ul>
+        </div>
+        
+        <div class="mql5-container">
+            <div class="mql5-header">
+                <h3>📈 Lihat Performa Live di MQL5</h3>
+                <p>Karena kebijakan keamanan MQL5.com, silakan klik tombol di bawah untuk melihat portofolio trading kami secara langsung</p>
+            </div>
+            
+            <a href="https://www.mql5.com/en/users/992115600" target="_blank" class="mql5-button">
+                <span>📊</span>
+                <span>Lihat Portofolio MQL5 →</span>
+            </a>
+            
+            <div class="mql5-info">
+                <strong>💡 Info:</strong> Link akan terbuka di tab baru. Data performa trading kami update otomatis di platform MQL5.
+            </div>
+        </div>
+        
+        <div style="text-align: center;">
+            <a href="dashboard.html" class="back-button">← Kembali ke Dashboard</a>
+        </div>
+    </div>
+    
+    <a href="https://t.me/etc_ea_v2_bot" target="_blank" class="floating-chat" title="Chat Bot EA">
+        <span>💬</span>
+    </a>
+
+    <!-- === FITUR MUSIK (SAMA SEPERTI FILE LAIN) === -->
+    <audio id="bgMusic" loop>
+        <source src="Music-1.mp3" type="audio/mpeg">
+    </audio>
+    
+    <button class="music-toggle-btn muted" id="musicToggle" title="Play/Pause Music">
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span>
+    </button>
+
+    <script>
+        // --- SCRIPT DASAR ---
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('preloader').classList.add('hide');
+            }, 1200); 
+        });
+
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark-mode');
+            const isDark = document.documentElement.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            document.getElementById('themeToggle').textContent = isDark ? '☀️' : '';
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const themeToggle = document.getElementById('themeToggle');
+            if (savedTheme === 'dark') {
+                themeToggle.textContent = '☀️';
+            } else {
+                themeToggle.textContent = '';
+            }
+            
+            const user = localStorage.getItem('user');
+            if (!user) { 
+                window.location.href = 'login.html'; 
+            }
+        });
+        
+        function logout() { 
+            localStorage.removeItem('user'); 
+            window.location.href = 'index.html'; 
+        }
+
+        // --- SCRIPT MUSIK (SAMA PERSIS DI SEMUA FILE) ---
+        const bgMusic = document.getElementById('bgMusic');
+        const musicToggle = document.getElementById('musicToggle');
+        let isPlaying = false;
+
+        const wasPlaying = localStorage.getItem('etc_music_playing') === 'true';
+        const savedTime = parseFloat(localStorage.getItem('etc_music_time')) || 0;
+
+        if (wasPlaying && savedTime > 0) {
+            bgMusic.currentTime = savedTime;
+            bgMusic.play().then(() => {
+                isPlaying = true;
+                musicToggle.classList.add('playing');
+                musicToggle.classList.remove('muted');
+            }).catch(() => {
+                isPlaying = false;
+                musicToggle.classList.remove('playing');
+                musicToggle.classList.add('muted');
+            });
+        }
+
+        musicToggle.addEventListener('click', () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                isPlaying = false;
+                musicToggle.classList.remove('playing');
+                musicToggle.classList.add('muted');
+                localStorage.setItem('etc_music_playing', 'false');
+            } else {
+                bgMusic.play();
+                isPlaying = true;
+                musicToggle.classList.add('playing');
+                musicToggle.classList.remove('muted');
+                localStorage.setItem('etc_music_playing', 'true');
+            }
+        });
+
+        setInterval(() => {
+            if (isPlaying) {
+                localStorage.setItem('etc_music_time', bgMusic.currentTime.toString());
+            }
+        }, 1000);
+
+        window.addEventListener('beforeunload', () => {
+            localStorage.setItem('etc_music_time', bgMusic.currentTime.toString());
+        });
+    </script>
+</body>
+</html>
