@@ -173,6 +173,26 @@
             70% { box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 15px rgba(212, 175, 55, 0); }
             100% { box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 0 rgba(212, 175, 55, 0); }
         }
+
+        /* --- CSS TOMBOL MUSIK (SAMA PERSIS DI SEMUA FILE) --- */
+        .music-toggle-btn {
+            position: fixed; bottom: 100px; right: 30px; width: 50px; height: 50px;
+            background: rgba(212, 175, 55, 0.9); border: 2px solid var(--gold-primary);
+            border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            gap: 3px; z-index: 9999; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); transition: all 0.3s ease;
+        }
+        .music-toggle-btn:hover { transform: scale(1.1); }
+        .music-toggle-btn .bar { width: 4px; height: 12px; background: #1a1a1a; border-radius: 2px; transition: height 0.1s ease; }
+        .music-toggle-btn.playing .bar { animation: equalize 0.8s ease-in-out infinite alternate; }
+        .music-toggle-btn.playing .bar:nth-child(1) { animation-delay: 0.1s; }
+        .music-toggle-btn.playing .bar:nth-child(2) { animation-delay: 0.3s; }
+        .music-toggle-btn.playing .bar:nth-child(3) { animation-delay: 0.0s; }
+        .music-toggle-btn.playing .bar:nth-child(4) { animation-delay: 0.4s; }
+        @keyframes equalize { 0% { height: 8px; } 100% { height: 22px; } }
+        .music-toggle-btn.muted::after {
+            content: ''; position: absolute; width: 70%; height: 3px; background: #ef4444;
+            transform: rotate(-45deg); border-radius: 2px; box-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
+        }
         
         @media (max-width: 768px) {
             .navbar { padding: 12px 4%; }
@@ -203,6 +223,9 @@
             .watermark { width: 300px; height: 300px; }
             .floating-chat { width: 54px; height: 54px; bottom: 20px; right: 20px; }
             .floating-chat span { font-size: 24px; }
+            
+            .music-toggle-btn { width: 46px; height: 46px; bottom: 90px; right: 20px; }
+            .music-toggle-btn .bar { width: 3px; }
         }
         
         @media (max-width: 400px) {
@@ -239,68 +262,77 @@
             <a href="exness-partner.html" class="tab">Partner</a>
             <a href="calendar.html" class="tab">Economic Calendar</a>
             <a href="academy.html" class="tab">Academy</a>
+            <a href="porto.html" class="tab">Portofolio</a>
             <div class="tab-separator"></div>
             <a href="group.html" class="tab">Group</a>
         </div>
     </div>
 
-    <!-- WRAPPER INI PENTING AGAR KONTEN BISA DIGANTI TANPA RELOAD DI DASHBOARD -->
-    <div id="page-content">
-        <div class="container">
-            <div class="header">
-                <h1><span class="highlight">Akun Pantau</span> Investor</h1>
-                <p>Monitor performa akun trading kami secara real-time. Akun ini menggunakan akses <strong>View-Only (Investor)</strong> untuk memastikan transparansi dan keamanan.</p>
-            </div>
-            
-            <div class="account-wrapper">
-                <div class="account-grid">
-                    <div class="account-card">
-                        <div class="account-header">
-                            <div class="broker-logo">D</div>
-                            <div class="account-title">
-                                <h2>Akun Pantau Utama</h2>
-                                <p>Dupoin MT5 Real - Investor Access</p>
-                            </div>
+    <div class="container">
+        <div class="header">
+            <h1><span class="highlight">Akun Pantau</span> Investor</h1>
+            <p>Monitor performa akun trading kami secara real-time. Akun ini menggunakan akses <strong>View-Only (Investor)</strong> untuk memastikan transparansi dan keamanan.</p>
+        </div>
+        
+        <div class="account-wrapper">
+            <div class="account-grid">
+                <div class="account-card">
+                    <div class="account-header">
+                        <div class="broker-logo">D</div>
+                        <div class="account-title">
+                            <h2>Akun Pantau Utama</h2>
+                            <p>Dupoin MT5 Real - Investor Access</p>
                         </div>
-                        <div class="account-details">
-                            <div class="detail">
-                                <div class="detail-label">ID Akun</div>
-                                <div class="detail-value">992115600</div>
-                            </div>
-                            <div class="detail">
-                                <div class="detail-label">Password Investor</div>
-                                <div class="detail-value password">Wh0ami3!</div>
-                            </div>
-                            <div class="detail" style="grid-column: 1 / -1;">
-                                <div class="detail-label">Server</div>
-                                <div class="detail-value">PT dupoin Futures Indonesia</div>
-                            </div>
+                    </div>
+                    <div class="account-details">
+                        <div class="detail">
+                            <div class="detail-label">ID Akun</div>
+                            <div class="detail-value">992115600</div>
+                        </div>
+                        <div class="detail">
+                            <div class="detail-label">Password Investor</div>
+                            <div class="detail-value password">Jakart@26</div>
+                        </div>
+                        <div class="detail" style="grid-column: 1 / -1;">
+                            <div class="detail-label">Server</div>
+                            <div class="detail-value">PT dupoin Futures Indonesia</div>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <div class="note">
-                <h3>📌 Cara Menggunakan Akun Pantau:</h3>
-                <ul>
-                    <li>Download platform <strong>MetaTrader 5 (MT5)</strong> dari website atau aplikasi resmi Dupoin.</li>
-                    <li>Login menggunakan <strong>ID Akun</strong> dan <strong>Password Investor</strong> di atas.</li>
-                    <li>Pastikan memilih server: <strong>PT dupoin Futures Indonesia</strong>.</li>
-                    <li>Akun ini bersifat <strong>View-Only</strong> (hanya untuk monitoring). Anda tidak dapat melakukan transaksi, modifikasi, atau penarikan dana.</li>
-                    <li>Ingin membuka akun trading baru untuk diri Anda sendiri? Silakan daftar melalui link partner resmi kami di halaman <a href="exness-partner.html" style="color: var(--gold-primary); font-weight: 700; text-decoration: underline;">Partner</a>.</li>
-                </ul>
-            </div>
-            
-            <div style="text-align: center;">
-                <a href="dashboard.html" class="back-button">← Kembali ke Dashboard</a>
-            </div>
+        </div>
+        
+        <div class="note">
+            <h3>📌 Cara Menggunakan Akun Pantau:</h3>
+            <ul>
+                <li>Download platform <strong>MetaTrader 5 (MT5)</strong> dari website atau aplikasi resmi Dupoin.</li>
+                <li>Login menggunakan <strong>ID Akun</strong> dan <strong>Password Investor</strong> di atas.</li>
+                <li>Pastikan memilih server: <strong>PT dupoin Futures Indonesia</strong>.</li>
+                <li>Akun ini bersifat <strong>View-Only</strong> (hanya untuk monitoring). Anda tidak dapat melakukan transaksi, modifikasi, atau penarikan dana.</li>
+                <li>Ingin membuka akun trading baru untuk diri Anda sendiri? Silakan daftar melalui link partner resmi kami di halaman <a href="exness-partner.html" style="color: var(--gold-primary); font-weight: 700; text-decoration: underline;">Partner</a>.</li>
+            </ul>
+        </div>
+        
+        <div style="text-align: center;">
+            <a href="dashboard.html" class="back-button">← Kembali ke Dashboard</a>
         </div>
     </div>
-    <!-- END PAGE CONTENT WRAPPER -->
     
     <a href="https://t.me/etc_ea_v2_bot" target="_blank" class="floating-chat" title="Chat Bot EA">
         <span>💬</span>
     </a>
+
+    <!-- === FITUR MUSIK (WAJIB ADA DI SETIAP FILE) === -->
+    <audio id="bgMusic" loop>
+        <source src="Music-1.mp3" type="audio/mpeg">
+    </audio>
+    
+    <button class="music-toggle-btn muted" id="musicToggle" title="Play/Pause Music">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </button>
 
     <script>
         window.addEventListener('load', () => {
@@ -312,7 +344,6 @@
         window.addEventListener('DOMContentLoaded', () => {
             const user = localStorage.getItem('user');
             if (!user) { 
-                alert('Silakan login terlebih dahulu untuk mengakses fitur ini!'); 
                 window.location.href = 'login.html'; 
             }
         });
@@ -321,6 +352,53 @@
             localStorage.removeItem('user'); 
             window.location.href = 'index.html'; 
         }
+
+        // --- SCRIPT MUSIK AMAN (SAMA PERSIS DI SEMUA FILE) ---
+        const bgMusic = document.getElementById('bgMusic');
+        const musicToggle = document.getElementById('musicToggle');
+        let isPlaying = false;
+
+        const wasPlaying = localStorage.getItem('etc_music_playing') === 'true';
+        const savedTime = parseFloat(localStorage.getItem('etc_music_time')) || 0;
+
+        if (wasPlaying && savedTime > 0) {
+            bgMusic.currentTime = savedTime;
+            bgMusic.play().then(() => {
+                isPlaying = true;
+                musicToggle.classList.add('playing');
+                musicToggle.classList.remove('muted');
+            }).catch(() => {
+                isPlaying = false;
+                musicToggle.classList.remove('playing');
+                musicToggle.classList.add('muted');
+            });
+        }
+
+        musicToggle.addEventListener('click', () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                isPlaying = false;
+                musicToggle.classList.remove('playing');
+                musicToggle.classList.add('muted');
+                localStorage.setItem('etc_music_playing', 'false');
+            } else {
+                bgMusic.play();
+                isPlaying = true;
+                musicToggle.classList.add('playing');
+                musicToggle.classList.remove('muted');
+                localStorage.setItem('etc_music_playing', 'true');
+            }
+        });
+
+        setInterval(() => {
+            if (isPlaying) {
+                localStorage.setItem('etc_music_time', bgMusic.currentTime.toString());
+            }
+        }, 1000);
+
+        window.addEventListener('beforeunload', () => {
+            localStorage.setItem('etc_music_time', bgMusic.currentTime.toString());
+        });
     </script>
 </body>
 </html>
