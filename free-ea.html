@@ -207,6 +207,26 @@
             70% { box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 15px rgba(212, 175, 55, 0); }
             100% { box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 0 rgba(212, 175, 55, 0); }
         }
+
+        /* --- CSS TOMBOL MUSIK (SAMA PERSIS DI SEMUA FILE) --- */
+        .music-toggle-btn {
+            position: fixed; bottom: 100px; right: 30px; width: 50px; height: 50px;
+            background: rgba(212, 175, 55, 0.9); border: 2px solid var(--gold-primary);
+            border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            gap: 3px; z-index: 9999; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); transition: all 0.3s ease;
+        }
+        .music-toggle-btn:hover { transform: scale(1.1); }
+        .music-toggle-btn .bar { width: 4px; height: 12px; background: #1a1a1a; border-radius: 2px; transition: height 0.1s ease; }
+        .music-toggle-btn.playing .bar { animation: equalize 0.8s ease-in-out infinite alternate; }
+        .music-toggle-btn.playing .bar:nth-child(1) { animation-delay: 0.1s; }
+        .music-toggle-btn.playing .bar:nth-child(2) { animation-delay: 0.3s; }
+        .music-toggle-btn.playing .bar:nth-child(3) { animation-delay: 0.0s; }
+        .music-toggle-btn.playing .bar:nth-child(4) { animation-delay: 0.4s; }
+        @keyframes equalize { 0% { height: 8px; } 100% { height: 22px; } }
+        .music-toggle-btn.muted::after {
+            content: ''; position: absolute; width: 70%; height: 3px; background: #ef4444;
+            transform: rotate(-45deg); border-radius: 2px; box-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
+        }
         
         @media (max-width: 768px) { 
             .navbar { padding: 12px 4%; }
@@ -241,6 +261,9 @@
             .watermark { width: 300px; height: 300px; }
             .floating-chat { width: 54px; height: 54px; bottom: 20px; right: 20px; }
             .floating-chat span { font-size: 24px; }
+            
+            .music-toggle-btn { width: 46px; height: 46px; bottom: 90px; right: 20px; }
+            .music-toggle-btn .bar { width: 3px; }
         }
         
         @media (max-width: 400px) {
@@ -277,67 +300,76 @@
             <a href="exness-partner.html" class="tab">Partner</a>
             <a href="calendar.html" class="tab">Economic Calendar</a>
             <a href="academy.html" class="tab">Academy</a>
+            <a href="porto.html" class="tab">Portofolio</a>
             <div class="tab-separator"></div>
             <a href="group.html" class="tab">Group</a>
         </div>
     </div>
 
-    <!-- WRAPPER INI PENTING AGAR KONTEN BISA DIGANTI TANPA RELOAD DI DASHBOARD -->
-    <div id="page-content">
-        <div class="container">
-            <div class="header">
-                <h1>Dapatkan <span class="highlight">Free EA</span></h1>
-                <p>Expert Advisor premium secara <strong>GRATIS</strong> dengan menjadi partner trading di Dupoin dan memenuhi syarat deposit minimum.</p>
-            </div>
+    <div class="container">
+        <div class="header">
+            <h1>Dapatkan <span class="highlight">Free EA</span></h1>
+            <p>Expert Advisor premium secara <strong>GRATIS</strong> dengan menjadi partner trading di Dupoin dan memenuhi syarat deposit minimum.</p>
+        </div>
+        
+        <div class="info-card">
+            <h2>📋 Syarat Mendapatkan Free EA</h2>
+            <p>Untuk mendapatkan akses Free EA, Anda wajib mendaftar akun trading baru melalui link partner resmi kami dan memenuhi ketentuan berikut:</p>
             
-            <div class="info-card">
-                <h2>📋 Syarat Mendapatkan Free EA</h2>
-                <p>Untuk mendapatkan akses Free EA, Anda wajib mendaftar akun trading baru melalui link partner resmi kami dan memenuhi ketentuan berikut:</p>
+            <div class="requirement-box">
+                <h3>Syarat & Langkah-langkah:</h3>
+                <ol>
+                    <li>Daftar akun trading baru melalui <strong>link partner resmi</strong> kami di bawah ini.</li>
+                    <li>Lengkapi registrasi dan lakukan verifikasi identitas (KYC) hingga status <strong>Approved</strong>.</li>
+                    <li>Lakukan <strong>deposit minimum sebesar $500 USD</strong> ke akun trading Anda.</li>
+                    <li>Kirimkan screenshot bukti deposit ke Admin kami melalui Telegram untuk verifikasi.</li>
+                </ol>
                 
-                <div class="requirement-box">
-                    <h3>Syarat & Langkah-langkah:</h3>
-                    <ol>
-                        <li>Daftar akun trading baru melalui <strong>link partner resmi</strong> kami di bawah ini.</li>
-                        <li>Lengkapi registrasi dan lakukan verifikasi identitas (KYC) hingga status <strong>Approved</strong>.</li>
-                        <li>Lakukan <strong>deposit minimum sebesar $500 USD</strong> ke akun trading Anda.</li>
-                        <li>Kirimkan screenshot bukti deposit ke Admin kami melalui Telegram untuk verifikasi.</li>
-                    </ol>
-                    
-                    <div class="lifetime-benefit">
-                        <strong>🎉 Benefit Eksklusif</strong>
-                        <span>Akun yang memenuhi syarat berhak mendapatkan <strong>Free EA SELAMANYA</strong> (Lifetime Access) tanpa biaya bulanan!</span>
-                    </div>
-                </div>
-                
-                <p style="font-size: 13px; color: var(--text-muted);">⚠️ <strong>Penting:</strong> Akun harus didaftarkan melalui link partner kami. Akun yang didaftarkan di luar link partner atau dengan deposit di bawah $500 <strong>tidak memenuhi syarat</strong> untuk mendapatkan Free EA.</p>
-            </div>
-            
-            <div class="options-grid">
-                <div class="option-card">
-                    <div class="option-num">1</div>
-                    <h3>Belum Punya Akun?</h3>
-                    <p>Daftar akun Dupoin sekarang menggunakan link partner resmi kami. Pastikan deposit minimal <strong>$500</strong> untuk klaim Free EA.</p>
-                    <a href="exness-partner.html" class="btn-option btn-register">Daftar Akun Dupoin →</a>
-                </div>
-                
-                <div class="option-card">
-                    <div class="option-num">2</div>
-                    <h3>Sudah Terdaftar & Deposit?</h3>
-                    <p>Kirimkan screenshot bukti deposit minimal <strong>$500</strong> ke Admin kami via Telegram untuk aktivasi Free EA.</p>
-                    <a href="https://t.me/elitetradingcircle07" target="_blank" class="btn-option btn-send">Kirim Bukti ke Admin →</a>
+                <div class="lifetime-benefit">
+                    <strong>🎉 Benefit Eksklusif</strong>
+                    <span>Akun yang memenuhi syarat berhak mendapatkan <strong>Free EA SELAMANYA</strong> (Lifetime Access) tanpa biaya bulanan!</span>
                 </div>
             </div>
             
-            <div class="back-wrapper">
-                <a href="dashboard.html" class="back-button">← Kembali ke Dashboard</a>
+            <p style="font-size: 13px; color: var(--text-muted);">⚠️ <strong>Penting:</strong> Akun harus didaftarkan melalui link partner kami. Akun yang didaftarkan di luar link partner atau dengan deposit di bawah $500 <strong>tidak memenuhi syarat</strong> untuk mendapatkan Free EA.</p>
+        </div>
+        
+        <div class="options-grid">
+            <div class="option-card">
+                <div class="option-num">1</div>
+                <h3>Belum Punya Akun?</h3>
+                <p>Daftar akun Dupoin sekarang menggunakan link partner resmi kami. Pastikan deposit minimal <strong>$500</strong> untuk klaim Free EA.</p>
+                <a href="exness-partner.html" class="btn-option btn-register">Daftar Akun Dupoin →</a>
+            </div>
+            
+            <div class="option-card">
+                <div class="option-num">2</div>
+                <h3>Sudah Terdaftar & Deposit?</h3>
+                <p>Kirimkan screenshot bukti deposit minimal <strong>$500</strong> ke Admin kami via Telegram untuk aktivasi Free EA.</p>
+                <a href="https://t.me/elitetradingcircle07" target="_blank" class="btn-option btn-send">Kirim Bukti ke Admin →</a>
             </div>
         </div>
+        
+        <div class="back-wrapper">
+            <a href="dashboard.html" class="back-button">← Kembali ke Dashboard</a>
+        </div>
     </div>
-    <!-- END PAGE CONTENT WRAPPER -->
     
     <a href="https://t.me/etc_ea_v2_bot" target="_blank" class="floating-chat" title="Chat Bot EA">
         <span>💬</span>
     </a>
+
+    <!-- === FITUR MUSIK (WAJIB ADA DI SETIAP FILE) === -->
+    <audio id="bgMusic" loop>
+        <source src="Music-1.mp3" type="audio/mpeg">
+    </audio>
+    
+    <button class="music-toggle-btn muted" id="musicToggle" title="Play/Pause Music">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </button>
 
     <script>
         window.addEventListener('load', () => {
@@ -349,7 +381,6 @@
         window.addEventListener('DOMContentLoaded', () => {
             const user = localStorage.getItem('user');
             if (!user) { 
-                alert('Silakan login terlebih dahulu!'); 
                 window.location.href = 'login.html'; 
             }
         });
@@ -358,6 +389,53 @@
             localStorage.removeItem('user'); 
             window.location.href = 'index.html'; 
         }
+
+        // --- SCRIPT MUSIK AMAN (SAMA PERSIS DI SEMUA FILE) ---
+        const bgMusic = document.getElementById('bgMusic');
+        const musicToggle = document.getElementById('musicToggle');
+        let isPlaying = false;
+
+        const wasPlaying = localStorage.getItem('etc_music_playing') === 'true';
+        const savedTime = parseFloat(localStorage.getItem('etc_music_time')) || 0;
+
+        if (wasPlaying && savedTime > 0) {
+            bgMusic.currentTime = savedTime;
+            bgMusic.play().then(() => {
+                isPlaying = true;
+                musicToggle.classList.add('playing');
+                musicToggle.classList.remove('muted');
+            }).catch(() => {
+                isPlaying = false;
+                musicToggle.classList.remove('playing');
+                musicToggle.classList.add('muted');
+            });
+        }
+
+        musicToggle.addEventListener('click', () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                isPlaying = false;
+                musicToggle.classList.remove('playing');
+                musicToggle.classList.add('muted');
+                localStorage.setItem('etc_music_playing', 'false');
+            } else {
+                bgMusic.play();
+                isPlaying = true;
+                musicToggle.classList.add('playing');
+                musicToggle.classList.remove('muted');
+                localStorage.setItem('etc_music_playing', 'true');
+            }
+        });
+
+        setInterval(() => {
+            if (isPlaying) {
+                localStorage.setItem('etc_music_time', bgMusic.currentTime.toString());
+            }
+        }, 1000);
+
+        window.addEventListener('beforeunload', () => {
+            localStorage.setItem('etc_music_time', bgMusic.currentTime.toString());
+        });
     </script>
 </body>
 </html>
