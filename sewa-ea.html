@@ -232,6 +232,26 @@
             70% { box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 15px rgba(212, 175, 55, 0); }
             100% { box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 0 rgba(212, 175, 55, 0); }
         }
+
+        /* --- CSS TOMBOL MUSIK (SAMA PERSIS DI SEMUA FILE) --- */
+        .music-toggle-btn {
+            position: fixed; bottom: 100px; right: 30px; width: 50px; height: 50px;
+            background: rgba(212, 175, 55, 0.9); border: 2px solid var(--gold-primary);
+            border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            gap: 3px; z-index: 9999; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); transition: all 0.3s ease;
+        }
+        .music-toggle-btn:hover { transform: scale(1.1); }
+        .music-toggle-btn .bar { width: 4px; height: 12px; background: #1a1a1a; border-radius: 2px; transition: height 0.1s ease; }
+        .music-toggle-btn.playing .bar { animation: equalize 0.8s ease-in-out infinite alternate; }
+        .music-toggle-btn.playing .bar:nth-child(1) { animation-delay: 0.1s; }
+        .music-toggle-btn.playing .bar:nth-child(2) { animation-delay: 0.3s; }
+        .music-toggle-btn.playing .bar:nth-child(3) { animation-delay: 0.0s; }
+        .music-toggle-btn.playing .bar:nth-child(4) { animation-delay: 0.4s; }
+        @keyframes equalize { 0% { height: 8px; } 100% { height: 22px; } }
+        .music-toggle-btn.muted::after {
+            content: ''; position: absolute; width: 70%; height: 3px; background: #ef4444;
+            transform: rotate(-45deg); border-radius: 2px; box-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
+        }
         
         @media (max-width: 1024px) {
             .pricing-grid { gap: 20px; }
@@ -263,6 +283,9 @@
             .watermark { width: 300px; height: 300px; }
             .floating-chat { width: 54px; height: 54px; bottom: 20px; right: 20px; }
             .floating-chat span { font-size: 24px; }
+            
+            .music-toggle-btn { width: 46px; height: 46px; bottom: 90px; right: 20px; }
+            .music-toggle-btn .bar { width: 3px; }
         }
         
         @media (max-width: 400px) {
@@ -300,106 +323,115 @@
             <a href="exness-partner.html" class="tab">Partner</a>
             <a href="calendar.html" class="tab">Economic Calendar</a>
             <a href="academy.html" class="tab">Academy</a>
+            <a href="porto.html" class="tab">Portofolio</a>
             <div class="tab-separator"></div>
             <a href="group.html" class="tab">Group</a>
         </div>
     </div>
 
-    <!-- WRAPPER INI PENTING AGAR KONTEN BISA DIGANTI TANPA RELOAD DI DASHBOARD -->
-    <div id="page-content">
-        <div class="container">
-            <div class="header">
-                <h1>Sewa <span class="highlight">EA Premium</span></h1>
-                <p>Pilih paket yang sesuai dengan kebutuhan trading Anda. Semua EA telah teruji dengan track record terbukti dan risk management yang ketat.</p>
-                
-                <div class="broker-note">
-                    <span class="broker-note-icon">🌐</span>
-                    <span><strong>100% Fleksibel:</strong> EA yang Anda sewa dapat dijalankan di <strong>semua broker</strong> yang mendukung platform MetaTrader 4 (MT4) atau MetaTrader 5 (MT5). Bebas pilih broker favorit Anda, tidak terikat pada broker tertentu!</span>
-                </div>
-            </div>
+    <div class="container">
+        <div class="header">
+            <h1>Sewa <span class="highlight">EA Premium</span></h1>
+            <p>Pilih paket yang sesuai dengan kebutuhan trading Anda. Semua EA telah teruji dengan track record terbukti dan risk management yang ketat.</p>
             
-            <div class="pricing-grid">
-                <div class="price-card">
-                    <div class="tier-name">Low Risk</div>
-                    <div class="price-row">
-                        <div class="price-label">Paket 1 Bulan</div>
-                        <div class="price-value">$20<span>/bulan</span></div>
-                    </div>
-                    <div class="price-row">
-                        <div class="price-label">Paket 3 Bulan</div>
-                        <div class="price-value">$60<span>/3 bulan</span></div>
-                        <div class="price-save">Hemat $0</div>
-                    </div>
-                    <ul class="features-list">
-                        <li>Kompatibel dengan semua broker (MT4/MT5)</li>
-                        <li>Cocok untuk pemula</li>
-                        <li>Drawdown maksimal 10%</li>
-                        <li>Pair: XAU/USD</li>
-                        <li>Support standar</li>
-                        <li>Update bulanan</li>
-                    </ul>
-                    <a href="https://t.me/etc_ea_v2_bot?start=package_low" target="_blank" class="btn-buy btn-buy-outline">Beli Paket Low</a>
-                </div>
-                
-                <div class="price-card popular">
-                    <div class="popular-tag">PALING LARIS</div>
-                    <div class="tier-name">Medium Risk</div>
-                    <div class="price-row">
-                        <div class="price-label">Paket 1 Bulan</div>
-                        <div class="price-value">$50<span>/bulan</span></div>
-                    </div>
-                    <div class="price-row">
-                        <div class="price-label">Paket 3 Bulan</div>
-                        <div class="price-value">$149<span>/3 bulan</span></div>
-                        <div class="price-save">Hemat $1</div>
-                    </div>
-                    <ul class="features-list">
-                        <li>Kompatibel dengan semua broker (MT4/MT5)</li>
-                        <li>Cocok untuk trader aktif</li>
-                        <li>Drawdown maksimal 15%</li>
-                        <li>Pair: XAU/USD + Major Forex</li>
-                        <li>Priority support</li>
-                        <li>Update mingguan</li>
-                        <li>Setting optimalisasi</li>
-                    </ul>
-                    <a href="https://t.me/etc_ea_v2_bot?start=package_med" target="_blank" class="btn-buy">Beli Paket Medium</a>
-                </div>
-                
-                <div class="price-card">
-                    <div class="tier-name">High Risk</div>
-                    <div class="price-row">
-                        <div class="price-label">Paket 1 Bulan</div>
-                        <div class="price-value">$70<span>/bulan</span></div>
-                    </div>
-                    <div class="price-row">
-                        <div class="price-label">Paket 3 Bulan</div>
-                        <div class="price-value">$190<span>/3 bulan</span></div>
-                        <div class="price-save">Hemat $20</div>
-                    </div>
-                    <ul class="features-list">
-                        <li>Kompatibel dengan semua broker (MT4/MT5)</li>
-                        <li>Untuk trader berpengalaman</li>
-                        <li>Drawdown maksimal 25%</li>
-                        <li>Semua pair tersedia</li>
-                        <li>VIP 1-on-1 support</li>
-                        <li>Update real-time</li>
-                        <li>Custom setting request</li>
-                        <li>Akses beta testing EA baru</li>
-                    </ul>
-                    <a href="https://t.me/etc_ea_v2_bot?start=package_high" target="_blank" class="btn-buy btn-buy-outline">Beli Paket High</a>
-                </div>
-            </div>
-            
-            <div class="back-wrapper">
-                <a href="dashboard.html" class="back-button">← Kembali ke Dashboard</a>
+            <div class="broker-note">
+                <span class="broker-note-icon">🌐</span>
+                <span><strong>100% Fleksibel:</strong> EA yang Anda sewa dapat dijalankan di <strong>semua broker</strong> yang mendukung platform MetaTrader 4 (MT4) atau MetaTrader 5 (MT5). Bebas pilih broker favorit Anda, tidak terikat pada broker tertentu!</span>
             </div>
         </div>
+        
+        <div class="pricing-grid">
+            <div class="price-card">
+                <div class="tier-name">Low Risk</div>
+                <div class="price-row">
+                    <div class="price-label">Paket 1 Bulan</div>
+                    <div class="price-value">$20<span>/bulan</span></div>
+                </div>
+                <div class="price-row">
+                    <div class="price-label">Paket 3 Bulan</div>
+                    <div class="price-value">$60<span>/3 bulan</span></div>
+                    <div class="price-save">Hemat $0</div>
+                </div>
+                <ul class="features-list">
+                    <li>Kompatibel dengan semua broker (MT4/MT5)</li>
+                    <li>Cocok untuk pemula</li>
+                    <li>Drawdown maksimal 10%</li>
+                    <li>Pair: XAU/USD</li>
+                    <li>Support standar</li>
+                    <li>Update bulanan</li>
+                </ul>
+                <a href="https://t.me/etc_ea_v2_bot?start=package_low" target="_blank" class="btn-buy btn-buy-outline">Beli Paket Low</a>
+            </div>
+            
+            <div class="price-card popular">
+                <div class="popular-tag">PALING LARIS</div>
+                <div class="tier-name">Medium Risk</div>
+                <div class="price-row">
+                    <div class="price-label">Paket 1 Bulan</div>
+                    <div class="price-value">$50<span>/bulan</span></div>
+                </div>
+                <div class="price-row">
+                    <div class="price-label">Paket 3 Bulan</div>
+                    <div class="price-value">$149<span>/3 bulan</span></div>
+                    <div class="price-save">Hemat $1</div>
+                </div>
+                <ul class="features-list">
+                    <li>Kompatibel dengan semua broker (MT4/MT5)</li>
+                    <li>Cocok untuk trader aktif</li>
+                    <li>Drawdown maksimal 15%</li>
+                    <li>Pair: XAU/USD + Major Forex</li>
+                    <li>Priority support</li>
+                    <li>Update mingguan</li>
+                    <li>Setting optimalisasi</li>
+                </ul>
+                <a href="https://t.me/etc_ea_v2_bot?start=package_med" target="_blank" class="btn-buy">Beli Paket Medium</a>
+            </div>
+            
+            <div class="price-card">
+                <div class="tier-name">High Risk</div>
+                <div class="price-row">
+                    <div class="price-label">Paket 1 Bulan</div>
+                    <div class="price-value">$70<span>/bulan</span></div>
+                </div>
+                <div class="price-row">
+                    <div class="price-label">Paket 3 Bulan</div>
+                    <div class="price-value">$190<span>/3 bulan</span></div>
+                    <div class="price-save">Hemat $20</div>
+                </div>
+                <ul class="features-list">
+                    <li>Kompatibel dengan semua broker (MT4/MT5)</li>
+                    <li>Untuk trader berpengalaman</li>
+                    <li>Drawdown maksimal 25%</li>
+                    <li>Semua pair tersedia</li>
+                    <li>VIP 1-on-1 support</li>
+                    <li>Update real-time</li>
+                    <li>Custom setting request</li>
+                    <li>Akses beta testing EA baru</li>
+                </ul>
+                <a href="https://t.me/etc_ea_v2_bot?start=package_high" target="_blank" class="btn-buy btn-buy-outline">Beli Paket High</a>
+            </div>
+        </div>
+        
+        <div class="back-wrapper">
+            <a href="dashboard.html" class="back-button">← Kembali ke Dashboard</a>
+        </div>
     </div>
-    <!-- END PAGE CONTENT WRAPPER -->
     
     <a href="https://t.me/etc_ea_v2_bot" target="_blank" class="floating-chat" title="Chat Bot EA">
         <span>💬</span>
     </a>
+
+    <!-- === FITUR MUSIK (WAJIB ADA DI SETIAP FILE) === -->
+    <audio id="bgMusic" loop>
+        <source src="Music-1.mp3" type="audio/mpeg">
+    </audio>
+    
+    <button class="music-toggle-btn muted" id="musicToggle" title="Play/Pause Music">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </button>
 
     <script>
         window.addEventListener('load', () => {
@@ -411,7 +443,6 @@
         window.addEventListener('DOMContentLoaded', () => {
             const user = localStorage.getItem('user');
             if (!user) { 
-                alert('Silakan login terlebih dahulu!'); 
                 window.location.href = 'login.html'; 
             }
         });
@@ -420,6 +451,53 @@
             localStorage.removeItem('user'); 
             window.location.href = 'index.html'; 
         }
+
+        // --- SCRIPT MUSIK AMAN (SAMA PERSIS DI SEMUA FILE) ---
+        const bgMusic = document.getElementById('bgMusic');
+        const musicToggle = document.getElementById('musicToggle');
+        let isPlaying = false;
+
+        const wasPlaying = localStorage.getItem('etc_music_playing') === 'true';
+        const savedTime = parseFloat(localStorage.getItem('etc_music_time')) || 0;
+
+        if (wasPlaying && savedTime > 0) {
+            bgMusic.currentTime = savedTime;
+            bgMusic.play().then(() => {
+                isPlaying = true;
+                musicToggle.classList.add('playing');
+                musicToggle.classList.remove('muted');
+            }).catch(() => {
+                isPlaying = false;
+                musicToggle.classList.remove('playing');
+                musicToggle.classList.add('muted');
+            });
+        }
+
+        musicToggle.addEventListener('click', () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                isPlaying = false;
+                musicToggle.classList.remove('playing');
+                musicToggle.classList.add('muted');
+                localStorage.setItem('etc_music_playing', 'false');
+            } else {
+                bgMusic.play();
+                isPlaying = true;
+                musicToggle.classList.add('playing');
+                musicToggle.classList.remove('muted');
+                localStorage.setItem('etc_music_playing', 'true');
+            }
+        });
+
+        setInterval(() => {
+            if (isPlaying) {
+                localStorage.setItem('etc_music_time', bgMusic.currentTime.toString());
+            }
+        }, 1000);
+
+        window.addEventListener('beforeunload', () => {
+            localStorage.setItem('etc_music_time', bgMusic.currentTime.toString());
+        });
     </script>
 </body>
 </html>
