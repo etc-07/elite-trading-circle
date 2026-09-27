@@ -242,6 +242,26 @@
             70% { box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 15px rgba(212, 175, 55, 0); }
             100% { box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), 0 0 0 0 rgba(212, 175, 55, 0); }
         }
+
+        /* --- CSS TOMBOL MUSIK (SAMA PERSIS DI SEMUA FILE) --- */
+        .music-toggle-btn {
+            position: fixed; bottom: 100px; right: 30px; width: 50px; height: 50px;
+            background: rgba(212, 175, 55, 0.9); border: 2px solid var(--gold-primary);
+            border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            gap: 3px; z-index: 9999; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); transition: all 0.3s ease;
+        }
+        .music-toggle-btn:hover { transform: scale(1.1); }
+        .music-toggle-btn .bar { width: 4px; height: 12px; background: #1a1a1a; border-radius: 2px; transition: height 0.1s ease; }
+        .music-toggle-btn.playing .bar { animation: equalize 0.8s ease-in-out infinite alternate; }
+        .music-toggle-btn.playing .bar:nth-child(1) { animation-delay: 0.1s; }
+        .music-toggle-btn.playing .bar:nth-child(2) { animation-delay: 0.3s; }
+        .music-toggle-btn.playing .bar:nth-child(3) { animation-delay: 0.0s; }
+        .music-toggle-btn.playing .bar:nth-child(4) { animation-delay: 0.4s; }
+        @keyframes equalize { 0% { height: 8px; } 100% { height: 22px; } }
+        .music-toggle-btn.muted::after {
+            content: ''; position: absolute; width: 70%; height: 3px; background: #ef4444;
+            transform: rotate(-45deg); border-radius: 2px; box-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
+        }
         
         @media (max-width: 768px) {
             .navbar { padding: 12px 4%; }
@@ -272,6 +292,9 @@
             .watermark { width: 300px; height: 300px; }
             .floating-chat { width: 54px; height: 54px; bottom: 20px; right: 20px; }
             .floating-chat span { font-size: 24px; }
+            
+            .music-toggle-btn { width: 46px; height: 46px; bottom: 90px; right: 20px; }
+            .music-toggle-btn .bar { width: 3px; }
         }
         
         @media (max-width: 400px) {
@@ -309,80 +332,89 @@
             <a href="exness-partner.html" class="tab active">Partner</a>
             <a href="calendar.html" class="tab">Economic Calendar</a>
             <a href="academy.html" class="tab">Academy</a>
+            <a href="porto.html" class="tab">Portofolio</a>
             <div class="tab-separator"></div>
             <a href="group.html" class="tab">Group</a>
         </div>
     </div>
 
-    <!-- WRAPPER INI PENTING AGAR KONTEN BISA DIGANTI TANPA RELOAD DI DASHBOARD -->
-    <div id="page-content">
-        <div class="container">
-            <div class="header">
-                <h1>Buka Akun <span class="highlight">Dupoin Partner</span></h1>
-                <p>Dapatkan akses ke kondisi trading premium dengan spread rendah, eksekusi cepat, dan dukungan eksklusif dari Elite Trading Circle melalui broker resmi Dupoin.</p>
-            </div>
-            
-            <div class="partner-card">
-                <div class="steps">
-                    <div class="step">
-                        <div class="step-num">1</div>
-                        <div class="step-content">
-                            <h3>Pilih Metode Pendaftaran</h3>
-                            <p>Anda bisa mendaftar dengan <strong>mengklik tombol di bawah</strong> atau <strong>scan QR code</strong> menggunakan kamera HP Anda.</p>
-                        </div>
-                    </div>
-                    <div class="step">
-                        <div class="step-num">2</div>
-                        <div class="step-content">
-                            <h3>Isi Data Registrasi</h3>
-                            <p>Lengkapi formulir pendaftaran dengan data diri yang valid. <strong>Kode partner akan otomatis terpasang</strong> karena Anda menggunakan link resmi kami, jadi tidak perlu input manual.</p>
-                        </div>
-                    </div>
-                    <div class="step">
-                        <div class="step-num">3</div>
-                        <div class="step-content">
-                            <h3>Verifikasi Akun (KYC)</h3>
-                            <p>Upload dokumen identitas dan bukti alamat untuk mengaktifkan akun trading Dupoin Anda secara penuh dan aman.</p>
-                        </div>
-                    </div>
-                    <div class="step">
-                        <div class="step-num">4</div>
-                        <div class="step-content">
-                            <h3>Deposit & Mulai Trading</h3>
-                            <p>Lakukan deposit pertama Anda dan nikmati akses ke EA Premium serta support prioritas dari tim Elite Trading Circle.</p>
-                        </div>
+    <div class="container">
+        <div class="header">
+            <h1>Buka Akun <span class="highlight">Dupoin Partner</span></h1>
+            <p>Dapatkan akses ke kondisi trading premium dengan spread rendah, eksekusi cepat, dan dukungan eksklusif dari Elite Trading Circle melalui broker resmi Dupoin.</p>
+        </div>
+        
+        <div class="partner-card">
+            <div class="steps">
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                        <h3>Pilih Metode Pendaftaran</h3>
+                        <p>Anda bisa mendaftar dengan <strong>mengklik tombol di bawah</strong> atau <strong>scan QR code</strong> menggunakan kamera HP Anda.</p>
                     </div>
                 </div>
-                
-                <a href="https://i.dupoin.vip/XS6tfAsuh" target="_blank" class="btn-register">
-                     Daftar Akun Dupoin Sekarang
-                </a>
-                
-                <div class="divider-or"><span>ATAU</span></div>
-                
-                <div class="qr-section">
-                    <div class="qr-title">📱 Scan QR Code untuk Daftar</div>
-                    <div class="qr-subtitle">Buka kamera HP atau aplikasi QR scanner, arahkan ke kode di bawah ini</div>
-                    <div class="qr-wrapper">
-                        <img src="barcode.png" alt="QR Code Pendaftaran Dupoin" class="qr-image">
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <div class="step-content">
+                        <h3>Isi Data Registrasi</h3>
+                        <p>Lengkapi formulir pendaftaran dengan data diri yang valid. <strong>Kode partner akan otomatis terpasang</strong> karena Anda menggunakan link resmi kami, jadi tidak perlu input manual.</p>
                     </div>
-                    <div class="qr-note">
-                        <span class="qr-note-icon">✓</span>
-                        <span>Link partner otomatis terpasang saat scan</span>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <div class="step-content">
+                        <h3>Verifikasi Akun (KYC)</h3>
+                        <p>Upload dokumen identitas dan bukti alamat untuk mengaktifkan akun trading Dupoin Anda secara penuh dan aman.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">4</div>
+                    <div class="step-content">
+                        <h3>Deposit & Mulai Trading</h3>
+                        <p>Lakukan deposit pertama Anda dan nikmati akses ke EA Premium serta support prioritas dari tim Elite Trading Circle.</p>
                     </div>
                 </div>
             </div>
             
-            <div style="text-align: center;">
-                <a href="dashboard.html" class="back-button">← Kembali ke Dashboard</a>
+            <a href="https://i.dupoin.vip/XS6tfAsuh" target="_blank" class="btn-register">
+                 Daftar Akun Dupoin Sekarang
+            </a>
+            
+            <div class="divider-or"><span>ATAU</span></div>
+            
+            <div class="qr-section">
+                <div class="qr-title">📱 Scan QR Code untuk Daftar</div>
+                <div class="qr-subtitle">Buka kamera HP atau aplikasi QR scanner, arahkan ke kode di bawah ini</div>
+                <div class="qr-wrapper">
+                    <img src="barcode.png" alt="QR Code Pendaftaran Dupoin" class="qr-image">
+                </div>
+                <div class="qr-note">
+                    <span class="qr-note-icon">✓</span>
+                    <span>Link partner otomatis terpasang saat scan</span>
+                </div>
             </div>
         </div>
+        
+        <div style="text-align: center;">
+            <a href="dashboard.html" class="back-button">← Kembali ke Dashboard</a>
+        </div>
     </div>
-    <!-- END PAGE CONTENT WRAPPER -->
     
     <a href="https://t.me/etc_ea_v2_bot" target="_blank" class="floating-chat" title="Chat Bot EA">
         <span>💬</span>
     </a>
+
+    <!-- === FITUR MUSIK (WAJIB ADA DI SETIAP FILE) === -->
+    <audio id="bgMusic" loop>
+        <source src="Music-1.mp3" type="audio/mpeg">
+    </audio>
+    
+    <button class="music-toggle-btn muted" id="musicToggle" title="Play/Pause Music">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </button>
 
     <script>
         window.addEventListener('load', () => {
@@ -394,7 +426,6 @@
         window.addEventListener('DOMContentLoaded', () => {
             const user = localStorage.getItem('user');
             if (!user) { 
-                alert('Silakan login terlebih dahulu untuk mengakses fitur ini!'); 
                 window.location.href = 'login.html'; 
             }
         });
@@ -403,6 +434,53 @@
             localStorage.removeItem('user'); 
             window.location.href = 'index.html'; 
         }
+
+        // --- SCRIPT MUSIK AMAN (SAMA PERSIS DI SEMUA FILE) ---
+        const bgMusic = document.getElementById('bgMusic');
+        const musicToggle = document.getElementById('musicToggle');
+        let isPlaying = false;
+
+        const wasPlaying = localStorage.getItem('etc_music_playing') === 'true';
+        const savedTime = parseFloat(localStorage.getItem('etc_music_time')) || 0;
+
+        if (wasPlaying && savedTime > 0) {
+            bgMusic.currentTime = savedTime;
+            bgMusic.play().then(() => {
+                isPlaying = true;
+                musicToggle.classList.add('playing');
+                musicToggle.classList.remove('muted');
+            }).catch(() => {
+                isPlaying = false;
+                musicToggle.classList.remove('playing');
+                musicToggle.classList.add('muted');
+            });
+        }
+
+        musicToggle.addEventListener('click', () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                isPlaying = false;
+                musicToggle.classList.remove('playing');
+                musicToggle.classList.add('muted');
+                localStorage.setItem('etc_music_playing', 'false');
+            } else {
+                bgMusic.play();
+                isPlaying = true;
+                musicToggle.classList.add('playing');
+                musicToggle.classList.remove('muted');
+                localStorage.setItem('etc_music_playing', 'true');
+            }
+        });
+
+        setInterval(() => {
+            if (isPlaying) {
+                localStorage.setItem('etc_music_time', bgMusic.currentTime.toString());
+            }
+        }, 1000);
+
+        window.addEventListener('beforeunload', () => {
+            localStorage.setItem('etc_music_time', bgMusic.currentTime.toString());
+        });
     </script>
 </body>
 </html>
