@@ -98,11 +98,6 @@
         .tab.active { color: var(--gold-primary); font-weight: 700; border-bottom-color: var(--gold-primary); }
         .tab-separator { width: 1px; background: var(--border-color); margin: 10px 6px; flex-shrink: 0; }
 
-        /* WRAPPER UNTUK SPA TRANSITION */
-        #page-content {
-            transition: opacity 0.2s ease-in-out;
-        }
-
         .ticker-wrap { margin-top: 122px; background: var(--card-bg); border-bottom: 1px solid var(--border-color); height: 46px; overflow: hidden; }
         .ticker-inner { height: 100%; }
 
@@ -158,40 +153,6 @@
         .news-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 18px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
         .news-widget { width: 100%; height: 600px; border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color); }
 
-        /* --- TOMBOL MUSIK EQUALIZER --- */
-        .music-toggle-btn {
-            position: fixed; bottom: 100px; right: 30px;
-            width: 50px; height: 50px;
-            background: rgba(212, 175, 55, 0.9);
-            border: 2px solid var(--gold-primary);
-            border-radius: 50%; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            gap: 3px; z-index: 9999;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
-            transition: all 0.3s ease;
-        }
-        .music-toggle-btn:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6); }
-        
-        .music-toggle-btn .bar {
-            width: 4px; height: 12px; background: #1a1a1a;
-            border-radius: 2px; transform-origin: bottom;
-            transition: height 0.1s ease;
-        }
-        
-        .music-toggle-btn.playing .bar { animation: equalize 0.8s ease-in-out infinite alternate; }
-        .music-toggle-btn.playing .bar:nth-child(1) { animation-delay: 0.1s; }
-        .music-toggle-btn.playing .bar:nth-child(2) { animation-delay: 0.3s; }
-        .music-toggle-btn.playing .bar:nth-child(3) { animation-delay: 0.0s; }
-        .music-toggle-btn.playing .bar:nth-child(4) { animation-delay: 0.4s; }
-        
-        @keyframes equalize { 0% { height: 8px; } 100% { height: 22px; } }
-        
-        .music-toggle-btn.muted::after {
-            content: ''; position: absolute; width: 70%; height: 3px;
-            background: #ef4444; transform: rotate(-45deg);
-            border-radius: 2px; box-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
-        }
-
         .floating-chat { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4); z-index: 998; text-decoration: none; transition: all 0.3s ease; animation: pulse 2s infinite; }
         .floating-chat:hover { transform: scale(1.1); box-shadow: 0 6px 25px rgba(212, 175, 55, 0.6); }
         .floating-chat span { font-size: 28px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
@@ -227,6 +188,28 @@
             .news-widget { height: 500px; }
             .floating-chat { width: 54px; height: 54px; bottom: 20px; right: 20px; }
             .floating-chat span { font-size: 24px; }
+        }
+
+        /* --- CSS TOMBOL MUSIK (AMAN & TIDAK MERUSAK LAYOUT) --- */
+        .music-toggle-btn {
+            position: fixed; bottom: 100px; right: 30px; width: 50px; height: 50px;
+            background: rgba(212, 175, 55, 0.9); border: 2px solid var(--gold-primary);
+            border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            gap: 3px; z-index: 9999; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); transition: all 0.3s ease;
+        }
+        .music-toggle-btn:hover { transform: scale(1.1); }
+        .music-toggle-btn .bar { width: 4px; height: 12px; background: #1a1a1a; border-radius: 2px; transition: height 0.1s ease; }
+        .music-toggle-btn.playing .bar { animation: equalize 0.8s ease-in-out infinite alternate; }
+        .music-toggle-btn.playing .bar:nth-child(1) { animation-delay: 0.1s; }
+        .music-toggle-btn.playing .bar:nth-child(2) { animation-delay: 0.3s; }
+        .music-toggle-btn.playing .bar:nth-child(3) { animation-delay: 0.0s; }
+        .music-toggle-btn.playing .bar:nth-child(4) { animation-delay: 0.4s; }
+        @keyframes equalize { 0% { height: 8px; } 100% { height: 22px; } }
+        .music-toggle-btn.muted::after {
+            content: ''; position: absolute; width: 70%; height: 3px; background: #ef4444;
+            transform: rotate(-45deg); border-radius: 2px; box-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
+        }
+        @media (max-width: 768px) {
             .music-toggle-btn { width: 46px; height: 46px; bottom: 90px; right: 20px; }
             .music-toggle-btn .bar { width: 3px; }
         }
@@ -264,129 +247,127 @@
         </div>
     </div>
     
-    <div id="page-content">
-        <div class="ticker-wrap">
-            <div class="ticker-inner">
+    <div class="ticker-wrap">
+        <div class="ticker-inner">
+            <div class="tradingview-widget-container">
+                <div class="tradingview-widget-container__widget"></div>
+                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+                {
+                    "symbols": [
+                        { "proName": "OANDA:XAUUSD", "title": "Gold" },
+                        { "proName": "OANDA:EURUSD", "title": "EUR/USD" },
+                        { "proName": "OANDA:GBPUSD", "title": "GBP/USD" },
+                        { "proName": "OANDA:USDJPY", "title": "USD/JPY" },
+                        { "proName": "BINANCE:BTCUSDT", "title": "Bitcoin" },
+                        { "proName": "BINANCE:ETHUSDT", "title": "Ethereum" },
+                        { "proName": "FOREXCOM:NSXUSD", "title": "Nasdaq" },
+                        { "proName": "FOREXCOM:DJI", "title": "Dow Jones" }
+                    ],
+                    "showSymbolLogo": true, "isTransparent": true, "displayMode": "adaptive", "colorTheme": "light", "locale": "id"
+                }
+                </script>
+            </div>
+        </div>
+    </div>
+    
+    <div class="dashboard">
+        <div class="welcome">
+            <div>
+                <h1>Selamat Datang, <span id="userName">User</span>! 👋</h1>
+                <p>Kelola akun trading dan akses fitur premium Anda</p>
+            </div>
+            <div class="welcome-badge">MEMBER AKTIF</div>
+        </div>
+        
+        <div class="high-impact-alert">
+            <div class="alert-header">
+                <div class="toa-icon">📢</div>
+                <div class="alert-title-wrap">
+                    <div class="alert-title">⚠️ PERINGATAN: Event High Impact Mendatang</div>
+                    <div class="alert-subtitle">NFP, CPI, FOMC & data penting lainnya — otomatis update</div>
+                </div>
+                <div class="alert-badge"><span class="live-dot"></span>AUTO-UPDATE</div>
+            </div>
+            
+            <div class="alert-widget">
                 <div class="tradingview-widget-container">
                     <div class="tradingview-widget-container__widget"></div>
-                    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+                    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
                     {
-                        "symbols": [
-                            { "proName": "OANDA:XAUUSD", "title": "Gold" },
-                            { "proName": "OANDA:EURUSD", "title": "EUR/USD" },
-                            { "proName": "OANDA:GBPUSD", "title": "GBP/USD" },
-                            { "proName": "OANDA:USDJPY", "title": "USD/JPY" },
-                            { "proName": "BINANCE:BTCUSDT", "title": "Bitcoin" },
-                            { "proName": "BINANCE:ETHUSDT", "title": "Ethereum" },
-                            { "proName": "FOREXCOM:NSXUSD", "title": "Nasdaq" },
-                            { "proName": "FOREXCOM:DJI", "title": "Dow Jones" }
-                        ],
-                        "showSymbolLogo": true, "isTransparent": true, "displayMode": "adaptive", "colorTheme": "light", "locale": "id"
+                        "width": "100%", "height": "100%", "colorTheme": "light", "isTransparent": true, "locale": "id",
+                        "importanceFilter": "-1", "currencyFilter": "USD,EUR,GBP,JPY,AUD,CAD,CHF,NZD",
+                        "showPrevious": false, "showForecast": true, "showActual": false
+                    }
+                    </script>
+                </div>
+            </div>
+            <p class="alert-note">⚡ Disarankan untuk menghindari trading agresif 30 menit sebelum & sesudah rilis data di atas</p>
+        </div>
+        
+        <div class="main-layout">
+            <div class="card-box">
+                <div class="card-header">
+                    <div class="card-title">📊 XAU/USD Live Chart</div>
+                    <div class="card-badge">LIVE</div>
+                </div>
+                <div class="tradingview-chart">
+                    <div id="tradingview_chart"></div>
+                    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+                    <script type="text/javascript">
+                    new TradingView.widget({
+                        "autosize": true, "symbol": "OANDA:XAUUSD", "interval": "60",
+                        "timezone": "Asia/Jakarta", "theme": "dark", "style": "1", "locale": "id",
+                        "toolbar_bg": "rgba(0,0,0,0)", "enable_publishing": false, "allow_symbol_change": true,
+                        "container_id": "tradingview_chart", "hide_top_toolbar": false,
+                        "hide_side_toolbar": true, "hide_legend": false, "withdateranges": true, "details": false
+                    });
+                    </script>
+                </div>
+            </div>
+            
+            <div class="card-box">
+                <div class="card-header">
+                    <div class="card-title">🔥 Market Overview</div>
+                    <div class="card-badge gold">REAL-TIME</div>
+                </div>
+                <div class="tradingview-market">
+                    <div class="tradingview-widget-container__widget"></div>
+                    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+                    {
+                        "colorTheme": "light", "dateRange": "1D", "showChart": true, "locale": "id",
+                        "width": "100%", "height": "100%", "isTransparent": true, "showSymbolLogo": true,
+                        "tabs": [
+                            { "title": "Forex", "symbols": [
+                                { "s": "OANDA:XAUUSD", "d": "Gold" }, { "s": "OANDA:EURUSD", "d": "EUR/USD" },
+                                { "s": "OANDA:GBPUSD", "d": "GBP/USD" }, { "s": "OANDA:USDJPY", "d": "USD/JPY" }
+                            ]},
+                            { "title": "Indices", "symbols": [
+                                { "s": "FOREXCOM:NAS100", "d": "Nasdaq 100" }, { "s": "FOREXCOM:US30", "d": "Dow Jones" }
+                            ]},
+                            { "title": "Crypto", "symbols": [
+                                { "s": "BINANCE:BTCUSDT", "d": "Bitcoin" }, { "s": "BINANCE:ETHUSDT", "d": "Ethereum" }
+                            ]}
+                        ]
                     }
                     </script>
                 </div>
             </div>
         </div>
         
-        <div class="dashboard">
-            <div class="welcome">
-                <div>
-                    <h1>Selamat Datang, <span id="userName">User</span>! 👋</h1>
-                    <p>Kelola akun trading dan akses fitur premium Anda</p>
-                </div>
-                <div class="welcome-badge">MEMBER AKTIF</div>
+        <div class="news-card">
+            <div class="card-header">
+                <div class="card-title">📰 Latest Market News</div>
+                <div class="card-badge">LIVE FEED</div>
             </div>
-            
-            <div class="high-impact-alert">
-                <div class="alert-header">
-                    <div class="toa-icon">📢</div>
-                    <div class="alert-title-wrap">
-                        <div class="alert-title">⚠️ PERINGATAN: Event High Impact Mendatang</div>
-                        <div class="alert-subtitle">NFP, CPI, FOMC & data penting lainnya — otomatis update</div>
-                    </div>
-                    <div class="alert-badge"><span class="live-dot"></span>AUTO-UPDATE</div>
-                </div>
-                
-                <div class="alert-widget">
-                    <div class="tradingview-widget-container">
-                        <div class="tradingview-widget-container__widget"></div>
-                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
-                        {
-                            "width": "100%", "height": "100%", "colorTheme": "light", "isTransparent": true, "locale": "id",
-                            "importanceFilter": "-1", "currencyFilter": "USD,EUR,GBP,JPY,AUD,CAD,CHF,NZD",
-                            "showPrevious": false, "showForecast": true, "showActual": false
-                        }
-                        </script>
-                    </div>
-                </div>
-                <p class="alert-note">⚡ Disarankan untuk menghindari trading agresif 30 menit sebelum & sesudah rilis data di atas</p>
-            </div>
-            
-            <div class="main-layout">
-                <div class="card-box">
-                    <div class="card-header">
-                        <div class="card-title">📊 XAU/USD Live Chart</div>
-                        <div class="card-badge">LIVE</div>
-                    </div>
-                    <div class="tradingview-chart">
-                        <div id="tradingview_chart"></div>
-                        <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-                        <script type="text/javascript">
-                        new TradingView.widget({
-                            "autosize": true, "symbol": "OANDA:XAUUSD", "interval": "60",
-                            "timezone": "Asia/Jakarta", "theme": "dark", "style": "1", "locale": "id",
-                            "toolbar_bg": "rgba(0,0,0,0)", "enable_publishing": false, "allow_symbol_change": true,
-                            "container_id": "tradingview_chart", "hide_top_toolbar": false,
-                            "hide_side_toolbar": true, "hide_legend": false, "withdateranges": true, "details": false
-                        });
-                        </script>
-                    </div>
-                </div>
-                
-                <div class="card-box">
-                    <div class="card-header">
-                        <div class="card-title">🔥 Market Overview</div>
-                        <div class="card-badge gold">REAL-TIME</div>
-                    </div>
-                    <div class="tradingview-market">
-                        <div class="tradingview-widget-container__widget"></div>
-                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
-                        {
-                            "colorTheme": "light", "dateRange": "1D", "showChart": true, "locale": "id",
-                            "width": "100%", "height": "100%", "isTransparent": true, "showSymbolLogo": true,
-                            "tabs": [
-                                { "title": "Forex", "symbols": [
-                                    { "s": "OANDA:XAUUSD", "d": "Gold" }, { "s": "OANDA:EURUSD", "d": "EUR/USD" },
-                                    { "s": "OANDA:GBPUSD", "d": "GBP/USD" }, { "s": "OANDA:USDJPY", "d": "USD/JPY" }
-                                ]},
-                                { "title": "Indices", "symbols": [
-                                    { "s": "FOREXCOM:NAS100", "d": "Nasdaq 100" }, { "s": "FOREXCOM:US30", "d": "Dow Jones" }
-                                ]},
-                                { "title": "Crypto", "symbols": [
-                                    { "s": "BINANCE:BTCUSDT", "d": "Bitcoin" }, { "s": "BINANCE:ETHUSDT", "d": "Ethereum" }
-                                ]}
-                            ]
-                        }
-                        </script>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="news-card">
-                <div class="card-header">
-                    <div class="card-title">📰 Latest Market News</div>
-                    <div class="card-badge">LIVE FEED</div>
-                </div>
-                <div class="news-widget">
-                    <div class="tradingview-widget-container">
-                        <div class="tradingview-widget-container__widget"></div>
-                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-timeline.js" async>
-                        {
-                            "feedMode": "all_symbols", "isTransparent": true, "displayMode": "regular",
-                            "width": "100%", "height": "100%", "colorTheme": "light", "locale": "id"
-                        }
-                        </script>
-                    </div>
+            <div class="news-widget">
+                <div class="tradingview-widget-container">
+                    <div class="tradingview-widget-container__widget"></div>
+                    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-timeline.js" async>
+                    {
+                        "feedMode": "all_symbols", "isTransparent": true, "displayMode": "regular",
+                        "width": "100%", "height": "100%", "colorTheme": "light", "locale": "id"
+                    }
+                    </script>
                 </div>
             </div>
         </div>
@@ -396,16 +377,20 @@
         <span>💬</span>
     </a>
 
-    <audio id="bgMusic"></audio>
-
+    <!-- === FITUR MUSIK (DITAMBAHKAN DI SINI, TIDAK MERUSAK APAPUN) === -->
+    <audio id="bgMusic" loop>
+        <source src="Music-1.mp3" type="audio/mpeg">
+    </audio>
+    
     <button class="music-toggle-btn muted" id="musicToggle" title="Play/Pause Music">
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
     </button>
-    
+
     <script>
+        // --- SCRIPT ASLI DASHBOARD ---
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('preloader').classList.add('hide');
@@ -446,136 +431,56 @@
             window.location.href = 'index.html'; 
         }
 
-        // ==========================================
-        // FITUR MUSIK & SPA NAVIGATION (ANTI PUTUS)
-        // ==========================================
-        
-        const playlist = ["Music-1.mp3", "Music-2.mp3"]; 
-        let currentTrack = 0;
+        // --- SCRIPT MUSIK AMAN (TIDAK MENGGUNAKAN FETCH/SPA YANG MERUSAK) ---
         const bgMusic = document.getElementById('bgMusic');
         const musicToggle = document.getElementById('musicToggle');
         let isPlaying = false;
 
-        // Ganti lagu otomatis saat lagu habis
-        bgMusic.addEventListener('ended', () => {
-            currentTrack = (currentTrack + 1) % playlist.length;
-            bgMusic.src = playlist[currentTrack];
-            bgMusic.play();
-        });
+        // Cek apakah musik sedang diputar di sesi sebelumnya
+        const wasPlaying = localStorage.getItem('etc_music_playing') === 'true';
+        const savedTime = parseFloat(localStorage.getItem('etc_music_time')) || 0;
 
-        // Toggle On/Off Manual
-        musicToggle.addEventListener('click', (e) => {
-            e.stopPropagation(); // Mencegah trigger klik global
-            if (isPlaying) {
-                bgMusic.pause();
+        if (wasPlaying && savedTime > 0) {
+            bgMusic.currentTime = savedTime;
+            bgMusic.play().then(() => {
+                isPlaying = true;
+                musicToggle.classList.add('playing');
+                musicToggle.classList.remove('muted');
+            }).catch(() => {
+                // Jika browser memblokir autoplay, biarkan user klik manual
+                isPlaying = false;
                 musicToggle.classList.remove('playing');
                 musicToggle.classList.add('muted');
-                isPlaying = false;
-            } else {
-                bgMusic.play();
-                musicToggle.classList.add('playing');
-                musicToggle.classList.remove('muted');
-                isPlaying = true;
-            }
-        });
-
-        // FUNGSI UTAMA: Coba Autoplay, kalau gagal tunggu klik pertama user
-        function attemptAutoPlay() {
-            bgMusic.src = playlist[0];
-            bgMusic.play().then(() => {
-                // BERHASIL AUTOPLAY (biasanya karena datang dari login)
-                musicToggle.classList.add('playing');
-                musicToggle.classList.remove('muted');
-                isPlaying = true;
-                console.log("✅ Musik berhasil diputar otomatis!");
-            }).catch(e => {
-                // DIBLOKIR BROWSER (karena langsung buka dashboard tanpa interaksi)
-                console.log("⏳ Autoplay diblokir browser. Menunggu klik pertama user...");
-                
-                // Pasang jebakan: Begitu user klik DI MANA SAJA di halaman, musik langsung nyala
-                document.body.addEventListener('click', function startMusicOnFirstClick() {
-                    bgMusic.play();
-                    musicToggle.classList.add('playing');
-                    musicToggle.classList.remove('muted');
-                    isPlaying = true;
-                    console.log("✅ Musik dimulai melalui interaksi user (First Click Fallback).");
-                    
-                    // Hapus event listener ini agar tidak mengganggu setelah musik nyala
-                    document.body.removeEventListener('click', startMusicOnFirstClick);
-                }, { once: true }); // { once: true } artinya event ini cuma jalan 1 kali
             });
         }
 
-        // Jalankan saat halaman selesai dimuat
-        window.addEventListener('load', () => {
-            // Jika ada flag dari login.html, hapus agar bersih
-            if (sessionStorage.getItem('allow_music_autoplay') === 'true') {
-                sessionStorage.removeItem('allow_music_autoplay'); 
-            }
-            // Eksekusi logika autoplay cerdas
-            attemptAutoPlay();
-        });
-
-        // SPA Navigation SUPER ROBUST (Mencegah Reload Halaman)
-        document.addEventListener('click', function(e) {
-            const link = e.target.closest('a');
-            
-            // Intercept HANYA jika:
-            // 1. Itu elemen <a>
-            // 2. Link internal (hostname sama)
-            // 3. BUKAN link eksternal (seperti t.me)
-            // 4. BUKAN anchor link (#)
-            if (link && link.hostname === window.location.hostname && !link.href.includes('t.me') && !link.getAttribute('href').startsWith('#')) {
-                e.preventDefault(); // STOP reload halaman biasa
-                const url = link.href;
-
-                // Update UI Tab Aktif (jika yang diklik ada di dalam .tab)
-                const clickedTab = link.closest('.tab');
-                if (clickedTab) {
-                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                    clickedTab.classList.add('active');
-                }
-
-                // Ambil konten halaman tujuan di background
-                fetch(url)
-                    .then(res => {
-                        if (!res.ok) throw new Error('Network response was not ok');
-                        return res.text();
-                    })
-                    .then(html => {
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(html, 'text/html');
-                        
-                        // Cari wrapper #page-content, fallback ke body
-                        const newContent = doc.querySelector('#page-content') || doc.querySelector('body');
-                        const mainContainer = document.querySelector('#page-content') || document.body;
-
-                        // Animasi fade halus
-                        mainContainer.style.transition = 'opacity 0.2s ease';
-                        mainContainer.style.opacity = '0';
-                        
-                        setTimeout(() => {
-                            mainContainer.innerHTML = newContent.innerHTML;
-                            mainContainer.style.opacity = '1';
-                            
-                            // Update URL browser tanpa reload
-                            window.history.pushState({}, '', url);
-                            
-                            // Scroll otomatis ke paling atas
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
-                        }, 200);
-                    })
-                    .catch(err => {
-                        console.error("Gagal memuat halaman (CORS/Network):", err);
-                        // Fallback ke reload biasa jika fetch gagal
-                        window.location.href = url; 
-                    });
+        // Fungsi saat tombol diklik
+        musicToggle.addEventListener('click', () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                isPlaying = false;
+                musicToggle.classList.remove('playing');
+                musicToggle.classList.add('muted');
+                localStorage.setItem('etc_music_playing', 'false');
+            } else {
+                bgMusic.play();
+                isPlaying = true;
+                musicToggle.classList.add('playing');
+                musicToggle.classList.remove('muted');
+                localStorage.setItem('etc_music_playing', 'true');
             }
         });
 
-        // Handle tombol back/forward browser
-        window.addEventListener('popstate', () => {
-            window.location.reload(); 
+        // Simpan posisi detik musik setiap 1 detik
+        setInterval(() => {
+            if (isPlaying) {
+                localStorage.setItem('etc_music_time', bgMusic.currentTime.toString());
+            }
+        }, 1000);
+
+        // Simpan posisi terakhir tepat sebelum halaman ditutup/reload
+        window.addEventListener('beforeunload', () => {
+            localStorage.setItem('etc_music_time', bgMusic.currentTime.toString());
         });
     </script>
 </body>
