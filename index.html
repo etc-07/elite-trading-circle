@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- TAMBAHAN PENTING UNTUK PWABUILDER (APK) -->
+    <meta name="theme-color" content="#D4AF37">
+    <link rel="manifest" href="./manifest.json">
+    
     <script src="vendor-analytics.js"></script>
     <title>Elite Trading Circle - Smart EA Platform</title>
     <link rel="icon" type="image/png" href="logo.png">
@@ -95,9 +100,7 @@
             box-shadow: 0 0 15px rgba(212, 175, 55, 0.5); 
             transform: scale(1.05); 
         }
-        .theme-toggle:active {
-            transform: scale(0.95);
-        }
+        .theme-toggle:active { transform: scale(0.95); }
 
         .nav-buttons { display: flex; gap: 12px; }
         
@@ -133,14 +136,12 @@
             .theme-toggle { width: 40px; height: 40px; font-size: 18px; }
             .nav-buttons { gap: 8px; }
             .btn { padding: 10px 18px; font-size: 13px; }
-            
             .hero { margin-top: 65px; padding: 50px 5%; }
             .hero-logo { width: 110px; height: 110px; margin-bottom: 20px; }
             .hero h1 { font-size: 26px; }
             .hero p { font-size: 14px; margin-bottom: 25px; }
             .hero-buttons { flex-direction: column; align-items: center; width: 100%; gap: 12px; }
             .hero-buttons .btn { width: 100%; max-width: 300px; padding: 14px 20px; font-size: 14px; }
-            
             .bg-logo { width: 280px; height: 280px; }
             .footer-links { gap: 15px; }
         }
@@ -152,19 +153,12 @@
             .nav-right { gap: 6px; }
             .theme-toggle { width: 38px; height: 38px; font-size: 16px; }
             .btn { padding: 9px 14px; font-size: 12px; }
-            
             .hero { padding: 40px 4%; }
             .hero-logo { width: 90px; height: 90px; }
             .hero h1 { font-size: 22px; }
             .hero p { font-size: 13px; }
             .hero-buttons .btn { max-width: 280px; padding: 12px 16px; }
-            
-            .footer-links { 
-                flex-direction: row !important; 
-                flex-wrap: nowrap !important;
-                gap: 12px;
-                font-size: 11px;
-            }
+            .footer-links { flex-direction: row !important; flex-wrap: nowrap !important; gap: 12px; font-size: 11px; }
         }
     </style>
 </head>
@@ -208,6 +202,19 @@
         </div>
     </footer>
     
+    <!-- TOMBOL TOGGLE TAMPILAN (IKON SAJA) -->
+    <button id="viewToggleBtn" onclick="toggleViewMode()" style="
+        position: fixed; bottom: 25px; right: 25px; 
+        background: linear-gradient(135deg, #D4AF37, #FFD700); 
+        color: #000; border: none; width: 55px; height: 55px; 
+        border-radius: 50%; cursor: pointer; z-index: 9999;
+        box-shadow: 0 4px 20px rgba(212, 175, 55, 0.6);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 26px; transition: all 0.3s ease;
+        -webkit-tap-highlight-color: transparent;">
+        📱
+    </button>
+
     <script>
         window.addEventListener('load', () => {
             setTimeout(() => {
@@ -219,33 +226,71 @@
             document.documentElement.classList.toggle('dark-mode');
             const isDark = document.documentElement.classList.contains('dark-mode');
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            // FIX: Ganti string kosong dengan emoji 🌙
             document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
         }
 
         window.addEventListener('DOMContentLoaded', () => {
+            // 1. Theme Logic
             const savedTheme = localStorage.getItem('theme');
             const themeToggle = document.getElementById('themeToggle');
             if (savedTheme === 'dark') {
                 themeToggle.textContent = '☀️';
             } else {
-                // FIX: Ganti string kosong dengan emoji 
                 themeToggle.textContent = '🌙';
             }
             
+            // 2. User Login Logic
             const user = localStorage.getItem('user');
             if (user) {
                 document.getElementById('nav-buttons').innerHTML = `<a href="dashboard.html" class="btn btn-login">Dashboard</a><button class="btn btn-join" onclick="doLogout()" style="border-color: #ef4444; color: #ef4444;">Logout</button>`;
             }
+
+            // 3. View Toggle Logic (HP / PC)
+            const savedMode = localStorage.getItem('etc_view_mode');
+            const btn = document.getElementById('viewToggleBtn');
+            
+            if (savedMode === 'pc') {
+                applyPcView(btn);
+            } else {
+                applyMobileView(btn);
+            }
         });
+
+        function toggleViewMode() {
+            const btn = document.getElementById('viewToggleBtn');
+            const currentMode = localStorage.getItem('etc_view_mode');
+
+            if (currentMode === 'pc') {
+                applyMobileView(btn);
+            } else {
+                applyPcView(btn);
+            }
+        }
+
+        function applyPcView(btn) {
+            // Simulasi lebar desktop agar layout tidak mengecil di HP
+            document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=1200, user-scalable=yes');
+            btn.innerHTML = '🖥️'; // Ikon PC
+            localStorage.setItem('etc_view_mode', 'pc');
+        }
+
+        function applyMobileView(btn) {
+            // Kembalikan ke responsif standar HP
+            document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+            btn.innerHTML = '📱'; // Ikon HP
+            localStorage.setItem('etc_view_mode', 'mobile');
+        }
         
         function doLogout() { 
             localStorage.removeItem('user'); 
             window.location.reload(); 
         }
         
+        // Service Worker Path diperbaiki menjadi relatif (./)
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js');
+            navigator.serviceWorker.register('./sw.js')
+                .then(reg => console.log('Service Worker registered'))
+                .catch(err => console.log('Service Worker failed:', err));
         }
     </script>
 </body>
