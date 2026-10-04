@@ -110,6 +110,17 @@
         .btn-join { background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary)); color: #1a1a1a; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); }
         .btn-join:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6); }
         
+        /* Style khusus tombol download APK */
+        .btn-download-apk { 
+            background: linear-gradient(135deg, #10b981, #059669); 
+            color: #ffffff; 
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); 
+        }
+        .btn-download-apk:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6); 
+        }
+
         .hero { 
             margin-top: 76px; padding: 80px 5%; text-align: center; 
             background: var(--card-bg); color: var(--text-color); 
@@ -190,6 +201,8 @@
         <div class="hero-buttons">
             <a href="register.html" class="btn btn-join">Daftar Sekarang</a>
             <a href="login.html" class="btn btn-login">Masuk ke Platform</a>
+            <!-- TOMBOL DOWNLOAD APK BARU -->
+            <a href="https://github.com/etc-07/elite-trading-circle/releases/download/v1.0.0/ETC.apk" class="btn btn-download-apk">📥 Download Aplikasi (APK)</a>
         </div>
     </section>
     
@@ -214,6 +227,18 @@
         -webkit-tap-highlight-color: transparent;">
         📱
     </button>
+
+    <!-- MODAL UPDATE OTOMATIS -->
+    <div id="updateModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; justify-content: center; align-items: center; backdrop-filter: blur(5px);">
+        <div style="background: var(--bg-color, #0f1115); border: 1px solid var(--gold-primary, #D4AF37); border-radius: 16px; padding: 30px; max-width: 90%; width: 350px; text-align: center; box-shadow: 0 10px 40px rgba(212, 175, 55, 0.3);">
+            <div style="font-size: 40px; margin-bottom: 15px;">🚀</div>
+            <h3 style="color: var(--gold-primary, #D4AF37); margin-bottom: 10px; font-size: 20px;">Update Tersedia!</h3>
+            <p id="updateMessage" style="color: var(--text-color, #e0e0e0); font-size: 14px; margin-bottom: 25px; line-height: 1.5;">Memuat info update...</p>
+            
+            <a id="updateDownloadBtn" href="#" class="btn btn-download-apk" style="width: 100%; margin-bottom: 10px;">Download Update</a>
+            <button onclick="document.getElementById('updateModal').style.display='none'" style="background: transparent; border: 1px solid var(--text-muted, #666); color: var(--text-muted, #666); padding: 10px 20px; border-radius: 8px; cursor: pointer; width: 100%; font-size: 13px;">Nanti Saja</button>
+        </div>
+    </div>
 
     <script>
         window.addEventListener('load', () => {
@@ -268,16 +293,14 @@
         }
 
         function applyPcView(btn) {
-            // Simulasi lebar desktop agar layout tidak mengecil di HP
             document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=1200, user-scalable=yes');
-            btn.innerHTML = '🖥️'; // Ikon PC
+            btn.innerHTML = '🖥️';
             localStorage.setItem('etc_view_mode', 'pc');
         }
 
         function applyMobileView(btn) {
-            // Kembalikan ke responsif standar HP
             document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
-            btn.innerHTML = '📱'; // Ikon HP
+            btn.innerHTML = '📱';
             localStorage.setItem('etc_view_mode', 'mobile');
         }
         
@@ -286,12 +309,38 @@
             window.location.reload(); 
         }
         
-        // Service Worker Path diperbaiki menjadi relatif (./)
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./sw.js')
                 .then(reg => console.log('Service Worker registered'))
                 .catch(err => console.log('Service Worker failed:', err));
         }
+
+        // ==========================================
+        // 4. AUTO UPDATE CHECKER LOGIC
+        // ==========================================
+        const CURRENT_APP_VERSION = "1.0.0"; // Versi saat ini
+
+        async function checkForUpdate() {
+            try {
+                // Tambahkan timestamp agar tidak diambil dari cache browser
+                const response = await fetch('./version.json?t=' + new Date().getTime());
+                const data = await response.json();
+
+                // Jika versi di file json lebih baru dari versi aplikasi
+                if (data.version > CURRENT_APP_VERSION) {
+                    document.getElementById('updateMessage').innerText = data.message;
+                    document.getElementById('updateDownloadBtn').href = data.download_url;
+                    document.getElementById('updateModal').style.display = 'flex';
+                }
+            } catch (error) {
+                console.log("Gagal mengecek update (Normal jika offline):", error);
+            }
+        }
+
+        // Jalankan pengecekan 2 detik setelah halaman selesai dimuat
+        window.addEventListener('load', () => {
+            setTimeout(checkForUpdate, 2000);
+        });
     </script>
 </body>
 </html>
