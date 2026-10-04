@@ -1,10 +1,25 @@
 {
   "name": "Elite Trading Circle",
-  "short_name": "Elite Trading",
+  "short_name": "ETC",
   "description": "Smart EA Platform - Trading Otomatis Cerdas",
-  "start_url": "/index.html",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#0a0a0a",
   "theme_color": "#D4AF37",
-  "orientation": "portrait"
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "./logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
 }
